@@ -1,0 +1,24 @@
+/* A4 print layout for client reports (Gotenberg renders this route to PDF). */
+@page {
+  size: A4;
+  margin: 12mm;
+}
+@media print {
+  html,
+  body {
+    background: #fff !important;
+  }
+}
+.report-print {
+  display: grid;
+  gap: 8mm;
+  color: #111827;
+}
+.report-print section,
+.report-print table,
+.report-print tr {
+  break-inside: avoid;
+}
+.report-print h2 {
+  break-after: avoid;
+}

@@ -1,0 +1,321 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens (FRONTEND_PROMPT §7), from the Leadexpa logo: maroon (#64140c), bronze (#a56f29) and gold (#ebc07a)
+ * on warm ivory. Leadexpa is light-only. Components use the Tailwind names below (bg-surface, text-muted,
+ * bg-sla-overdue …). Text colors meet 4.5:1 on bg, surface and surface-2; bronze and gold are for large type,
+ * fills and decoration only (use accent-strong for small bronze text).
+ */
+:root {
+  --c-bg: #fbf7f1;
+  --c-surface: #ffffff;
+  --c-surface-2: #f6efe5;
+  --c-border: #ebe0d1;
+  --c-text: #2a1613;
+  --c-muted: #6b5850;
+  --c-primary: #7a1a12;
+  --c-primary-hover: #64140c;
+  --c-primary-fg: #ffffff;
+  --c-primary-soft: #f8e9e5;
+  --c-accent: #a56f29;
+  --c-accent-strong: #84561c;
+  --c-accent-soft: #fbf0dc;
+  --c-gold: #ebc07a;
+  --c-success: #146c3c;
+  --c-success-soft: #e4f3e9;
+  --c-warning: #a04a06;
+  --c-warning-soft: #fdeedd;
+  --c-danger: #c22d1f;
+  --c-danger-soft: #fde9e6;
+  --c-info: #1d5fa8;
+  --c-info-soft: #e7f0fa;
+  --c-focus: #a56f29;
+  --leading-body: 1.5;
+  --shadow-1: 0 1px 2px rgb(74 32 18 / 0.05), 0 1px 3px rgb(74 32 18 / 0.07);
+  --shadow-2: 0 12px 32px -8px rgb(74 32 18 / 0.18);
+  --brand-gradient: linear-gradient(135deg, #7a1a12 0%, #64140c 55%, #4f0f09 100%);
+  --brand-rule: linear-gradient(90deg, #64140c 0%, #a56f29 55%, #ebc07a 100%);
+  color-scheme: light;
+}
+
+/* Bengali and Arabic scripts need ~10–15 % more line-height. */
+html[lang="bn"],
+html[lang="ar"] {
+  --leading-body: 1.7;
+}
+
+@theme inline {
+  --color-bg: var(--c-bg);
+  --color-surface: var(--c-surface);
+  --color-surface-2: var(--c-surface-2);
+  --color-border: var(--c-border);
+  --color-text: var(--c-text);
+  --color-muted: var(--c-muted);
+  --color-primary: var(--c-primary);
+  --color-primary-fg: var(--c-primary-fg);
+  --color-primary-soft: var(--c-primary-soft);
+  --color-success: var(--c-success);
+  --color-success-soft: var(--c-success-soft);
+  --color-warning: var(--c-warning);
+  --color-warning-soft: var(--c-warning-soft);
+  --color-danger: var(--c-danger);
+  --color-danger-soft: var(--c-danger-soft);
+  --color-info: var(--c-info);
+  --color-info-soft: var(--c-info-soft);
+  --color-primary-hover: var(--c-primary-hover);
+  --color-accent: var(--c-accent);
+  --color-accent-strong: var(--c-accent-strong);
+  --color-accent-soft: var(--c-accent-soft);
+  --color-gold: var(--c-gold);
+
+  /* SLA palette: a first-class part of the system. Always paired with text + icon, never color alone. */
+  --color-sla-on-track: var(--c-muted);
+  --color-sla-on-track-soft: var(--c-surface-2);
+  --color-sla-due-soon: var(--c-warning);
+  --color-sla-due-soon-soft: var(--c-warning-soft);
+  --color-sla-overdue: var(--c-danger);
+  --color-sla-overdue-soft: var(--c-danger-soft);
+  --color-sla-met: var(--c-success);
+  --color-sla-met-soft: var(--c-success-soft);
+  --color-sla-paused: var(--c-info);
+  --color-sla-paused-soft: var(--c-info-soft);
+
+  --font-sans: var(--font-inter), var(--font-bengali), var(--font-arabic), ui-sans-serif, system-ui, sans-serif;
+  --shadow-card: var(--shadow-1);
+  --shadow-pop: var(--shadow-2);
+
+  /* Radii: tight and consistent, so boxes read as precise rather than bubbly. Pills (rounded-full) stay round. */
+  --radius-xs: 0.125rem; /* 2px */
+  --radius-sm: 0.1875rem; /* 3px */
+  --radius-md: 0.25rem; /* 4px: chips, menu items, small controls */
+  --radius-lg: 0.25rem; /* 4px: inputs, buttons, menus, popovers */
+  --radius-xl: 0.25rem; /* 4px */
+  --radius-2xl: 0.375rem; /* 6px */
+  --radius-3xl: 0.375rem; /* 6px */
+  --radius-card: 0.25rem; /* 4px: cards and dialogs */
+
+  /* The app's content width on big screens (max-w-app): pages and the top bar's contents stay within it, centered. */
+  --container-app: 90rem; /* 1440px */
+
+  /* Motion: short, eased, never bouncy. */
+  --ease-out-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-fade-in: fade-in 160ms var(--ease-out-smooth);
+  --animate-fade-out: fade-out 120ms ease-in forwards;
+  --animate-pop-in: pop-in 160ms var(--ease-out-smooth);
+  --animate-pop-out: pop-out 110ms ease-in forwards;
+  --animate-dialog-in: dialog-in 200ms var(--ease-out-smooth);
+  --animate-dialog-out: dialog-out 130ms ease-in forwards;
+  --animate-sheet-in-end: sheet-in-end 260ms var(--ease-out-smooth);
+  --animate-sheet-out-end: sheet-out-end 180ms ease-in forwards;
+  --animate-sheet-in-bottom: sheet-in-bottom 260ms var(--ease-out-smooth);
+  --animate-sheet-out-bottom: sheet-out-bottom 180ms ease-in forwards;
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      scale: 0.97;
+    }
+  }
+  @keyframes pop-out {
+    to {
+      opacity: 0;
+      scale: 0.97;
+    }
+  }
+  /* Dialogs are centered with the translate property; these animate scale and opacity only, so they don't fight it. */
+  @keyframes dialog-in {
+    from {
+      opacity: 0;
+      scale: 0.96;
+    }
+  }
+  @keyframes dialog-out {
+    to {
+      opacity: 0;
+      scale: 0.97;
+    }
+  }
+  @keyframes sheet-in-end {
+    from {
+      transform: translateX(var(--sheet-from, 100%));
+    }
+  }
+  @keyframes sheet-out-end {
+    to {
+      transform: translateX(var(--sheet-from, 100%));
+    }
+  }
+  @keyframes sheet-in-bottom {
+    from {
+      transform: translateY(100%);
+    }
+  }
+  @keyframes sheet-out-bottom {
+    to {
+      transform: translateY(100%);
+    }
+  }
+
+  --animate-sla-pulse: sla-pulse 2s ease-in-out infinite;
+  /* A ring, not an opacity fade: fading the text would drop it below 4.5:1 contrast mid-pulse. */
+  @keyframes sla-pulse {
+    50% {
+      box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 30%, transparent);
+    }
+  }
+  --animate-highlight: highlight 2.5s ease-out;
+  @keyframes highlight {
+    from {
+      background-color: var(--c-primary-soft);
+    }
+  }
+}
+
+@layer base {
+  html {
+    background: var(--c-bg);
+    color: var(--c-text);
+    line-height: var(--leading-body);
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply min-h-dvh font-sans antialiased;
+  }
+  /* Browsers center <th>; headers line up with their column's text unless a cell says text-center/text-end. */
+  th {
+    text-align: start;
+  }
+  :focus-visible {
+    outline: 2px solid var(--c-focus);
+    outline-offset: 2px;
+  }
+  /* Date and time fields: the browser's placeholder reads "MM/DD/YYYY", not "mm/dd/yyyy". */
+  input:is([type="date"], [type="datetime-local"], [type="month"], [type="week"], [type="time"]) {
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+  }
+  ::selection {
+    background: var(--c-primary-soft);
+    color: var(--c-primary-hover);
+  }
+  /*
+   * Every scroll container is a positioning context: screen-reader-only text (absolutely positioned) inside it is
+   * then clipped by it, instead of being placed against the page where it stretches the document and adds a second
+   * scrollbar. :where() keeps this at zero specificity, so fixed/absolute/sticky utilities still win.
+   */
+  :where(
+    [class*="overflow-auto"],
+    [class*="overflow-y-auto"],
+    [class*="overflow-x-auto"],
+    [class*="overflow-scroll"],
+    [class*="overflow-y-scroll"],
+    [class*="overflow-x-scroll"]
+  ) {
+    position: relative;
+  }
+
+  /*
+   * Custom scrollbars, in the brand: a hairline 3px rounded bronze thumb on an invisible track (darker on hover, maroon
+   * while dragged) and no arrow buttons. WebKit/Blink draw them from the ::-webkit-scrollbar parts; Firefox, which has
+   * no such parts, gets the standard thin scrollbar in the same colors.
+   */
+  ::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--c-accent) 45%, var(--c-surface-2));
+    border-radius: 999px;
+    min-height: 32px;
+    min-width: 32px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in srgb, var(--c-accent) 75%, var(--c-surface-2));
+  }
+  ::-webkit-scrollbar-thumb:active {
+    background: var(--c-primary);
+  }
+  ::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+  @supports not selector(::-webkit-scrollbar) {
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: color-mix(in srgb, var(--c-accent) 55%, var(--c-surface-2)) transparent;
+    }
+  }
+  /* Sheets enter from the end edge: the right in LTR, the left in RTL. */
+  [dir="rtl"] {
+    --sheet-from: -100%;
+  }
+}
+
+@layer components {
+  /*
+   * Custom select arrow: the platform arrow is removed and a chevron drawn in its place, on the end side (left in
+   * RTL), muted at rest and maroon on hover and focus. Used by NativeSelect, so every dropdown matches.
+   */
+  .select-chevron {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%236b5850' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+    background-position: right 0.625rem center;
+    padding-inline-end: 2rem;
+    cursor: pointer;
+  }
+  .select-chevron:hover:not(:disabled),
+  .select-chevron:focus-visible {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%237a1a12' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
+  }
+  /* The element's own direction: a phone field stays LTR inside an Arabic page. */
+  .select-chevron:dir(rtl) {
+    background-position: left 0.625rem center;
+  }
+  /* Compact: a text-like select (the language picker) with the chevron right after the label. */
+  .select-chevron.select-compact {
+    background-position: right 0 center;
+    background-size: 0.875rem 0.875rem;
+    padding-inline-end: 1.125rem;
+  }
+  .select-chevron.select-compact:dir(rtl) {
+    background-position: left 0 center;
+  }
+  .select-chevron:disabled {
+    cursor: not-allowed;
+  }
+  /* Multi-line selects keep the platform's list box. */
+  .select-chevron[multiple],
+  .select-chevron[size]:not([size="1"]) {
+    background-image: none;
+    padding-inline-end: 0.75rem;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

@@ -13,10 +13,7 @@ import { Input } from "@/shared/ui/input";
 
 import type { LeadDetail } from "../api/hooks";
 
-/**
- * Action link (BACKEND_PROMPT 17.0.3): a 72-hour, no-login link for this one lead, for client staff who won't
- * open the app. It logs outcomes as the lead's owner; a new link or a reassignment kills the old one.
- */
+/** 72-hour no-login link; a new link or a reassignment revokes the old one. */
 export function ActionLinkShare({ lead, timeZone }: { lead: Pick<LeadDetail, "id" | "full_name">; timeZone: string }) {
   const t = useTranslations("actionLink");
   const locale = useLocale();

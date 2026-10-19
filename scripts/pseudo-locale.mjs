@@ -1,20 +1,64 @@
-// Generates messages/en-XA.json from en.json (GLOBAL_PROMPT §5.2): accented, ~40 % longer, bracketed strings.
-// Rendering the app in en-XA shows hard-coded text (plain ASCII), truncation (missing "]") and concatenated
-// fragments (brackets in the middle of a sentence). ICU syntax ({name}, plural/select cases, #) is preserved.
-// Usage: node scripts/pseudo-locale.mjs   (the file is generated, never committed)
+// Generates messages/en-XA.json: accented, ~40 % longer, bracketed strings.
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const ROOT = join(import.meta.dirname, "..");
 const ACCENTS = {
-  a: "á", b: "ƀ", c: "ç", d: "đ", e: "é", f: "ƒ", g: "ĝ", h: "ĥ", i: "í", j: "ĵ", k: "ķ", l: "ĺ", m: "ɱ",
-  n: "ñ", o: "ó", p: "þ", q: "ǫ", r: "ŕ", s: "ş", t: "ţ", u: "ú", v: "ṽ", w: "ŵ", x: "ẋ", y: "ý", z: "ž",
-  A: "Á", B: "Ɓ", C: "Ç", D: "Đ", E: "É", F: "Ƒ", G: "Ĝ", H: "Ĥ", I: "Í", J: "Ĵ", K: "Ķ", L: "Ĺ", M: "Ṁ",
-  N: "Ñ", O: "Ó", P: "Þ", Q: "Ǫ", R: "Ŕ", S: "Ş", T: "Ţ", U: "Ú", V: "Ṽ", W: "Ŵ", X: "Ẋ", Y: "Ý", Z: "Ž",
+  a: "á",
+  b: "ƀ",
+  c: "ç",
+  d: "đ",
+  e: "é",
+  f: "ƒ",
+  g: "ĝ",
+  h: "ĥ",
+  i: "í",
+  j: "ĵ",
+  k: "ķ",
+  l: "ĺ",
+  m: "ɱ",
+  n: "ñ",
+  o: "ó",
+  p: "þ",
+  q: "ǫ",
+  r: "ŕ",
+  s: "ş",
+  t: "ţ",
+  u: "ú",
+  v: "ṽ",
+  w: "ŵ",
+  x: "ẋ",
+  y: "ý",
+  z: "ž",
+  A: "Á",
+  B: "Ɓ",
+  C: "Ç",
+  D: "Đ",
+  E: "É",
+  F: "Ƒ",
+  G: "Ĝ",
+  H: "Ĥ",
+  I: "Í",
+  J: "Ĵ",
+  K: "Ķ",
+  L: "Ĺ",
+  M: "Ṁ",
+  N: "Ñ",
+  O: "Ó",
+  P: "Þ",
+  Q: "Ǫ",
+  R: "Ŕ",
+  S: "Ş",
+  T: "Ţ",
+  U: "Ú",
+  V: "Ṽ",
+  W: "Ŵ",
+  X: "Ẋ",
+  Y: "Ý",
+  Z: "Ž",
 };
 const accent = (text) => [...text].map((c) => ACCENTS[c] ?? c).join("");
 
-/** Transforms literal text of an ICU message; arguments and case keywords stay intact. */
 function pseudo(msg) {
   let i = 0;
   const literal = (stop) => {
@@ -30,13 +74,13 @@ function pseudo(msg) {
   };
   const argument = () => {
     const start = i;
-    i++; // {
+    i++;
     while (i < msg.length && msg[i] !== "," && msg[i] !== "}") i++;
     if (msg[i] === "}") {
       i++;
-      return msg.slice(start, i); // {name}
+      return msg.slice(start, i);
     }
-    i++; // ,
+    i++;
     const typeStart = i;
     while (i < msg.length && msg[i] !== "," && msg[i] !== "}") i++;
     const type = msg.slice(typeStart, i).trim();
@@ -49,11 +93,11 @@ function pseudo(msg) {
       }
       return msg.slice(start, i);
     }
-    let out = msg.slice(start, ++i); // through the second comma
+    let out = msg.slice(start, ++i);
     while (i < msg.length && msg[i] !== "}") {
       const keyStart = i;
       while (i < msg.length && msg[i] !== "{") i++;
-      out += msg.slice(keyStart, i) + "{"; // " one " / " =0 " / " offset:1 one "
+      out += msg.slice(keyStart, i) + "{";
       i++;
       out += literal("}") + "}";
       i++;

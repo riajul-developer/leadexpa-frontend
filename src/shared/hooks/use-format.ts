@@ -6,7 +6,6 @@ import { useMemo } from "react";
 import * as f from "../lib/format";
 import { usePreferences } from "../lib/preferences";
 
-/** Formatting bound to the current locale and the user's display preferences (digits, clock, region). */
 export function useFormat() {
   const locale = useLocale() as f.AppLocale;
   const digits = usePreferences((s) => s.digits);

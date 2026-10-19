@@ -14,7 +14,6 @@ import { Card, CardContent, CardHeader, CardTitle, Skeleton } from "@/shared/ui/
 
 import { type Meter, useSetBudget, useUsage } from "../api";
 
-/** Metered usage this month (UTC) with per-meter budgets: alerts at 80 % and 100 %, never a cut-off. */
 export function UsageCard({ canManage }: { canManage: boolean }) {
   const t = useTranslations("billing.usage");
   const f = useFormat();

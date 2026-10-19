@@ -14,7 +14,6 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 
 import type { Lead } from "../api/queries";
 
-/** The lead's score with "Why?" in plain language, and "Score seems wrong" feedback (17.7). */
 export function ScoreWhy({ lead }: { lead: Lead }) {
   const t = useTranslations("score");
   const factor = useScoreFactor();

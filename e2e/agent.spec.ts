@@ -1,7 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// Agent flows on mock data (FRONTEND_PROMPT §12 E2E 2, 5, 6). The mock API is seeded deterministically.
-
 test.beforeEach(async ({ page }) => {
   await page.goto("/bn/inbox");
   await expect(page.getByRole("heading", { level: 1, name: "ইনবক্স" })).toBeVisible();
@@ -25,7 +23,6 @@ test("log an outcome in one tap: the SLA turns met immediately", async ({ page }
   await expect(page.getByRole("dialog")).toContainText("কেমন হলো?");
   await page.getByRole("button", { name: "কথা হয়েছে" }).click();
   await expect(page.getByRole("dialog")).toBeHidden();
-  // The same lead now reads "responded in …" (optimistic, then confirmed by the refetch).
   const after = page.locator("article", { hasText: name ?? "" }).first();
   await expect(after.locator('[data-sla="met"]')).toBeVisible();
 });
@@ -40,7 +37,7 @@ test("AI drafts a Bangla WhatsApp message, editable before sending", async ({ pa
   await expect(variant).toHaveValue(/আসসালামু আলাইকুম/);
   await variant.fill("আসসালামু আলাইকুম, আজ বিকেলে কথা বলা যাবে?");
   await expect(sheet.getByText("সম্পাদিত")).toBeVisible();
-  // Stub WhatsApp: the real wa.me redirects to api.whatsapp.com, and tests must not depend on the network.
+  // Stub wa.me: it redirects off-site, and tests must not depend on the network.
   await page.context().route("https://wa.me/**", (route) => route.fulfill({ contentType: "text/html", body: "ok" }));
   const popup = page.waitForEvent("popup");
   await sheet.getByRole("button", { name: "WhatsApp-এ খুলুন" }).first().click();

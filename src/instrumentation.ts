@@ -1,5 +1,4 @@
-// Server-side error reporting (Next.js instrumentation hook). A no-op unless SENTRY_DSN / NEXT_PUBLIC_SENTRY_DSN is
-// set; the SDK is imported only then, so dev and mock builds don't load it.
+// Sentry is imported only when a DSN is set, so dev and mock builds skip it.
 import type { Instrumentation } from "next";
 
 const dsn = process.env.SENTRY_DSN ?? process.env.NEXT_PUBLIC_SENTRY_DSN;

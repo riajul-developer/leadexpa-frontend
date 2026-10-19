@@ -6,8 +6,6 @@ import { track } from "@/shared/lib/analytics";
 import { api, unwrap, unwrapEmpty, type Schemas } from "@/shared/lib/api/client";
 import { lookupKeys } from "@/shared/lib/lookups";
 
-// Query keys local to this feature (kept out of the shared first-load bundle).
-/** Lead-source connectors (G5): the catalog, installs per client, and each install's health page. */
 export const connectorKeys = {
   all: ["connectors"] as const,
   catalog: ["connectors", "catalog"] as const,

@@ -30,7 +30,6 @@ import { AppointmentStatusBadge, RiskBadge, SlotPicker } from "./parts";
 type Lead = Schemas["LeadDetail"];
 const LANGUAGES = ["en", "bn", "ar"] as const;
 
-/** Lead › Sales: book, move, cancel and close out appointments; share a self-booking link (10.1). */
 export function LeadAppointments({ lead, timeZone }: { lead: Lead; timeZone: string }) {
   const t = useTranslations("appointments.lead");
   const te = useTranslations("errors");

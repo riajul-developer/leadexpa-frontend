@@ -38,7 +38,6 @@ export const INDUSTRIES = [
   "other",
 ] as const;
 
-/** Client list with this month's health (server numbers from the dashboard's by_client breakdown). */
 export function ClientsList() {
   const t = useTranslations("clients");
   const f = useFormat();
@@ -190,7 +189,7 @@ export function CreateClientDialog({ onClose, onCreated }: { onClose: () => void
     mutationFn: (v: Values) =>
       unwrap(
         api.POST("/v1/clients", {
-          // Timezone and currency follow the country server-side (the agency's own when it's the same country).
+          // Timezone and currency are derived from the country server-side.
           body: { ...v, dedup_window_days: 30 },
         }),
       ),

@@ -2,14 +2,11 @@ import { useSyncExternalStore } from "react";
 
 import type { Schemas } from "./api/client";
 
-// Passkeys (FRONTEND_PROMPT 17.6). The API sends WebAuthn options as JSON with base64url binary fields and takes
-// the credential back the same way. Browsers with PublicKeyCredential.parse*OptionsFromJSON / toJSON do the
-// conversion natively; for older ones (Safari < 17.4, older Android WebViews) we convert by hand.
+// Browsers without the WebAuthn JSON helpers (Safari < 17.4) get hand conversion.
 
 export type WebAuthnOptions = Schemas["WebAuthnOptions"];
 export type WebAuthnCredential = Schemas["WebAuthnCredential"];
 
-/** The person dismissed the browser's passkey sheet, or it timed out. Not an error worth reporting. */
 export class PasskeyCancelled extends Error {
   constructor() {
     super("passkey cancelled");
@@ -23,7 +20,7 @@ export function passkeysSupported(): boolean {
 
 const noSubscribe = () => () => undefined;
 
-/** passkeysSupported as a hook: false during server rendering and hydration, then the real answer. */
+/** false during server rendering and hydration, then the real answer. */
 export function usePasskeysSupported(): boolean {
   return useSyncExternalStore(noSubscribe, passkeysSupported, () => false);
 }
@@ -79,7 +76,6 @@ function cancelled(e: unknown): boolean {
   return e instanceof DOMException && (e.name === "NotAllowedError" || e.name === "AbortError");
 }
 
-/** navigator.credentials.create for options from /v1/me/security/passkeys/options. */
 export async function createPasskey(options: WebAuthnOptions): Promise<WebAuthnCredential> {
   const pk = options.publicKey as JSONOptions;
   const publicKey: PublicKeyCredentialCreationOptions =
@@ -100,7 +96,6 @@ export async function createPasskey(options: WebAuthnOptions): Promise<WebAuthnC
   }
 }
 
-/** navigator.credentials.get for sign-in and verification options. */
 export async function getPasskey(options: WebAuthnOptions): Promise<WebAuthnCredential> {
   const pk = options.publicKey as JSONOptions;
   const publicKey: PublicKeyCredentialRequestOptions =

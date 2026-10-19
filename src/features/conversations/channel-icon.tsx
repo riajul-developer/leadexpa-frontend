@@ -15,7 +15,6 @@ const TONE = {
   sms: "text-muted",
 } as const;
 
-/** The channel of a conversation, as an icon with its name for screen readers. */
 export function ChannelIcon({ channel, className }: { channel: Channel; className?: string }) {
   const t = useTranslations("conversations.channel");
   const Icon = ICON[channel];

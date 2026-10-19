@@ -32,7 +32,6 @@ import {
   useSetAutonomy,
 } from "./api";
 
-/** Client › AI agent (17.12): autonomy, guardrails, knowledge base and evals. */
 export function AgentSettings({ clientId }: { clientId: string }) {
   const agent = useAgent(clientId);
   if (!agent.data) return <Skeleton className="h-96 w-full" />;

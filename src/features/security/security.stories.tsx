@@ -8,7 +8,6 @@ import { RecoveryCodes } from "./components/recovery-codes";
 import { SecuritySettings } from "./components/security-settings";
 import { TOTPSetup } from "./components/totp-setup";
 
-/** Security (17.6): two-step sign-in, passkeys, recovery codes, signed-in devices and the agency gate. */
 const meta = {
   title: "Security/Settings",
   component: SecuritySettings,

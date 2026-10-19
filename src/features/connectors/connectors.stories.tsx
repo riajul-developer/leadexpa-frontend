@@ -6,7 +6,6 @@ import { ConnectorsCard } from "./connectors-card";
 import { ConnectorInstallPage } from "./install-page";
 import { CredentialsPanel } from "./parts";
 
-/** Lead-source connectors (G5): the list with health, a health page, and the credentials shown once. */
 const meta = {
   title: "Connectors/InstallPage",
   component: ConnectorInstallPage,

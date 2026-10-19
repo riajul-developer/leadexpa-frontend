@@ -20,7 +20,6 @@ import { type EncryptionKeys, useEncryptionKeyActions, useEncryptionKeys } from 
 
 type Provider = EncryptionKeys["provider"];
 
-/** Settings › Single sign-on › Encryption keys (G7f): the platform key or the agency's own KMS key (BYOK). */
 export function EncryptionKeysCard() {
   const t = useTranslations("sso.keys");
   const fmt = useFormat();
@@ -159,7 +158,6 @@ export function EncryptionKeysCard() {
   );
 }
 
-/** Lead contact encryption (G7f-2): names, phones and emails sealed with the workspace key. */
 function LeadPII({ keys: k, owner }: { keys: EncryptionKeys; owner: boolean }) {
   const t = useTranslations("sso.keys.leadPII");
   const { leadPII } = useEncryptionKeyActions();

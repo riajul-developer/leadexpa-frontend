@@ -1,8 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// GLOBAL_PROMPT 10.3 (step 7f-1): revenue intelligence. Offline sales matched to leads with a review queue, a lead's
-// likely deal value and close date, prediction accuracy under the forecast, and opt-in benchmarks.
-
 test("offline sales: upload, then confirm or ignore what didn't match", async ({ page }) => {
   await page.goto("/en/clients");
   await page.getByRole("link", { name: "Dhaka Dental Care" }).first().click();

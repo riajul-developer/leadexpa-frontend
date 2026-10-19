@@ -12,7 +12,6 @@ import { type Benchmarks, useBenchmarks, useBenchSettings, useCalibration, useSe
 
 type Metric = Benchmarks["metrics"][number];
 
-/** Insights › Benchmarks: where a client stands among agencies that opted in (10.3, k-anonymous groups only). */
 export function BenchmarksPanel({ clientId }: { clientId?: string }) {
   const t = useTranslations("revintel.benchmarks");
   const canChange = useCan("agency.update");
@@ -101,7 +100,6 @@ function MetricCard({ m }: { m: Metric }) {
   );
 }
 
-/** Insights › Forecast: how accurate the deal predictions behind the forecast have been. */
 export function CalibrationCard({ clientId }: { clientId?: string }) {
   const t = useTranslations("revintel.calibration");
   const f = useFormat();

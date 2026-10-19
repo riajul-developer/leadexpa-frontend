@@ -14,7 +14,6 @@ import { Card, CardContent, CardHeader, CardTitle, Skeleton } from "@/shared/ui/
 import { useCallSettings, useMyCallPhone, useSaveCallSettings, useSaveMyCallPhone, type CallSettings } from "./api";
 import { useCallErrorToast } from "./errors";
 
-/** Settings → Calls: the phone you answer click-to-call on, and (admins) recording, its notice and retention. */
 export function CallSettingsPage() {
   const canManage = useCan("integration.manage");
   return (
@@ -42,7 +41,6 @@ function MyPhone() {
         {q.isPending ? (
           <Skeleton className="h-16" />
         ) : (
-          // Label, then input + Save on one line, then the hint: the button lines up with the input, not the hint.
           <form
             className="grid grid-cols-[1fr_auto] gap-x-2 gap-y-1.5"
             onSubmit={(e) => {

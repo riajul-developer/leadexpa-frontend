@@ -34,7 +34,6 @@ import {
 } from "./api";
 import { ConnectCard } from "./connect-card";
 
-/** /reseller: sell your own plans to your clients through your own Stripe account (6c). */
 export function ResellerPage() {
   const t = useTranslations("reseller");
   const account = useConnectedAccount();
@@ -60,7 +59,6 @@ export function ResellerPage() {
   );
 }
 
-/** Stripe sends the owner back with ?onboarding=done|refresh. */
 function useOnboardingReturn() {
   const t = useTranslations("reseller.account");
   const params = useSearchParams();

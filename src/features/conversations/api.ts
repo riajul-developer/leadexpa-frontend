@@ -68,7 +68,6 @@ export function useSendReply(conversationId: string, leadId: string | undefined)
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: conversationKeys.messages(conversationId) });
       void qc.invalidateQueries({ queryKey: conversationKeys.all });
-      // The reply is the SLA response: the lead's chip flips to "Met".
       if (leadId) {
         void qc.invalidateQueries({ queryKey: leadKeys.detail(leadId) });
         void qc.invalidateQueries({ queryKey: leadKeys.activities(leadId) });

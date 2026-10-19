@@ -4,7 +4,6 @@ import { ruleRuns, rules } from "@/mocks/db";
 
 import { Checks, RuleBuilder } from "./rule-builder";
 
-/** Automation rules (17.5): the When / If / Then builder and the "why did/didn't it fire" explanation. */
 const meta = {
   title: "Automations/RuleBuilder",
   component: RuleBuilder,

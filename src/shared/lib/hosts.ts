@@ -1,5 +1,4 @@
-// Custom portal domains (8f-2): an agency's clients can reach the portal on portal.theiragency.com. Every host
-// not listed in NEXT_PUBLIC_APP_HOSTS (our own hosts, comma-separated) is such a custom domain. Unset: none are.
+// Any host not in NEXT_PUBLIC_APP_HOSTS is a custom portal domain.
 const APP_HOSTS = (process.env.NEXT_PUBLIC_APP_HOSTS ?? "")
   .split(",")
   .map((h) => h.trim().toLowerCase())

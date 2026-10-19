@@ -8,27 +8,23 @@ import type { components, paths } from "./schema";
 
 export type Schemas = components["schemas"];
 
-// On an agency's custom portal domain the TLS proxy serves the API same-origin (/v1 on that host).
+// On a custom portal domain the API is served same-origin.
 export const API_URL =
   typeof window !== "undefined" && isCustomHost(window.location.host)
     ? window.location.origin
     : (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080");
 export const CSRF_COOKIE = "recov_csrf";
 
-// Multi-region (G1): /v1/me says which cell serves the active agency. NEXT_PUBLIC_API_URL only bootstraps;
-// after that every call goes to the agency's region.
 let base = API_URL;
 export function apiBase(): string {
   return base;
 }
-/** Points the client at the agency's region (from /v1/me api_base_url). Ignored on custom portal hosts. */
 export function setApiBase(url: string | null | undefined) {
   if (!url || !/^https?:\/\//.test(url)) return;
   if (typeof window !== "undefined" && isCustomHost(window.location.host)) return;
   base = url.replace(/\/$/, "");
 }
 
-/** A 421 wrong_region answer: the agency lives in another region. Continue there, on the same page. */
 async function followRegion(res: Response) {
   if (res.status !== 421 || typeof window === "undefined") return;
   const body = (await res
@@ -49,7 +45,6 @@ export function readCookie(name: string): string | undefined {
 }
 
 // One refresh at a time: concurrent 401s wait for the same refresh call.
-// Resolves to null on success, or why the session is gone ("session_policy" when the agency's limits ended it).
 let refreshing: Promise<string | null> | null = null;
 function refreshSession(): Promise<string | null> {
   refreshing ??= fetch(`${base}/v1/auth/refresh`, {
@@ -67,16 +62,13 @@ function refreshSession(): Promise<string | null> {
   return refreshing;
 }
 
-/** reason: the API code that ended the session (e.g. "session_policy"), when it said one. */
 export type SessionListener = (reason?: string) => void;
 const sessionLost = new Set<SessionListener>();
-/** Called when the session can't be refreshed (the app shell redirects to login, keeping returnTo). */
 export function onSessionLost(fn: SessionListener): () => void {
   sessionLost.add(fn);
   return () => sessionLost.delete(fn);
 }
 
-/** fetch with one silent refresh on `401 session_expired`, retrying the original request once. */
 async function fetchWithRefresh(input: Request): Promise<Response> {
   const retry = input.clone();
   const res = await fetch(input);
@@ -123,10 +115,6 @@ const conventions: Middleware = {
 export const api = createClient<paths>({ baseUrl: API_URL, credentials: "include", fetch: fetchWithRefresh });
 api.use(conventions);
 
-/**
- * Unwraps an openapi-fetch result: returns data or throws a typed ApiError. Use in every query/mutation fn
- * so React Query sees failures as errors.
- */
 export async function unwrap<T>(
   call: Promise<{ data?: T; error?: unknown; response: Response }>,
 ): Promise<NonNullable<T>> {
@@ -135,7 +123,6 @@ export async function unwrap<T>(
   return data as NonNullable<T>;
 }
 
-/** For endpoints without a body (204). */
 export async function unwrapEmpty(call: Promise<{ error?: unknown; response: Response }>): Promise<void> {
   const { error, response } = await call;
   if (error !== undefined || !response.ok) throw toApiError(response, error);

@@ -8,12 +8,9 @@ import { inboxKeys, leadKeys } from "@/shared/lib/query-keys";
 import { realtime } from "@/shared/lib/realtime";
 import { useMe } from "@/shared/lib/session";
 
-// Sandbox environments (G7i): a test copy of the agency, managed from the live agency.
-
 export type SandboxView = Schemas["SandboxView"];
 export const sandboxKey = ["sandbox"] as const;
 
-/** The current agency is a sandbox: returns the live agency's id, or null. */
 export function useSandboxOf(): string | null {
   const { data: me } = useMe();
   return me?.agency?.sandbox_of ?? null;
@@ -49,7 +46,6 @@ export function useSandboxActions() {
   };
 }
 
-/** Switches the session to another agency (the sandbox or back to the live one) and reloads into its inbox. */
 export function useSwitchWorkspace() {
   const qc = useQueryClient();
   const locale = useLocale();

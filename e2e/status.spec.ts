@@ -1,8 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// The public status page (G7j): no login, every region's components with 90 days of uptime, current incidents,
-// scheduled maintenance and the last 14 days, in the reader's language.
-
 test("the public status page shows regions, uptime bars, incidents and maintenance", async ({ page }) => {
   await page.goto("/en/status");
   await expect(page.getByRole("heading", { level: 1, name: "LeadExpa status" })).toBeVisible();
@@ -15,7 +12,6 @@ test("the public status page shows regions, uptime bars, incidents and maintenan
   await expect(page.getByRole("heading", { name: "Current incidents" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Problems with lead capture" })).toBeVisible();
   await expect(page.getByText("Affects Lead capture in eu1")).toBeVisible();
-  // Opened by the prober (ADR 0052), and labelled so.
   await expect(page.getByTestId("status-incident-automatic")).toHaveText("Detected automatically");
   await expect(page.getByRole("heading", { name: "Scheduled maintenance", exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Scheduled maintenance: messaging" })).toBeVisible();

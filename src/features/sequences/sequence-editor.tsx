@@ -50,7 +50,6 @@ const BLANK: SequenceInput = {
   holdout_percent: 10,
 };
 
-/** Fills the parameters a trigger kind needs with sensible defaults. */
 function triggerFor(kind: Trigger["kind"], prev: Trigger): Trigger {
   switch (kind) {
     case "no_answer":
@@ -64,7 +63,6 @@ function triggerFor(kind: Trigger["kind"], prev: Trigger): Trigger {
   }
 }
 
-/** Step-list editor (17.3): a few rows, not a canvas. */
 export function SequenceEditor({ sequence, defaultClient }: { sequence?: Sequence; defaultClient?: string }) {
   const t = useTranslations("sequences");
   const te = useTranslations("errors");
@@ -85,7 +83,6 @@ export function SequenceEditor({ sequence, defaultClient }: { sequence?: Sequenc
       : { ...BLANK, client_id: defaultClient ?? clients[0]?.id ?? null },
   );
   const [errors, setErrors] = useState<Record<string, string>>({});
-  // A new sequence starts on a client (clients load after the first render); "All clients" is a choice.
   const [clientTouched, setClientTouched] = useState(false);
   const firstClient = clients[0]?.id;
   useEffect(() => {
@@ -270,7 +267,6 @@ function TriggerCard({
   const f = useFormat();
   const tr = v.trigger;
   const setTrigger = (p: Partial<Trigger>) => set({ trigger: { ...tr, ...p } });
-  // The preview follows the editor, half a second after the last change.
   const [debounced, setDebounced] = useState(tr);
   useEffect(() => {
     const id = setTimeout(() => setDebounced(tr), 500);

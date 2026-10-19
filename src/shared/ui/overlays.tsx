@@ -1,5 +1,4 @@
-// Re-exports. Each primitive is its own "use client" module so pages only ship what they use
-// (a client module keeps all its exports in the bundle).
+// Each primitive is its own client module, so pages ship only what they use.
 export * from "./dialog";
 export * from "./sheet";
 export * from "./tabs";

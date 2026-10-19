@@ -30,17 +30,12 @@ import { useActivities, useLogActivity, type Activity, type Lead, type Outcome }
 
 import { ConversationWindow } from "./conversation-window";
 
-// ---------------------------------------------------------------------------------------------
-// Renderer registry (FRONTEND_PROMPT §16): keyed by type, so new channels plug in without a rewrite.
-
 interface ItemRenderer {
   icon: LucideIcon;
   tone?: string;
-  /** Title line; body defaults to activity.body. */
   title: (a: Activity, t: ReturnType<typeof useTranslations>) => ReactNode;
 }
 
-// Automated messages: a recovery sequence, the appointment engine (confirmations, reminders) or the auto-responder.
 const automatedTitle = (via?: string) =>
   via === "sequence" ? "sequenceMessage" : via === "appointments" ? "appointmentMessage" : "autoReply";
 
@@ -72,7 +67,6 @@ const REGISTRY: Record<string, ItemRenderer> = {
     icon: Users,
     title: (a, t) => {
       const m = a.meta as { via?: string; appointment_id?: string; event?: string };
-      // Appointments (10.1): booked, rescheduled, confirmed, cancelled, attended, no-show.
       if (m.appointment_id && m.event && t.has(`appointment.${m.event}`)) return t(`appointment.${m.event}`);
       return m.via === "walk_in" ? t("walkIn") : t("meeting");
     },
@@ -92,9 +86,7 @@ const REGISTRY: Record<string, ItemRenderer> = {
   system: {
     icon: Settings2,
     title: (a, t) => {
-      // A recovery sequence handed the lead to a person (17.3).
       const m = a.meta as { via?: string; task?: string; sequence?: string; kind?: string; status?: string };
-      // Payment links (17.0.2): requested → paid / failed / cancelled / expired / refunded.
       if (m.kind === "payment") return t(`payment.${m.status ?? "requested"}`);
       if (m.via === "automation") return t("automationTask", { rule: m.sequence ?? "" });
       if (m.via === "appointments") return t("appointmentCall", { title: m.sequence ?? "" });
@@ -102,7 +94,6 @@ const REGISTRY: Record<string, ItemRenderer> = {
       return t(m.task === "draft" ? "sequenceDraft" : "sequenceCall", { sequence: m.sequence ?? "" });
     },
   },
-  // Inbound DMs (17.0.4): the lead wrote to the page or the Instagram account.
   messenger: { icon: MessageCircle, tone: "text-primary", title: (_a, t) => t("messenger") },
   instagram: { icon: Camera, tone: "text-primary", title: (_a, t) => t("instagram") },
 };
@@ -190,8 +181,6 @@ export function Timeline({ lead, timeZone }: { lead: Lead; timeZone: string }) {
   );
 }
 
-// ---------------------------------------------------------------------------------------------
-
 const COMPOSER_OUTCOMES: Outcome[] = [
   "connected",
   "no_answer",
@@ -202,7 +191,6 @@ const COMPOSER_OUTCOMES: Outcome[] = [
   "wrong_number",
 ];
 
-/** Log a call / note / message with outcome chips; "Schedule callback" takes a date-time. */
 export function Composer({ lead }: { lead: Lead }) {
   const t = useTranslations("composer");
   const to = useTranslations("outcome");

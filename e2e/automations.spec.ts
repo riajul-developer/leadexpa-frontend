@@ -1,8 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// FRONTEND_PROMPT 17.5: the automation rules builder — When / If / Then, test on a lead, simulate on history,
-// the execution log ("why did/didn't it fire") and version history with a diff.
-
 test("rules are listed under Automation and can be switched off and on", async ({ page }) => {
   await page.goto("/en/automations");
   await expect(page.getByRole("heading", { level: 1, name: "Automations" })).toBeVisible();
@@ -24,7 +21,6 @@ test("build a rule, test it on a lead and simulate it", async ({ page }) => {
   await page.getByRole("button", { name: "Add condition" }).click();
   await page.getByLabel("Field of condition 2").selectOption("lead.stage");
 
-  // Nothing runs while trying it.
   await page.getByLabel("Search a lead by name or phone").fill("01");
   await page.getByRole("region", { name: "Test on a lead" }).getByRole("button").first().click();
   await expect(page.getByText(/^Would (not )?run$/)).toBeVisible();

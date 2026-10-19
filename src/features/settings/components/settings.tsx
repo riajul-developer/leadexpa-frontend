@@ -49,32 +49,26 @@ const TAB_PERMISSION: Partial<Record<SettingsTab, string>> = {
   group: "agency.read",
 };
 
-// Lead scoring (17.7) loads on first visit.
 const ScoringSettings = dynamic(() => import("@/features/scoring").then((m) => m.ScoringSettings), {
   loading: () => <Skeleton className="h-64 w-full" />,
 });
 
-// White-label branding (8f) loads on first visit.
 const BrandingSettings = dynamic(() => import("@/features/portal").then((m) => m.BrandingSettings), {
   loading: () => <Skeleton className="h-96 w-full" />,
 });
 
-// Calendar connection (10.1) loads on first visit.
 const CalendarSettings = dynamic(() => import("@/features/appointments").then((m) => m.CalendarSettings), {
   loading: () => <Skeleton className="h-40 w-full" />,
 });
 
-// Single sign-on and SCIM (G7a) load on first visit: only owners and admins see the tab.
 const SSOSettings = dynamic(() => import("@/features/sso").then((m) => m.SSOSettings), {
   loading: () => <Skeleton className="h-96 w-full" />,
 });
 
-// Holding group (G7e) loads on first visit.
 const GroupSettings = dynamic(() => import("@/features/groups").then((m) => m.GroupSettings), {
   loading: () => <Skeleton className="h-40 w-full" />,
 });
 
-// Developer settings load on first visit: most members never open them.
 const DeveloperSettings = dynamic(() => import("@/features/developer").then((m) => m.DeveloperSettings), {
   loading: () => <Skeleton className="h-64 w-full" />,
 });
@@ -87,7 +81,7 @@ export function SettingsPage({ tab }: { tab: SettingsTab }) {
   return (
     <div className="mx-auto grid max-w-5xl gap-4 p-4 md:grid-cols-[12rem_1fr]">
       <h1 className="text-xl font-semibold md:col-span-2">{t("title")}</h1>
-      {/* Stays below the sticky app header (h-14) while the settings content scrolls. */}
+      {/* Stays below the sticky app header (h-14). */}
       <nav
         aria-label={t("title")}
         className="flex gap-1 overflow-x-auto md:sticky md:top-18 md:max-h-[calc(100dvh-5.5rem)] md:flex-col md:self-start md:overflow-y-auto"
@@ -126,8 +120,6 @@ export function SettingsPage({ tab }: { tab: SettingsTab }) {
     </div>
   );
 }
-
-// ---------------------------------------------------------------------------------------------
 
 function ProfileSettings() {
   const t = useTranslations("settings.profile");
@@ -174,8 +166,6 @@ function ProfileSettings() {
               </p>
             </div>
           </div>
-          {/* One row on wide screens: language (compact), the digits choice where the language has its own, clock,
-              and timezone taking the rest. Two per row on tablets, stacked on phones. */}
           <div
             className={cn(
               "grid gap-4 sm:grid-cols-2",
@@ -264,8 +254,6 @@ function ProfileSettings() {
   );
 }
 
-// ---------------------------------------------------------------------------------------------
-
 function AgencySettings() {
   const t = useTranslations("settings.agency");
   const qc = useQueryClient();
@@ -352,7 +340,6 @@ function AgencySettings() {
   );
 }
 
-/** Owners and admins must use two-step sign-in (17.6). Saved on toggle, separately from the form. */
 function AdminMFAPolicy({ agency }: { agency: Schemas["Agency"] }) {
   const t = useTranslations("settings.agency");
   const te = useTranslations("errors");
@@ -390,8 +377,6 @@ function AdminMFAPolicy({ agency }: { agency: Schemas["Agency"] }) {
     </div>
   );
 }
-
-// ---------------------------------------------------------------------------------------------
 
 const ROLE_ORDER: Schemas["Role"][] = ["owner", "admin", "manager", "agent", "client_agent", "client_viewer"];
 
@@ -556,7 +541,6 @@ function InviteDialog({ onClose }: { onClose: () => void }) {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [role, setRole] = useState<Schemas["InvitableRole"]>("agent");
-  // Client staff (17.0.3) belong to one client and are usually invited by phone (SMS link, no password).
   const clientRole = role === "client_agent" || role === "client_viewer";
   const [by, setBy] = useState<"email" | "phone">("email");
   const [clientId, setClientId] = useState("");
@@ -683,8 +667,6 @@ function InviteDialog({ onClose }: { onClose: () => void }) {
     </Dialog>
   );
 }
-
-// ---------------------------------------------------------------------------------------------
 
 function Diff({ before, after }: { before: unknown; after: unknown }) {
   const t = useTranslations("settings.audit");

@@ -17,7 +17,6 @@ import { Card, CardContent, CardHeader, CardTitle, Skeleton } from "@/shared/ui/
 
 import { useSandbox, useSandboxActions, useSandboxOf, useSwitchWorkspace } from "../api";
 
-/** Settings › Single sign-on › Sandbox (G7i): a test copy of the workspace, managed from the live workspace. */
 export function SandboxCard() {
   const t = useTranslations("sandbox");
   const fmt = useFormat();

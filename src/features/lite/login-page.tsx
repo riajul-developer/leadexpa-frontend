@@ -12,10 +12,6 @@ const field =
 const primary =
   "bg-primary text-primary-fg flex h-14 w-full items-center justify-center rounded-lg text-lg font-semibold disabled:opacity-50";
 
-/**
- * Lite sign-in (FRONTEND_PROMPT 17.0.3): phone number → SMS code. No password. "Remember this device" keeps
- * the person signed in for 90 days on their own phone.
- */
 export function LiteLogin({ returnTo }: { returnTo?: string }) {
   const t = useTranslations("lite.login");
   const router = useRouter();
@@ -26,7 +22,6 @@ export function LiteLogin({ returnTo }: { returnTo?: string }) {
   const [remember, setRemember] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  // Two-step sign-in (17.6): the SMS code was right, but the account also asks for its app or recovery code.
   const [mfa, setMfa] = useState<{ token: string; methods: string[] } | null>(null);
   const [mfaCode, setMfaCode] = useState("");
   const [recovery, setRecovery] = useState(false);

@@ -12,7 +12,6 @@ import { Badge, Card, EmptyState, Skeleton } from "@/shared/ui/primitives";
 import { type Category, useListings } from "./api";
 import { AppMark, Stars, useListingText } from "./parts";
 
-/** /marketplace: every integration and partner app, by category, with ratings. */
 export function MarketplacePage() {
   const t = useTranslations("marketplace");
   const tc = useTranslations("marketplace.categories");

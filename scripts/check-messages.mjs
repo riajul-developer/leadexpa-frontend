@@ -1,6 +1,4 @@
-// i18n check (FRONTEND_PROMPT §8, GLOBAL_PROMPT G-7): every catalog has exactly en's keys, and every static key
-// used in code exists. Generated catalogs (the en-XA pseudo-locale) are skipped.
-// Usage: node scripts/check-messages.mjs [--list]   (--list prints the keys found in code)
+// Checks every catalog has en's keys and every static key used in code exists.
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 
@@ -30,10 +28,8 @@ function files(dir, out = []) {
   return out;
 }
 
-/** Static keys per file: `const t = useTranslations("ns")` / getTranslations({ namespace: "ns" }) then t("key"). */
 export function extract(src) {
-  // Components in one file rebind the same name (const t = …) — resolve each call against the nearest
-  // preceding binding of that name, which matches component scope for sequentially declared components.
+  // Several components may rebind `t`: use the nearest preceding binding.
   const bindings = [];
   const bind =
     /const\s+(\w+)\s*=\s*(?:await\s+)?(?:useTranslations|getTranslations)\(\s*(?:"([^"]*)"|\{[^}]*namespace:\s*"([^"]*)"[^}]*\})?\s*\)/g;

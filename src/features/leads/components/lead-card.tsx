@@ -17,10 +17,7 @@ import type { Lead } from "../api/hooks";
 
 import { contactHref, onContactClick } from "./contact-flow";
 
-/**
- * Inbox row: name, client, campaign, stage, live SLA chip, last activity, tap-to-call and WhatsApp.
- * Memoized: SSE updates re-render only the rows whose lead object changed.
- */
+/** Memoized: SSE updates re-render only rows whose lead changed. */
 export const LeadCard = memo(function LeadCard({
   lead,
   selected,
@@ -35,7 +32,6 @@ export const LeadCard = memo(function LeadCard({
   focused?: boolean;
   onOpen: (lead: Lead) => void;
   onOutcome?: (lead: Lead) => void;
-  /** AI/rules one-liner slot (renders its own markup, or nothing). */
   hint?: ReactNode;
   highlight?: boolean;
 }) {

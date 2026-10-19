@@ -16,15 +16,12 @@ import type { InboxPage, Lead, LeadDetail, Stage } from "./queries";
 export * from "./queries";
 export type Outcome = NonNullable<ActivityBody["outcome"]>;
 
-// ---------------------------------------------------------------------------------------------
-// Cache helpers: a lead lives in its detail cache, the inbox and lead lists; patch all of them at once.
-
 type Patch = Partial<Lead> | ((l: Lead) => Lead);
 
 function patchLeadEverywhere(qc: QueryClient, id: string, patch: Patch) {
   const apply = (l: Lead): Lead => (typeof patch === "function" ? patch(l) : { ...l, ...patch });
   qc.setQueryData<LeadDetail>(leadKeys.detail(id), (old) => (old ? ({ ...old, ...apply(old) } as LeadDetail) : old));
-  // Inbox and lead lists are infinite queries ({ pages: [{ data }] }); inbox rows keep their `section`.
+  // Inbox and lead lists are infinite queries; inbox rows keep their `section`.
   const patchPages = <P extends { data: Lead[] }>(old: { pages: P[]; pageParams: unknown[] } | undefined) =>
     old?.pages
       ? {
@@ -62,7 +59,6 @@ function restore(qc: QueryClient, s: Snapshot | undefined) {
   for (const [key, data] of s?.entries ?? []) qc.setQueryData(key, data);
 }
 
-/** Stale version: refetch, then tell the user who changed it (FRONTEND_PROMPT §4.2). */
 function useConflictToast() {
   const t = useTranslations("leads.conflict");
   const { byUserId } = useMembers();
@@ -85,12 +81,7 @@ function settle(qc: QueryClient, id: string) {
   void qc.invalidateQueries({ queryKey: leadKeys.nextAction(id) });
 }
 
-// ---------------------------------------------------------------------------------------------
-
-/**
- * Logs a call/message/note. Optimistic: a response activity marks the SLA met immediately (< 100 ms UI
- * feedback). Offline, the activity is queued with its Idempotency-Key and replayed on reconnect.
- */
+/** Optimistic; offline, it is queued with its Idempotency-Key and replayed on reconnect. */
 export function useLogActivity(lead: Pick<Lead, "id" | "received_at" | "first_response_at" | "stage">) {
   const qc = useQueryClient();
   const t = useTranslations("leads.activity");
@@ -209,7 +200,7 @@ export function useRecordSale(lead: Pick<Lead, "id">) {
     mutationFn: ({ sale, key }: { sale: Schemas["SaleInput"]; key: string }) =>
       unwrap(
         api.POST("/v1/leads/{leadId}/sales", {
-          // Required by the API: a double tap or retry must not record two sales.
+          // Required by the API: a retry must not record two sales.
           params: { path: { leadId: lead.id }, header: { "Idempotency-Key": key } },
           body: sale,
         }),

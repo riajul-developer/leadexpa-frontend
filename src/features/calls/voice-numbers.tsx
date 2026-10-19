@@ -14,10 +14,6 @@ import { Badge, Card, CardContent, CardHeader, CardTitle, Skeleton } from "@/sha
 import { useConnectVoiceNumber, useDisconnectVoiceNumber, useVoiceNumbers, type VoiceNumber } from "./api";
 import { useCallErrorToast } from "./errors";
 
-/**
- * A client's calling numbers (17.8), on the client's Channels tab: a Twilio number for click-to-call, or a cloud
- * PBX number that reports its calls to a webhook (missed calls from new numbers become leads).
- */
 export function VoiceNumbers({ clientId }: { clientId: string }) {
   const t = useTranslations("calls.numbers");
   const canManage = useCan("integration.manage");

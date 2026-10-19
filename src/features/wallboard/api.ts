@@ -5,7 +5,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { track } from "@/shared/lib/analytics";
 import { api, unwrap, unwrapEmpty, type Schemas } from "@/shared/lib/api/client";
 
-/** Wallboard / TV screens (Tier 3, step 8h). */
 export type Screen = Schemas["WallboardScreen"];
 export type ScreenInput = Schemas["WallboardInput"];
 export type Paired = Schemas["WallboardPaired"];

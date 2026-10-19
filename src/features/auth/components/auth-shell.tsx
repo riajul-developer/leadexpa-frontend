@@ -3,7 +3,6 @@ import type * as React from "react";
 import { BrandLogo } from "@/shared/ui/brand";
 import { LocaleSwitcher } from "@/shared/ui/locale-switcher";
 
-/** Centered card for sign-in flows; mobile-first, no app chrome. */
 export function AuthShell({
   title,
   subtitle,

@@ -9,7 +9,6 @@ import { Badge, Card, CardContent, CardHeader, CardTitle, Skeleton } from "@/sha
 
 import { useInvoices } from "../api";
 
-/** Stripe invoices (with VAT/GST shown separately) in the customer's currency. */
 export function InvoicesCard() {
   const t = useTranslations("billing.invoices");
   const f = useFormat();

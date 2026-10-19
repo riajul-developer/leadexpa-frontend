@@ -7,7 +7,6 @@ import { cn } from "@/shared/lib/cn";
 
 import type { Listing } from "./api";
 
-/** Built-in texts are translated by key; partner apps show what their publisher wrote. */
 export function useListingText() {
   const t = useTranslations("marketplace.builtIn");
   return (l: Pick<Listing, "key" | "kind" | "summary" | "description">) => {
@@ -19,7 +18,6 @@ export function useListingText() {
   };
 }
 
-/** A monogram tile in the brand palette (partner logos aren't hosted). */
 export function AppMark({ name, kind, className }: { name: string; kind: Listing["kind"]; className?: string }) {
   const letters = name
     .split(/[\s&,]+/)
@@ -41,7 +39,6 @@ export function AppMark({ name, kind, className }: { name: string; kind: Listing
   );
 }
 
-/** Read-only stars with the number for screen readers. */
 export function Stars({ value, className }: { value: number; className?: string }) {
   const t = useTranslations("marketplace");
   return (
@@ -61,7 +58,7 @@ export function Stars({ value, className }: { value: number; className?: string 
   );
 }
 
-/** A rating input: five radio buttons styled as stars. */
+/** Five radio buttons styled as stars, for screen readers. */
 export function StarInput({ value, onChange }: { value: number; onChange: (n: number) => void }) {
   const t = useTranslations("marketplace");
   return (

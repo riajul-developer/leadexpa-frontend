@@ -26,7 +26,7 @@ function appOrigin() {
   return typeof window === "undefined" ? "" : window.location.origin;
 }
 
-// Copy pasted into the client's own website, so it is in the website's language, not the agency's UI.
+// Pasted into the client's own website, so it uses the site's language, not the UI's.
 const SNIPPET_COPY: Record<ApiLocale, { name: string; phone: string; consent: string; send: string }> = {
   en: { name: "Your name", phone: "Mobile number", consent: "I agree to be contacted on WhatsApp", send: "Send" },
   bn: { name: "আপনার নাম", phone: "মোবাইল নম্বর", consent: "WhatsApp-এ যোগাযোগে সম্মতি দিচ্ছি", send: "পাঠান" },
@@ -53,7 +53,6 @@ export function embedSnippets(endpoint: string, lang: AppLocale, otp = false) {
   return { js, html };
 }
 
-/** A client's lead sources: web forms (snippet, domains, test lead), plus CSV/manual/Meta sources. */
 export function SourcesPanel({ clientId }: { clientId: string }) {
   const t = useTranslations("sources");
   const f = useFormat();
@@ -292,7 +291,6 @@ function SnippetDialog({ source, onClose }: { source: Source; onClose: () => voi
   const { js, html } = embedSnippets(source.endpoint_url!, lang, source.otp_required);
   const copy = (v: string) => void navigator.clipboard.writeText(v).then(() => toast.success(t("copied")));
   const test = useMutation({
-    // Same path a real visitor takes: the public endpoint. It shows up as a real lead named "Test lead".
     mutationFn: async () => {
       const r = await fetch(source.endpoint_url!, {
         method: "POST",
@@ -380,7 +378,6 @@ function copyText(value: string, done: string) {
   void navigator.clipboard.writeText(value).then(() => toast.success(done));
 }
 
-/** The forwarding address of an email-in source, copyable in one tap. */
 function InboundAddress({ address }: { address: string }) {
   const t = useTranslations("sources");
   return (
@@ -400,7 +397,6 @@ function InboundAddress({ address }: { address: string }) {
   );
 }
 
-/** Setup guide (17.0.4): forward enquiry emails from a mailbox or a portal to the client's address. */
 function EmailInGuideDialog({ address, onClose }: { address: string; onClose: () => void }) {
   const t = useTranslations("sources");
   return (

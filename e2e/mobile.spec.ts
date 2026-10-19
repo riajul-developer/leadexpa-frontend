@@ -1,12 +1,9 @@
 import { expect, test } from "@playwright/test";
 
-// Agent on a phone (FRONTEND_PROMPT §2.5, §12: Pixel 7 project).
-
 test("bottom navigation and one-tap actions on a phone", async ({ page }) => {
   await page.goto("/bn/inbox");
   const nav = page.getByRole("navigation", { name: "প্রধান মেনু" }).last();
   await expect(nav.getByRole("link", { name: "ইনবক্স" })).toBeVisible();
-  // Call and WhatsApp are real links (tel:, wa.me) with large tap targets.
   const call = page.getByRole("link", { name: /কল করুন$/ }).first();
   await expect(call).toHaveAttribute("href", /^tel:\+880/);
   const box = await call.boundingBox();

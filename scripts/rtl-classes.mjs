@@ -1,9 +1,4 @@
-// RTL guard (GLOBAL_PROMPT §5.2): physical left/right utilities break Arabic layouts. This script lists them
-// (default) or rewrites them to logical ones (--fix): ml→ms, pr→pe, left→start, text-left→text-start,
-// border-l→border-s, rounded-l→rounded-s…
-// Centering lists ("left-1/2 right-auto -translate-x-1/2") stay physical: they are direction-neutral, while start-*
-// combined with a physical translate would push the element off-center in RTL.
-// Usage: node scripts/rtl-classes.mjs [--fix]   (exit 1 when unfixed classes remain)
+// Lists physical left/right utilities, or rewrites them to logical ones (--fix).
 import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
@@ -38,12 +33,12 @@ function files(dir, out = []) {
   return out;
 }
 
-/** Converts one class token (with variants like sm:hover:) or returns null when it isn't physical. */
 function convert(token, siblings) {
   const parts = token.split(":");
   const base = parts.pop();
   for (const [re, to] of MAP) {
     if (!re.test(base)) continue;
+    // Centering stays physical: start-* with a physical translate is off-center in RTL.
     if (/^-?(left|right)-/.test(base) && siblings.some((s) => /translate-x/.test(s))) return null;
     return [...parts, base.replace(re, to)].join(":");
   }
@@ -54,9 +49,7 @@ let remaining = 0;
 let changed = 0;
 for (const file of files(ROOT)) {
   const src = readFileSync(file, "utf8");
-  // Class lists: className="…", cn("…", "…"), cva variants: any string literal made of class-like tokens.
   const out = src.replace(/(["'`])([^"'`\n]*)\1/g, (lit, q, body) => {
-    // Only literals that look like class lists: lowercase utility tokens separated by single spaces.
     if (!/^[\w:./\[\]%!#() -]+$/.test(body) || /\$\{/.test(body)) return lit;
     const tokens = body.split(" ");
     let touched = false;

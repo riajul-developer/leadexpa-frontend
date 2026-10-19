@@ -1,11 +1,8 @@
 import { expect, test } from "@playwright/test";
 
-// BACKEND/FRONTEND_PROMPT 17.0.1: junk leads stay out of the inbox, live in their bucket, and can be restored.
-
 test("the Junk bucket lists junk leads and restores them", async ({ page }) => {
   await page.goto("/en/inbox");
   await expect(page.getByRole("heading", { level: 1, name: "Inbox" })).toBeVisible();
-  // No junk badge anywhere in the inbox.
   await expect(page.locator("main").getByText("Junk", { exact: true })).toHaveCount(0);
 
   const junkLink = page

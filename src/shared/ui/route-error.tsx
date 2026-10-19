@@ -15,10 +15,6 @@ export interface RouteErrorProps {
   reset: () => void;
 }
 
-/**
- * Body of every route segment's error.tsx (FRONTEND_PROMPT §10): reports to Sentry, shows the event id people
- * can quote to support, and retries by refetching server data and re-rendering the segment. Never a white screen.
- */
 export function RouteError({ error, reset }: RouteErrorProps) {
   const t = useTranslations("errorBoundary");
   const router = useRouter();

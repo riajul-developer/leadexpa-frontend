@@ -6,7 +6,6 @@ import { isCustomHost } from "./shared/lib/hosts";
 
 const intl = createIntlMiddleware(routing);
 
-// Routes outside the app shell: auth screens, public reports, action links.
 const PUBLIC_SEGMENTS = new Set([
   "login",
   "signup",
@@ -16,24 +15,23 @@ const PUBLIC_SEGMENTS = new Set([
   "invite",
   "r",
   "t",
-  "pay", // payment links (17.0.2): the payer has no account
-  "buy", // reseller checkout links (6c): the agency's customer has no account
-  "book", // self-booking links (10.1): the lead has no account
-  "appt", // the lead's appointment link: confirm, change, cancel
-  "audit", // a Leakage Audit report shared with a prospect (10.3)
-  "qbr", // an approved business review shared with a client (10.3)
-  "p", // the client portal's branded sign-in (8f)
-  "status", // the public status page (G7j)
+  "pay", // the payer has no account
+  "buy", // reseller checkout: the customer has no account
+  "book", // self-booking: the lead has no account
+  "appt", // the lead's appointment link
+  "audit", // a Leakage Audit shared with a prospect
+  "qbr", // a business review shared with a client
+  "p", // the client portal's branded sign-in
+  "status", // the public status page
 ]);
 
-// The session cookie set by the API. The access cookie lives 15 min; the CSRF cookie lives as long as the
-// refresh token, so its presence is the cheap "probably signed in" signal. Real auth is GET /v1/me.
+// CSRF cookie lives as long as the refresh token: a cheap hint; real auth is /v1/me.
 const SESSION_COOKIE = "recov_csrf";
 
 function csp(nonce: string, isDev: boolean, frameAncestors: string): string {
   const api = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080";
   const posthog = process.env.NEXT_PUBLIC_POSTHOG_HOST ?? "";
-  const status = process.env.NEXT_PUBLIC_STATUS_API_URL ?? ""; // the control plane's public status API (G7j)
+  const status = process.env.NEXT_PUBLIC_STATUS_API_URL ?? ""; // control plane's public status API
   return [
     "default-src 'self'",
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isDev ? " 'unsafe-eval'" : ""}`,
@@ -50,8 +48,7 @@ function csp(nonce: string, isDev: boolean, frameAncestors: string): string {
   ].join("; ");
 }
 
-// Adds request headers for rendering on top of whatever next-intl already forwards (its locale header), using
-// the same mechanism as NextResponse.next({ request: { headers } }).
+// Forwards extra request headers alongside next-intl's, like NextResponse.next().
 function forwardRequestHeaders(res: NextResponse, req: NextRequest, extra: Record<string, string>) {
   const listed = res.headers.get("x-middleware-override-headers");
   const names = new Set(listed ? listed.split(",") : [...req.headers.keys()]);
@@ -63,8 +60,7 @@ function forwardRequestHeaders(res: NextResponse, req: NextRequest, extra: Recor
   res.headers.set("x-middleware-override-headers", [...names].join(","));
 }
 
-// On an agency's custom domain the root is its portal: ask the API which agency the host belongs to and send
-// visitors to the branded sign-in. Unknown hosts get the normal app.
+// On a custom domain the root redirects to that agency's branded portal sign-in.
 async function customHostRoot(req: NextRequest): Promise<NextResponse | null> {
   const host = req.headers.get("host");
   const segments = req.nextUrl.pathname.split("/").filter(Boolean);
@@ -95,7 +91,7 @@ export async function middleware(req: NextRequest) {
   const isDev = process.env.NODE_ENV !== "production";
   const { pathname } = req.nextUrl;
   const isPrint = pathname.startsWith("/print/");
-  // The PDF renderer loads the print route directly; it may be framed by nothing but itself.
+  // The PDF renderer loads print routes directly; only same-origin may frame them.
   const policy = csp(nonce, isDev, isPrint ? "'self'" : "'none'");
 
   const headers = new Headers(req.headers);
@@ -111,7 +107,7 @@ export async function middleware(req: NextRequest) {
     const hasLocale = routing.locales.includes(maybeLocale as (typeof routing.locales)[number]);
     const section = hasLocale ? first : maybeLocale;
     const mocking = process.env.NEXT_PUBLIC_API_MOCKING === "enabled";
-    // The lite app (client staff) has its own phone sign-in; its login page is public.
+    // The lite app has its own phone sign-in; its login page is public.
     const lite = section === "lite";
     const liteLogin = lite && segments[2] === "login";
     if (

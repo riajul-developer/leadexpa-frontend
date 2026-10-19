@@ -9,7 +9,6 @@ import { Badge } from "@/shared/ui/primitives";
 
 import type { ApiKey, DeliveryStatus, WebhookEndpoint } from "./api";
 
-/** A secret shown once (new key, new endpoint, rotation): copy it now, it can't be shown again. */
 export function SecretOnce({ label, value, children }: { label: string; value: string; children?: React.ReactNode }) {
   const t = useTranslations("developer");
   return (
@@ -74,7 +73,6 @@ export function DeliveryStatusBadge({ status, code }: { status: DeliveryStatus; 
   );
 }
 
-/** Event types read as written in the API ("lead.created"); the label explains them. */
 export function useEventLabel() {
   const t = useTranslations("developer.events");
   return (e: string) => (t.has(e.replace(".", "_")) ? t(e.replace(".", "_")) : e);

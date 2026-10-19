@@ -4,7 +4,6 @@ import type { Step, Trigger } from "./api";
 
 type T = ReturnType<typeof useTranslations<"sequences">>;
 
-/** One line saying who a sequence picks up, e.g. "2 unanswered calls" or "Lost (price) 14 days ago". */
 export function describeTrigger(
   t: T,
   tr: Trigger,
@@ -26,7 +25,6 @@ export function describeTrigger(
   }
 }
 
-/** "Wait 1 day", "WhatsApp: lead_welcome", "Call task"… */
 export function describeStep(t: T, s: Step): string {
   switch (s.type) {
     case "wait":

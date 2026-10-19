@@ -13,10 +13,6 @@ import { NativeSelect } from "@/shared/ui/input";
 import { useEnroll, useLeadEnrollments, useSequences, useStopEnrollment } from "./api";
 import { describeStep } from "./describe";
 
-/**
- * On the lead page: the lead's recovery sequence (where it is, what's next, stop it), or add the lead to an active
- * sequence by hand.
- */
 export function EnrollmentCard({ lead }: { lead: { id: string; client_id: string; do_not_contact: boolean } }) {
   const t = useTranslations("sequences");
   const te = useTranslations("errors");

@@ -5,7 +5,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { track } from "@/shared/lib/analytics";
 import { api, unwrap, unwrapEmpty, type Schemas } from "@/shared/lib/api/client";
 
-/** The public API (G5 step 5c): agency API keys and outgoing webhooks with their delivery log. */
 export const developerKeys = {
   all: ["developer"] as const,
   catalog: ["developer", "catalog"] as const,
@@ -104,7 +103,6 @@ export function useRotateSecret(id: string) {
   });
 }
 
-/** Test and resend answer at once with the delivery (and the receiver's answer). */
 export function useTestEndpoint(id: string) {
   const qc = useQueryClient();
   return useMutation({

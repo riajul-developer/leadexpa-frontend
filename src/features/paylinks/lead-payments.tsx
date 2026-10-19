@@ -31,7 +31,6 @@ type Lead = Schemas["LeadDetail"];
 
 const EXPIRY = [24, 72, 168] as const;
 
-/** Lead › Sales: request a payment (bKash / SSLCommerz) and follow it until it's paid (17.0.2). */
 export function LeadPayments({ lead, currency, timeZone }: { lead: Lead; currency: string; timeZone: string }) {
   const t = useTranslations("payments");
   const f = useFormat();

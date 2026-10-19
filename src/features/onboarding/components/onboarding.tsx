@@ -96,7 +96,6 @@ function AgencyStep({ onDone }: { onDone: () => void }) {
   const { data: me } = useMe();
   const uiLocale = useLocale() as AppLocale;
   const [name, setName] = useState(me?.agency?.name ?? "");
-  // Signup already derived these from the agency's country; this step only confirms them.
   const [country, setCountry] = useState(me?.agency?.country ?? "");
   const [tz, setTz] = useState(me?.agency?.default_timezone ?? browserTimeZone());
   const [currency, setCurrency] = useState(me?.agency?.default_currency ?? "");
@@ -213,7 +212,6 @@ function SlaStep({ clientId, onDone }: { clientId: string; onDone: () => void })
       },
     ],
   };
-  // Plain-language preview from the API: a lead arriving Thursday 6:55 PM.
   const arrival = (() => {
     const d = new Date();
     d.setUTCDate(d.getUTCDate() + ((4 - d.getUTCDay() + 7) % 7 || 7));
@@ -420,7 +418,6 @@ function TeamStep({ onDone }: { onDone: () => void }) {
   );
 }
 
-/** Waits for the test lead to arrive live (SSE), the moment that proves the setup works. */
 function DoneStep() {
   const t = useTranslations("onboarding.done");
   const [arrived, setArrived] = useState(false);

@@ -1,13 +1,10 @@
 import { expect, test } from "@playwright/test";
 
-// Manager and admin flows on mock data (FRONTEND_PROMPT §12 E2E 6, 7).
-
 test("dashboard shows server KPIs with definitions and data coverage", async ({ page }) => {
   await page.goto("/bn/dashboard");
   await expect(page.getByRole("heading", { level: 1, name: "ড্যাশবোর্ড" })).toBeVisible();
   await expect(page.getByText("প্রাপ্ত লিড").first()).toBeVisible();
   await expect(page.getByText(/ফলাফল রেকর্ড আছে|কোনো বন্ধ লিড নেই/).first()).toBeVisible();
-  // Period picker lives in the URL.
   await page.getByRole("radio", { name: "৭ দিন" }).click();
   await expect(page).toHaveURL(/period=7d/);
 });
@@ -24,7 +21,7 @@ test("create a client report and a share link", async ({ page }) => {
   await expect(page.getByText("ইমপ্লান্ট বিজ্ঞাপন সবচেয়ে ভালো করছে।")).toBeVisible();
   await page.getByRole("button", { name: "লিংক তৈরি করুন" }).click();
   await expect(page.getByRole("textbox", { name: "শেয়ার লিংক" })).toHaveValue(/\/bn\/r\//);
-  // The PDF renders in the background and the page polls for it.
+  // The PDF renders in the background; the page polls for it.
   await expect(page.getByRole("link", { name: "PDF ডাউনলোড করুন" })).toBeVisible({ timeout: 15_000 });
 });
 

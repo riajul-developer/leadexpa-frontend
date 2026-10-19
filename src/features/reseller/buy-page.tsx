@@ -13,7 +13,6 @@ import { Skeleton } from "@/shared/ui/primitives";
 
 import { useBuyCheckout, useBuyView } from "./api";
 
-/** /buy/[code]: an agency's client buys the agency's plan. Payment goes to the agency's own Stripe account. */
 export function BuyPage({ code }: { code: string }) {
   const t = useTranslations("buyPage");
   const te = useTranslations("errors");

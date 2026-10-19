@@ -1,8 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// FRONTEND_PROMPT 17.3: recovery sequences — the grouped sidebar, the step-list editor with a live preview, the
-// monitor with recovered revenue vs. holdout, a lead's sequence, and the dashboard hero card.
-
 test("the sidebar is grouped and Sequences sits under Automation", async ({ page, isMobile }) => {
   test.skip(isMobile, "desktop sidebar");
   await page.goto("/en/inbox");
@@ -28,7 +25,6 @@ test("build a sequence: preview who matches, add steps, create and activate", as
   await expect(page.getByText(/leads? match now/)).toBeVisible();
   await page.getByRole("button", { name: "SMS", exact: true }).click();
   await page.getByLabel("Message").last().fill("Hi {first_name}, still thinking about it? Reply STOP to opt out.");
-  // The template step needs a template: pick the approved one.
   await page.getByLabel("Approved template").selectOption({ index: 1 });
   await page.getByRole("button", { name: "Create as draft" }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Gone quiet 7 days" })).toBeVisible();

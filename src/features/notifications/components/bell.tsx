@@ -13,7 +13,7 @@ import { Button } from "@/shared/ui/button";
 
 export type Page = { data: Schemas["Notification"][]; unread_count: number; next_cursor: string | null };
 
-// The unread count is always loaded (header badge); SSE prepends new notifications to this cache.
+// SSE prepends new notifications to this cache.
 export const notificationsQuery = queryOptions({
   queryKey: notificationKeys.list(false),
   queryFn: () => unwrap(api.GET("/v1/notifications", { params: { query: { limit: 30 } } })),
@@ -23,7 +23,6 @@ export const notificationsQuery = queryOptions({
 const load = () => import("./bell-popover");
 const NotificationPopover = lazy(() => load().then((m) => ({ default: m.NotificationPopover })));
 
-/** The bell with its unread badge, shared by the placeholder and the real popover trigger. */
 export const BellButton = forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<"button"> & { unread: number }>(
   function BellButton({ unread, ...props }, ref) {
     const t = useTranslations("notifications");
@@ -48,7 +47,6 @@ export const BellButton = forwardRef<HTMLButtonElement, React.ComponentPropsWith
   },
 );
 
-/** Header bell. The list (Radix popover, mutations) loads on first open; the badge is live from the start. */
 export function NotificationBell() {
   const list = useQuery(notificationsQuery);
   const { mounted, triggerProps } = useDeferredOverlay(load);

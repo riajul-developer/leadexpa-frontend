@@ -1,8 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// Tier 3 white-label + client portal (step 8f-1): the agency's brand (readable colours only, a logo), the portal's
-// branded sign-in page, and the client's view of their own results and approved reviews.
-
 // A 1×1 PNG.
 const PNG = Buffer.from(
   "89504e470d0a1a0a0000000d4948445200000001000000010806000000" +
@@ -30,7 +27,6 @@ test("set the brand: unreadable colours are blocked, the preview follows, a logo
   await expect(page.getByTestId("brand-preview").getByRole("img", { name: "Bright Growth" })).toBeVisible();
   await expect(page.getByText("/p/demo-digital")).toBeVisible();
 
-  // The client portal's sign-in page carries the brand.
   await page.goto("/en/p/demo-digital");
   await expect(page.getByRole("heading", { name: "Sign in to Bright Growth" })).toBeVisible();
   await expect(page.getByRole("img", { name: "Bright Growth" })).toBeVisible();

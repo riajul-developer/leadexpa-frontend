@@ -6,7 +6,6 @@ import { useActiveClient } from "@/shared/hooks/use-active-client";
 import { api, unwrap } from "@/shared/lib/api/client";
 import { qualityKeys } from "@/shared/lib/query-keys";
 
-/** Junk leads waiting for a decision (17.0.1); hidden at zero. */
 export function JunkCount() {
   const client = useActiveClient();
   const { data } = useQuery({

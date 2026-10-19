@@ -54,34 +54,25 @@ interface NavItem {
   href: string;
   key: string;
   icon: LucideIcon;
-  /** Any of these permissions shows the item. */
   anyOf: string[];
-  /** Carries the global ?client= filter. */
   scoped?: boolean;
-  /** Shows the Junk bucket count next to the label. */
   junkCount?: boolean;
-  /** Sidebar section. */
   group: NavGroup;
 }
 
-// The sidebar is grouped once it grows past a glance: daily work first, then automation, numbers, setup.
 const GROUPS = ["work", "automation", "insights", "manage"] as const;
 type NavGroup = (typeof GROUPS)[number];
 
-// The Junk count is a nicety: it loads after first paint, outside the inbox budget.
 const JunkCount = dynamic(() => import("./junk-count").then((m) => m.JunkCount), { ssr: false });
-// Only loaded when an agency requires two-step sign-in this login hasn't proven (17.6): outside the inbox budget.
 const MFAGate = dynamic(() => import("@/features/security").then((m) => m.MFAGate), { ssr: false });
 const AccessBlockedGate = dynamic(() => import("@/features/security").then((m) => m.AccessBlockedGate), { ssr: false });
 const ReviewLink = dynamic(() => import("./review-link").then((m) => m.ReviewLink), { ssr: false });
-// The live-update bridge is a background subscription: it connects right after first paint, outside the inbox budget.
 const RealtimeBridge = dynamic(() => import("./realtime-bridge").then((m) => m.RealtimeBridge), { ssr: false });
 const OfflineBanner = dynamic(() => import("./offline-banner").then((m) => m.OfflineBanner), { ssr: false });
 const IncidentBanner = dynamic(() => import("@/features/status").then((m) => m.IncidentBanner), { ssr: false });
 const SandboxBanner = dynamic(() => import("@/features/sandbox").then((m) => m.SandboxBanner), { ssr: false });
-// The live-updates line sits at the bottom of the sidebar: loading it after first paint shifts nothing.
 const StreamStatus = dynamic(() => import("./stream-status").then((m) => m.StreamStatus), { ssr: false });
-// The bell (unread count) follows first paint; a same-size placeholder keeps the header still.
+// A same-size placeholder keeps the header still.
 const NotificationBell = dynamic(() => import("@/features/notifications").then((m) => m.NotificationBell), {
   ssr: false,
   loading: () => <span className="inline-block size-10" aria-hidden />,
@@ -148,7 +139,6 @@ const NAV: NavItem[] = [
   { href: "/ask", key: "ask", icon: Sparkles, anyOf: ["lead.read", "lead.read.own", "report.read"], group: "insights" },
   { href: "/report-builder", key: "reportBuilder", icon: LayoutDashboard, anyOf: ["report.read"], group: "insights" },
   { href: "/wallboards", key: "wallboards", icon: MonitorPlay, anyOf: ["report.share"], group: "insights" },
-  // Holding groups (G7e): their people are owners and admins of member agencies.
   { href: "/groups", key: "holdingGroups", icon: Network, anyOf: ["agency.update"], group: "insights" },
   { href: "/clients", key: "clients", icon: Building2, anyOf: ["client.manage", "report.share"], group: "manage" },
   {
@@ -206,7 +196,6 @@ function NavLink({ item, onNavigate, compact }: { item: NavItem; onNavigate?: ()
   );
 }
 
-/** The nav in sections, each with a small heading (only sections the user has items in). */
 function GroupedNav({
   nav,
   reviewAfter,
@@ -250,11 +239,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const nav = useNav();
   const canReview = !!me?.permissions.includes("lead.assign");
-  // "Needs review" sits with the lead work: right after Junk (or Leads when Junk is hidden).
   const reviewAfter = nav.some((n) => n.key === "junk") ? "junk" : "leads";
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Session can't be refreshed → login, coming back here afterwards.
   useEffect(
     () =>
       onSessionLost((reason) => {
@@ -266,12 +253,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (isError) router.replace(`/login?returnTo=${encodeURIComponent(pathname)}`);
   }, [isError, pathname, router]);
-  // Client viewers have the client portal, not the agency workspace (8f).
   useEffect(() => {
     if (me?.membership?.role === "client_viewer") router.replace("/portal");
   }, [me, router]);
-  // Signed in without an agency (e.g. last membership removed) → onboarding creates/joins one. An agency withheld
-  // until two-step sign-in is proven shows the gate instead.
   useEffect(() => {
     if (me && !me.agency && !me.mfa_required && !me.access_blocked && !pathname.startsWith("/onboarding"))
       router.replace("/onboarding/agency");
@@ -285,8 +269,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   if (isPending || !me) {
     return (
-      // The same frame as the loaded shell (sidebar, top bar, content container), so nothing jumps when it arrives
-      // and the placeholders stay within the container's width on big screens.
+      // Same frame as the loaded shell, so nothing jumps when it arrives.
       <div className="flex min-h-dvh" aria-busy>
         <div className="border-border bg-surface sticky top-0 hidden h-dvh w-60 shrink-0 flex-col gap-3 border-e p-4 md:flex">
           <Skeleton className="h-8 w-32" />
@@ -328,7 +311,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <RealtimeBridge />
       <CommandPalette />
 
-      {/* Desktop sidebar */}
       <aside className="border-border bg-surface sticky top-0 hidden h-dvh w-60 shrink-0 flex-col border-e md:flex">
         <div className="px-4 pt-3 pb-2">
           <BrandLogo className="w-36" />
@@ -343,7 +325,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="border-border bg-surface/95 sticky top-0 z-30 h-14 border-b backdrop-blur">
-          {/* The bar spans the window; its contents line up with the page container below. */}
           <div className="max-w-app mx-auto flex h-full w-full items-center gap-2 px-3 md:px-4">
             <ClientSwitcher />
             <div className="ms-auto flex items-center gap-1">
@@ -362,13 +343,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </p>
         )}
         <main id="main" className="flex min-w-0 flex-1 flex-col pb-20 md:pb-0">
-          {/* One fixed content width on big screens (--container-app), centered and full height, without a frame of its
-              own; narrower pages center inside it. */}
           <div className="max-w-app mx-auto w-full flex-1">{children}</div>
         </main>
       </div>
 
-      {/* Mobile bottom navigation */}
       <nav
         aria-label={t("main")}
         className="border-border bg-surface fixed inset-x-0 bottom-0 z-30 flex border-t pb-[env(safe-area-inset-bottom)] md:hidden"

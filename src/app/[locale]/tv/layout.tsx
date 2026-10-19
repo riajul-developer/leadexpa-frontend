@@ -3,10 +3,6 @@ import { getMessages, setRequestLocale } from "next-intl/server";
 
 import { MockGate } from "../../mock-gate";
 
-/**
- * The wallboard TV (8h): paired by a kiosk token, no login. Only its own strings and the mock gate: no query
- * client, toasts or app shell, because TVs and streaming sticks are slow.
- */
 export default async function TvLayout({
   children,
   params,

@@ -4,7 +4,6 @@ import type { RuleInput } from "./api";
 
 type T = ReturnType<typeof useTranslations<"automations">>;
 
-/** One line: "When a lead is created · 2 conditions · then assign, tag". */
 export function describeRule(t: T, r: Pick<RuleInput, "event" | "conditions" | "actions">): string {
   return t("summary", {
     event: t(`event.${r.event.replace(".", "_")}`),
@@ -13,7 +12,6 @@ export function describeRule(t: T, r: Pick<RuleInput, "event" | "conditions" | "
   });
 }
 
-/** The lines of a definition, for the version diff. */
 export function ruleLines(t: T, d: RuleInput): string[] {
   const show = (v: unknown) => (Array.isArray(v) ? v.join(", ") : v == null ? "" : String(v));
   return [

@@ -1,4 +1,4 @@
-// SLA chip state (FRONTEND_PROMPT §7). The server decides deadlines; the client only counts down to them.
+// The server decides deadlines; the client only counts down to them.
 import { useEffect, useSyncExternalStore } from "react";
 
 import { serverNow } from "./server-time";
@@ -15,16 +15,12 @@ export interface SlaInput {
 
 export interface SlaView {
   state: SlaState;
-  /** Seconds: remaining (on_track/due_soon), overdue by (overdue), response time (met). */
   seconds: number;
-  /** For paused: the callback time. */
   at?: string;
   kind?: string | null;
 }
 
-/** Below this, a running timer is "due soon" even if the server last said on_track. */
 export const DUE_SOON_SECONDS = 5 * 60;
-/** Below this, chips tick every second. */
 export const FINE_TICK_SECONDS = 10 * 60;
 
 export function slaView(lead: SlaInput, now: number): SlaView {
@@ -34,7 +30,6 @@ export function slaView(lead: SlaInput, now: number): SlaView {
     const responded = lead.first_response_at
       ? (Date.parse(lead.first_response_at) - Date.parse(lead.received_at)) / 1000
       : 0;
-    // A met first response with a scheduled callback reads better as the callback.
     if (lead.next_callback_at && Date.parse(lead.next_callback_at) > now && !closed) {
       return { state: "paused", seconds: 0, at: lead.next_callback_at, kind: sla?.kind };
     }
@@ -52,13 +47,11 @@ export function slaView(lead: SlaInput, now: number): SlaView {
   return { state: "on_track", seconds: remaining, kind: sla.kind };
 }
 
-/** Whether a view needs per-second updates. */
 export function needsFineTick(v: SlaView): boolean {
   return (v.state === "due_soon" || v.state === "on_track") && v.seconds < FINE_TICK_SECONDS;
 }
 
-// ---------------------------------------------------------------------------------------------
-// One shared ticker for the page: 1 s while any chip needs it, else 60 s. Never one interval per chip.
+// One shared ticker: 1 s while any chip needs it, else 60 s.
 
 let now = typeof window === "undefined" ? 0 : serverNow();
 const listeners = new Set<() => void>();
@@ -70,7 +63,6 @@ function schedule() {
   timer = null;
   if (listeners.size === 0) return;
   const period = fineSubscribers > 0 ? 1000 : 60_000;
-  // Align to the boundary so all chips flip together.
   const wait = period - (serverNow() % period);
   timer = setTimeout(() => {
     now = serverNow();
@@ -80,8 +72,7 @@ function schedule() {
 }
 
 function subscribe(l: () => void) {
-  // Refresh only when the ticker wakes from idle. Moving `now` on every subscribe changes the snapshot each
-  // time a chip mounts, which re-renders every consumer and can loop (cells remount → resubscribe → …).
+  // Refresh only on wake: moving `now` on every subscribe can loop re-renders.
   if (listeners.size === 0) now = serverNow();
   listeners.add(l);
   schedule();
@@ -91,7 +82,6 @@ function subscribe(l: () => void) {
   };
 }
 
-/** Current server-corrected time, re-rendering on the shared tick. `fine` requests 1 s resolution. */
 export function useNow(fine = false): number {
   useEffect(() => {
     if (!fine) return;
@@ -109,7 +99,6 @@ export function useNow(fine = false): number {
   );
 }
 
-/** Test helper. */
 export function __tickerState() {
   return { listeners: listeners.size, fineSubscribers, running: timer !== null };
 }

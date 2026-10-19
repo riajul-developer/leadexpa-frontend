@@ -21,7 +21,7 @@ import { CustomDomains, SenderDomains } from "./domain-settings";
 const FONTS = ["system", "inter", "poppins", "hind_siliguri", "noto_sans", "noto_sans_arabic", "roboto"] as const;
 const brandKey = ["brand"] as const;
 
-// WCAG relative luminance and contrast (the same rule the API enforces).
+// WCAG contrast: the same rule the API enforces.
 function luminance(hex: string) {
   const c = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
   const [r, g, b] = c.map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
@@ -32,7 +32,6 @@ export function contrastWithWhite(hex: string) {
 }
 const isHex = (v: string) => /^#[0-9a-fA-F]{6}$/.test(v);
 
-/** Settings › Branding (8f): what clients see on the portal and shared pages, with a live preview. */
 export function BrandingSettings() {
   const t = useTranslations("portal.branding");
   const te = useTranslations("errors");
@@ -68,7 +67,7 @@ export function BrandingSettings() {
     onError: (e) => toast.error(isApiError(e) && Object.keys(e.fieldErrors).length ? t("checkFields") : t("failed")),
   });
   const upload = useMutation({
-    // Multipart: openapi-fetch serializes JSON, so post the file directly (CSRF + idempotency by hand).
+    // openapi-fetch only sends JSON: post multipart by hand (CSRF + idempotency).
     mutationFn: async (file: File) => {
       const body = new FormData();
       body.append("file", file);
@@ -210,7 +209,6 @@ export function BrandingSettings() {
                         {t("removeLogo")}
                       </Button>
                     )}
-                    {/* Wraps onto a second line beside the buttons rather than pushing them to a new row. */}
                     <span className="text-muted min-w-0 text-xs">{t("logoHint")}</span>
                   </div>
                 )}

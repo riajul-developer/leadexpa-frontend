@@ -26,10 +26,8 @@ export function SheetContent({
   ...props
 }: React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
   title: React.ReactNode;
-  /** "center": a modal in the middle of the screen with the close button in the screen's top corner. */
   side?: "right" | "bottom" | "center";
   hideTitle?: boolean;
-  /** Extra controls in the top bar, just before the close button. */
   actions?: React.ReactNode;
 }) {
   const t = useTranslations("common");
@@ -92,7 +90,6 @@ export function SheetContent({
   );
 }
 
-/** Root + content in one: what LazySheet loads on first open. */
 export function SheetModal({
   open,
   onOpenChange,

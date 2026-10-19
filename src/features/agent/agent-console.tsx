@@ -30,7 +30,6 @@ import {
   useTranscript,
 } from "./api";
 
-/** /agent: the AI agent console (17.12): kill switch, approval queue, live conversations. */
 export function AgentConsole() {
   const t = useTranslations("agent");
   const drafts = useDrafts();
@@ -123,7 +122,6 @@ function ApprovalQueue() {
   );
 }
 
-/** One reply waiting for approval. On touch screens, swipe right to send, left to discard. */
 function DraftCard({ draft }: { draft: Draft }) {
   const t = useTranslations("agent.queue");
   const te = useTranslations("errors");

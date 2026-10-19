@@ -25,7 +25,6 @@ import { PLATFORM_NAME, PlatformIcon } from "./parts";
 
 const GOOGLE_TRIGGERS = ["stage.qualified", "stage.won", "sale"] as const;
 
-/** Add a Meta dataset (Conversions API token) or a Google Ads account (an OAuth connection + conversion actions). */
 export function AddDestinationDialog({ clientId, onClose }: { clientId: string; onClose: () => void }) {
   const t = useTranslations("conversions.addDialog");
   const tc = useTranslations("conversions");

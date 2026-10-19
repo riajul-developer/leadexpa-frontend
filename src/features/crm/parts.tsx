@@ -50,7 +50,6 @@ export function HealthBadge({ connection: c }: { connection: Pick<CrmConnection,
   return <Badge tone={tone}>{t(c.health)}</Badge>;
 }
 
-/** /integrations/crm/callback: the CRM redirects here; the code is posted to the API, then the popup closes. */
 export function CrmCallback() {
   const t = useTranslations("crm.callback");
   const te = useTranslations("errors");

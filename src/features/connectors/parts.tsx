@@ -11,7 +11,6 @@ import type { ConnectorCredentials, ConnectorInstall } from "./api";
 
 const TONE = { pending: "neutral", healthy: "success", degraded: "warning", down: "danger" } as const;
 
-/** Health of an install; a paused install says so instead. */
 export function HealthBadge({ install }: { install: Pick<ConnectorInstall, "health" | "status"> }) {
   const t = useTranslations("connectors");
   if (install.status === "paused") return <Badge tone="warning">{t("paused")}</Badge>;
@@ -47,7 +46,6 @@ function CopyLine({ label, value }: { label: string; value: string }) {
   );
 }
 
-/** The URL and key, shown once (after install or rotation), with where to paste them. */
 export function CredentialsPanel({ connector, credentials }: { connector: string; credentials: ConnectorCredentials }) {
   const t = useTranslations("connectors.credentials");
   return (

@@ -20,16 +20,11 @@ import { finishOIDC, startSSO } from "../api";
 
 const KNOWN = ["sso_not_configured", "sso_not_provisioned", "sso_domain_mismatch", "sso_failed", "sso_required"];
 
-/** The message for an SSO error code (from the API or the ?sso_error= the SAML endpoint redirects with). */
 export function useSSOErrorMessage() {
   const t = useTranslations("auth.sso.errors");
   return (code: string | null | undefined) => (code ? t(KNOWN.includes(code) ? code : "sso_failed") : null);
 }
 
-/**
- * "Sign in with SSO" on the login page: the person's work email finds their organization, then the browser
- * goes to its identity provider.
- */
 export function SSOSignIn({
   email: initialEmail,
   returnTo,
@@ -99,7 +94,6 @@ export function SSOSignIn({
   );
 }
 
-/** /sso/callback: the identity provider (OIDC) returns here with a code; the API opens the session. */
 export function SSOCallback() {
   const t = useTranslations("auth.sso");
   const params = useSearchParams();
@@ -109,7 +103,7 @@ export function SSOCallback() {
   const [error, setError] = useState<string | null>(null);
   const ran = useRef(false);
   useEffect(() => {
-    if (ran.current) return; // the code is single-use (React runs effects twice in development)
+    if (ran.current) return; // the code is single-use (effects run twice in development)
     ran.current = true;
     const code = params.get("code");
     const state = params.get("state");

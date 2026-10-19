@@ -10,7 +10,6 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        // Maroon with a faint top highlight; a gold-warm shadow ties it to the logo.
         primary:
           "bg-primary text-primary-fg shadow-[inset_0_1px_0_rgb(255_255_255/0.14),0_1px_2px_rgb(100_20_12/0.35)] hover:bg-primary-hover hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.14),0_2px_6px_-1px_rgb(100_20_12/0.4)]",
         secondary:
@@ -25,7 +24,7 @@ export const buttonVariants = cva(
       size: {
         sm: "h-8 px-3",
         md: "h-10 px-4",
-        lg: "h-12 px-5 text-base", // ≥ 48 px tap target for agent flows on phones
+        lg: "h-12 px-5 text-base",
         icon: "size-10",
         "icon-sm": "size-8",
       },

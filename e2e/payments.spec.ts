@@ -1,8 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// BACKEND_PROMPT 17.0.2 (step 6a): an agent requests a payment from a lead and shares the link; the lead pays on
-// a no-login page; the client's Payments tab shows the merchant account, the links and the revenue they brought.
-
 test("request a payment, share it, and the lead pays on the public page", async ({ page }) => {
   await page.goto("/en/leads");
   await page.locator("tbody tr").filter({ hasText: "Dhaka Dental Care" }).first().click();
@@ -24,7 +21,6 @@ test("request a payment, share it, and the lead pays on the public page", async 
   const link = (await ready.locator("code").textContent())!.trim();
   await ready.getByRole("button", { name: "Done" }).click();
 
-  // The payer: no session, the client's name, the amount, one button.
   await page.context().clearCookies();
   await page.goto(link);
   await expect(page.getByRole("heading", { name: "Dhaka Dental Care" })).toBeVisible();
@@ -41,7 +37,6 @@ test("the client's Payments tab: account, links and revenue", async ({ page }) =
   await expect(page.getByText("Sandbox (test)")).toBeVisible();
   await expect(page.getByRole("switch")).toBeChecked();
 
-  // Credentials are checked with the gateway before they're saved.
   await page.getByRole("button", { name: "Connect account" }).click();
   await page.getByLabel("Gateway").selectOption("sslcommerz");
   await page.getByLabel("Store ID").fill("dhakadental");

@@ -23,13 +23,11 @@ import { Field } from "@/shared/ui/field";
 import { NativeSelect } from "@/shared/ui/input";
 import { Badge, Card, CardContent, CardHeader, CardTitle, EmptyState, Skeleton } from "@/shared/ui/primitives";
 
-// Two-way CRM sync (step 5d) loads after the page: it is managed rarely.
 const CrmCard = dynamic(() => import("@/features/crm").then((m) => m.CrmCard), {
   ssr: false,
   loading: () => <Skeleton className="h-40 w-full" />,
 });
 
-/** /integrations: lead sources per client, CSV import, Meta Lead Ads status, ingestion issues. */
 export function IntegrationsHub() {
   const t = useTranslations("integrations");
   const active = useActiveClient();

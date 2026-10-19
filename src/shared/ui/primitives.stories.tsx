@@ -25,7 +25,6 @@ export const Empty: Story = {
   ),
 };
 
-/** Skeletons keep the final layout's size, so first paint never shifts. */
 export const Skeletons: Story = {
   render: () => (
     <div className="grid max-w-md gap-3">
@@ -42,7 +41,6 @@ export const Skeletons: Story = {
   ),
 };
 
-/** Bangla names keep whole grapheme clusters as initials. */
 export const Avatars: Story = {
   render: () => (
     <div className="flex gap-2">

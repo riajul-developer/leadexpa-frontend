@@ -1,8 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// FRONTEND_PROMPT 17.8: calls. Recording + transcript + AI notes, click-to-call from the lead page, the power
-// dialer, coaching, calling numbers on the client's Channels tab, and call settings.
-
 test("a recorded call shows its transcript and AI notes, which can be applied to the lead", async ({ page }) => {
   await page.goto("/en/calls");
   await expect(page.getByRole("heading", { level: 1, name: "Calls" })).toBeVisible();

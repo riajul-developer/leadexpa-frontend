@@ -33,7 +33,6 @@ import { EmptyState, Skeleton } from "@/shared/ui/primitives";
 type Section = "overdue" | "due_soon" | "callback_due" | "new" | "unassigned" | "in_progress";
 type InboxLead = Lead & { section: Section };
 
-/** Display order and grouping (FRONTEND_PROMPT §5.2): Overdue, Due soon, Callbacks today, New, Others. */
 const GROUPS: { key: string; sections: Section[] }[] = [
   { key: "overdue", sections: ["overdue"] },
   { key: "due_soon", sections: ["due_soon"] },
@@ -42,7 +41,6 @@ const GROUPS: { key: string; sections: Section[] }[] = [
   { key: "others", sections: ["in_progress"] },
 ];
 
-// Dialog bodies load on first use (FRONTEND_PROMPT §9 inbox budget).
 const StagePicker = dynamic(() => import("./inbox-dialogs").then((m) => m.StagePicker));
 const ShortcutsHelp = dynamic(() => import("./inbox-dialogs").then((m) => m.ShortcutsHelp));
 
@@ -63,7 +61,6 @@ export function Inbox() {
   const [helpOpened, setHelpOpened] = useState(false);
   if (help && !helpOpened) setHelpOpened(true);
 
-  // Urgency × Score (17.7): within each section, hottest leads first. Remembered per browser.
   const [sort, setSort] = useState<"urgency" | "score">(() => {
     try {
       return localStorage.getItem("inbox-sort") === "score" ? "score" : "urgency";
@@ -89,14 +86,14 @@ export function Inbox() {
   useEffect(() => track("inbox.viewed"), []);
 
   const all = useMemo(() => (query.data?.pages.flatMap((p) => p.data) ?? []) as InboxLead[], [query.data]);
-  // The client switcher filters the inbox locally (the API returns the agent's whole queue).
+  // Filtered locally: the API returns the agent's whole queue.
   const leads = useMemo(() => (client ? all.filter((l) => l.client_id === client) : all), [all, client]);
   const groups = GROUPS.map((g) => ({ ...g, leads: leads.filter((l) => g.sections.includes(l.section)) })).filter(
     (g) => g.leads.length > 0,
   );
   const ordered = groups.flatMap((g) => (collapsed[g.key] ? [] : g.leads));
 
-  // --- New-lead pill: never move rows under the user's finger --------------------------------
+  // New-lead pill: never move rows under the user's finger.
   const seen = useRef<Set<string> | null>(null);
   const [fresh, setFresh] = useState<Set<string>>(new Set());
   const [pill, setPill] = useState(0);
@@ -128,7 +125,6 @@ export function Inbox() {
     [ordered, focusIndex],
   );
 
-  // Keyboard: j/k move, c call, w WhatsApp, o outcome, s stage, a AI draft, Enter open, ? help.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const el = e.target as HTMLElement;
@@ -183,7 +179,6 @@ export function Inbox() {
     return () => window.removeEventListener("keydown", onKey);
   }, [focused, move, sheet, showOutcome, startContact]);
 
-  // --- Pull to refresh (phones) --------------------------------------------------------------
   const [pull, setPull] = useState(0);
   const startY = useRef<number | null>(null);
   const refresh = () => qc.invalidateQueries({ queryKey: inboxKeys.all });
@@ -297,8 +292,6 @@ export function Inbox() {
                 <div
                   className={cn(
                     "border-border overflow-hidden border-y md:mx-4 md:rounded-md md:border",
-                    // The focus ring follows the box's corners (4px outer, 3px inside its 1px border); the last row
-                    // drops its divider so the bottom edge isn't doubled.
                     "md:[&>div:first-child>article]:rounded-t-sm md:[&>div:last-child>article]:rounded-b-sm",
                     "[&>div:last-child>article]:border-b-0",
                   )}
@@ -358,7 +351,7 @@ export function Inbox() {
   );
 }
 
-/** The AI/rules one-liner, fetched only for the focused lead (never N requests for the whole list). */
+/** Fetched only for the focused lead, never once per row. */
 function FocusedHint({ leadId }: { leadId: string }) {
   const t = useTranslations("ai.nba.action");
   const q = useNextAction(leadId);
@@ -383,7 +376,6 @@ function AllCaughtUp({ leads }: { leads: Lead[] }) {
     <EmptyState
       icon={PartyPopper}
       title={t("caughtUp")}
-      // The inbox scrolls with the page: fill what's left below the app bar, title row and mobile nav.
       className="min-h-[calc(100dvh-3.5rem-3.5rem-5rem)] md:min-h-[calc(100dvh-3.5rem-3.5rem)]"
       description={
         next

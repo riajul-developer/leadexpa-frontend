@@ -10,7 +10,6 @@ import type { Anomaly } from "./api";
 const BAND_COLOR = { healthy: "text-success", watch: "text-warning", at_risk: "text-danger" } as const;
 type Band = keyof typeof BAND_COLOR;
 
-/** Daily scores (0–100) as a line; the client page and the overview rows both draw it. */
 export function TrendLine({ points, label, className }: { points: number[]; label: string; className?: string }) {
   const w = 300;
   const h = 48;
@@ -31,7 +30,6 @@ export function TrendLine({ points, label, className }: { points: number[]; labe
   );
 }
 
-/** The health score as a ring (17.10). */
 export function HealthRing({ score, band, size = 96 }: { score: number | null; band: Band | null; size?: number }) {
   const t = useTranslations("insights.health");
   const r = 42;
@@ -71,7 +69,6 @@ export function HealthRing({ score, band, size = 96 }: { score: number | null; b
   );
 }
 
-/** One anomaly in plain language: "Lead volume dropped 86% on Tue 12 Oct — Eid offer paused?" */
 export function useAnomalyText() {
   const t = useTranslations("insights.anomaly");
   const f = useFormat();

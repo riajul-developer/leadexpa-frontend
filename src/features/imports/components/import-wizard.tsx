@@ -47,7 +47,7 @@ export function ImportWizard({ importId }: { importId?: string }) {
     queryKey: importKeys.detail(importId ?? ""),
     queryFn: () => unwrap(api.GET("/v1/imports/{importId}", { params: { path: { importId: importId! } } })),
     enabled: !!importId,
-    // SSE (import.progress) patches this cache; polling is the fallback while work is running.
+    // SSE patches this cache; polling is the fallback while work is running.
     refetchInterval: (q) => (q.state.data && ["validating", "importing"].includes(q.state.data.status) ? 2000 : false),
   });
   const step = stepFor(imp.data);

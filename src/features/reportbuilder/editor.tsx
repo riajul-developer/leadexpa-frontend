@@ -47,7 +47,6 @@ function useDebounced<T>(value: T, ms: number): T {
   return v;
 }
 
-/** /report-builder/[id] ("new" for a new one): arrange widgets, preview them live for any client, save. */
 export function ReportEditor({ templateId }: { templateId: string }) {
   const t = useTranslations("reportBuilder");
   const ta = useTranslations("ask");
@@ -72,7 +71,6 @@ export function ReportEditor({ templateId }: { templateId: string }) {
   const [nameError, setNameError] = useState(false);
   const loaded = useRef(false);
 
-  // Seed once: the saved template, or a starter layout for a new one.
   useEffect(() => {
     if (loaded.current) return;
     if (isNew) {
@@ -96,7 +94,6 @@ export function ReportEditor({ templateId }: { templateId: string }) {
     setDirty(true);
   };
 
-  // Preview only what the server would accept, a beat after the last change.
   const runnable = useMemo(() => widgets.filter((w) => !problem(w)), [widgets]);
   const queries = useDebounced(
     useMemo(() => runnable.map((w) => ({ ...w, title: "", text: w.type === "text" ? w.text : "" })), [runnable]),
@@ -156,8 +153,6 @@ export function ReportEditor({ templateId }: { templateId: string }) {
           asChild
           variant="ghost"
           size="icon-sm"
-          // In the page margin from md up, so the name box lines up with the boxes below. mt/top: centres the arrow
-          // on the name line, which sits below the edit box's border and padding.
           className="hover:text-primary mt-[5px] h-8 w-auto px-0 hover:bg-transparent active:bg-transparent md:absolute md:end-full md:top-0 md:me-1"
           aria-label={t("back")}
         >
@@ -167,7 +162,6 @@ export function ReportEditor({ templateId }: { templateId: string }) {
         </Button>
         <div className="grid min-w-0 flex-1 gap-1">
           <h1 className="sr-only">{name || t("newReport")}</h1>
-          {/* Name and description edit in one box, always shown as a field for editors. */}
           <div
             className={cn(
               "grid rounded-lg border border-transparent px-2 py-1 transition-[border-color,box-shadow,background-color] duration-150",

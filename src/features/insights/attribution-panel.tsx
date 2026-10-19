@@ -12,7 +12,6 @@ import { type AttributionModel, MODELS, useAttribution } from "./api";
 
 const iso = (d: Date) => d.toISOString().slice(0, 10);
 
-/** Multi-touch attribution with a model switcher; the model is labelled on every number (17.11). */
 export function AttributionPanel({ clientId }: { clientId?: string }) {
   const t = useTranslations("insights.attribution");
   const tk = useTranslations("source");

@@ -1,7 +1,5 @@
 "use client";
 
-// Loaded on demand from QuickAddLead (React Hook Form + Zod stay out of every page's first load).
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { UserRoundSearch } from "lucide-react";
@@ -75,7 +73,6 @@ export function QuickAddForm({ onDone }: { onDone: () => void }) {
 
   const phone = useDebounced(toLatinDigits(form.watch("phone")).replace(/\D/g, ""), 350);
   const clientId = form.watch("client_id");
-  // The country code picker follows the chosen client; a different country adds its dialing code.
   const clientCountry = clients.find((c) => c.id === clientId)?.country ?? "";
   const [dialCountry, setDialCountry] = useState(clientCountry);
   useEffect(() => setDialCountry(clientCountry), [clientCountry]);
@@ -113,7 +110,6 @@ export function QuickAddForm({ onDone }: { onDone: () => void }) {
     onError: (e) => setError(apply(e, ["full_name", "phone", "client_id", "note"])),
   });
 
-  // Paste-to-fill: a pasted message with a number fills the phone field (Bangla digits ok).
   const onPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     const found = extractPhone(e.clipboardData.getData("text"));
     if (found) {

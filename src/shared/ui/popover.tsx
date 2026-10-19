@@ -29,7 +29,6 @@ export function PopoverContent({
 
 export const TooltipProvider = TooltipPrimitive.Provider;
 
-/** Self-contained (own provider): only pages that use tooltips ship Radix tooltip. */
 export function Tooltip({ content, children }: { content: React.ReactNode; children: React.ReactNode }) {
   return (
     <TooltipPrimitive.Provider delayDuration={300}>

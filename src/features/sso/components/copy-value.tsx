@@ -14,7 +14,6 @@ export function useCopy() {
       .catch(() => toast.success(v));
 }
 
-/** A value to paste into the identity provider, DNS or a SIEM, with a copy button. */
 export function CopyValue({ label, value }: { label: string; value: string }) {
   const t = useTranslations("sso");
   const copy = useCopy();

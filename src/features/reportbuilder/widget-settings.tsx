@@ -13,7 +13,6 @@ import { autoTitle } from "./widget-view";
 
 const TOPS = [0, 3, 5, 10] as const;
 
-/** One widget's settings: what it shows and how. Changing the type reshapes the query to fit. */
 export function WidgetSettings({ widget, onChange }: { widget: ReportWidget; onChange: (w: ReportWidget) => void }) {
   const t = useTranslations("reportBuilder");
   const ta = useTranslations("ask");
@@ -80,13 +79,12 @@ export function WidgetSettings({ widget, onChange }: { widget: ReportWidget; onC
                       checked={on}
                       disabled={(!on && full && RULES[type].max > 1) || last}
                       onCheckedChange={(v) => {
-                        // A one-number widget swaps its metric instead of refusing a second.
                         const metrics = v
                           ? RULES[type].max === 1
                             ? [m]
                             : [...q.metrics, m]
                           : q.metrics.filter((x) => x !== m);
-                        setQ({ metrics, sort: q.limit ? metrics[0]! : "" }); // a "top N" ranks by the first one
+                        setQ({ metrics, sort: q.limit ? metrics[0]! : "" });
                       }}
                     />
                     {ta(`metric.${m}`)}

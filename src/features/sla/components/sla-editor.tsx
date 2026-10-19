@@ -28,11 +28,10 @@ type Recipient = Step["notify"][number];
 export const SLA_PRESETS = { fast: 5, standard: 15, relaxed: 60 } as const;
 const RECIPIENTS: Recipient[] = ["owner", "client_managers", "agency_admins"];
 
-/** A sample "Thursday 18:55" in the client's timezone, for the plain-language preview. */
 function sampleArrival(tz: string): string {
   const now = new Date();
   const day = now.getUTCDay();
-  const add = (4 - day + 7) % 7 || 7; // next Thursday
+  const add = (4 - day + 7) % 7 || 7;
   const d = new Date(now.getTime() + add * 86400_000);
   const ymd = new Intl.DateTimeFormat("en-CA", {
     timeZone: tz,
@@ -72,7 +71,7 @@ export function SlaPolicyEditor({
     }
   }, [q.data]);
 
-  // Live preview from the API (business-time math lives on the server only).
+  // Business-time math lives on the server only.
   const arrival = useMemo(() => sampleArrival(timeZone), [timeZone]);
   const [debounced, setDebounced] = useState<Policy | null>(null);
   useEffect(() => {
@@ -331,12 +330,9 @@ export function SlaPolicyEditor({
   );
 }
 
-// ---------------------------------------------------------------------------------------------
-
 const ISO_DAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] as const;
 type Day = (typeof ISO_DAYS)[number];
 
-/** Days in the order the user's locale starts the week (Saturday in Bangladesh, Sunday in the US…). */
 function weekOrder(locale: string): Day[] {
   let first = 1;
   try {
@@ -351,7 +347,6 @@ function weekOrder(locale: string): Day[] {
   return [...ISO_DAYS.slice(first - 1), ...ISO_DAYS.slice(0, first - 1)];
 }
 
-/** Common business weeks; the server's default for the client's country is what an unsaved calendar shows. */
 const WEEK_PRESETS: { key: string; open: Day[]; hours: [string, string] }[] = [
   { key: "presetMonFri", open: ["mon", "tue", "wed", "thu", "fri"], hours: ["09:00", "18:00"] },
   { key: "presetSunThu", open: ["sun", "mon", "tue", "wed", "thu"], hours: ["09:00", "18:00"] },
@@ -373,7 +368,6 @@ export function CalendarEditor({ clientId }: { clientId: string }) {
   const [source, setSource] = useState<Schemas["HolidaySource"] | null>(null);
   const locale = useLocale();
   const region = usePreferences((p) => p.region);
-  // The week starts where the agency's country starts it (Saturday, Sunday or Monday).
   const days = useMemo(
     () => weekOrder(intlLocale({ locale: locale as FormatOptions["locale"], digits: "latn", region })),
     [locale, region],

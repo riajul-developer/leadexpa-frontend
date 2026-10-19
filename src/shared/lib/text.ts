@@ -1,4 +1,3 @@
-/** Levenshtein distance over code points (AI feedback "edited" sends how much the agent changed a draft). */
 export function editDistance(a: string, b: string, cap = 2000): number {
   const x = [...a].slice(0, cap);
   const y = [...b].slice(0, cap);
@@ -16,7 +15,6 @@ export function editDistance(a: string, b: string, cap = 2000): number {
   return prev[y.length]!;
 }
 
-/** sessionStorage that never throws (private mode, blocked storage). */
 export const sessionStore = {
   get<T>(key: string): T | null {
     try {

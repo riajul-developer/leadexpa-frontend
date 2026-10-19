@@ -16,10 +16,6 @@ import type { Call } from "./api";
 
 type Summary = NonNullable<Call["summary"]>;
 
-/**
- * AI call notes with "Apply to lead" (a note, plus the suggested stage). Loaded on demand: it pulls in the lead
- * mutations, which the Calls route should not carry on first load.
- */
 export function SummaryCard({ c, s }: { c: Call; s: Summary }) {
   const t = useTranslations("calls.summary");
   const ts = useTranslations("stage");

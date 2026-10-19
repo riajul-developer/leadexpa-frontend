@@ -1,5 +1,4 @@
-// Server-compatible: no client hooks, no chart library. Used by the in-app preview, the public /r/[token]
-// page and the print route rendered to PDF. Charts are static SVG so they print crisply on A4.
+// Server-compatible (no client hooks, no chart library): also rendered to PDF.
 import { useTranslations } from "next-intl";
 
 import { dir, type AppLocale } from "@/shared/config/locales";

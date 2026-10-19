@@ -25,7 +25,6 @@ import {
 } from "./api";
 import { HealthBadge, PLATFORM_NAME, PlatformIcon } from "./parts";
 
-/** Clients → Campaigns: ad accounts whose daily spend syncs into reports (replaces the CSV for their campaigns). */
 export function AdAccountsCard({ clientId, currency }: { clientId: string; currency: string }) {
   const t = useTranslations("spend");
   const q = useAdAccounts(clientId);

@@ -30,7 +30,7 @@ import { MFAStep, PasskeySignIn } from "./mfa-step";
 
 const LOCALE_PREFIX = new RegExp(`^/(${LOCALES.join("|")})(?=/|$)`);
 
-/** Only same-app relative paths are honored as returnTo (no open redirects). */
+/** Only same-app relative paths are honored (no open redirects). */
 function safeReturnTo(v: string | null): string | null {
   if (!v || !v.startsWith("/") || v.startsWith("//")) return null;
   return v.replace(LOCALE_PREFIX, "") || "/";
@@ -45,8 +45,6 @@ function FormError({ message }: { message: string | null }) {
   );
 }
 
-// ---------------------------------------------------------------------------------------------
-
 export function LoginForm() {
   const t = useTranslations("auth");
   const tv = useTranslations("validation");
@@ -57,15 +55,12 @@ export function LoginForm() {
   type Values = z.infer<typeof schema>;
   const form = useForm<Values>({ resolver: zodResolver(schema), defaultValues: { email: params.get("email") ?? "" } });
   const apply = useApplyApiError(form.setError);
-  // Single sign-on (G7a): a SAML sign-in that failed comes back with ?sso_error=; an organization that turned
-  // passwords off answers sso_required, which opens the SSO panel with the email filled in.
   const ssoMessage = useSSOErrorMessage();
   const [error, setError] = useState<string | null>(() =>
     params.get("reason") === "session_policy" ? t("login.sessionPolicy") : ssoMessage(params.get("sso_error")),
   );
   const [ssoRequired, setSSORequired] = useState(false);
   const locale = useLocale();
-  // Multi-region (G1): where the account lives. Several regions: the person picks one.
   const [regions, setRegions] = useState<RegionChoice[] | null>(null);
   const [routing, setRouting] = useState(false);
   const submit = async (v: Values) => {
@@ -77,12 +72,10 @@ export function LoginForm() {
     if (only && !isHere(only)) return window.location.assign(regionLoginURL(only, locale, v.email));
     login.mutate(v);
   };
-  // Accounts with two-step sign-in get a challenge instead of a session (17.6).
   const [challenge, setChallenge] = useState<Schemas["MFAChallenge"] | null>(null);
   const signedIn = (me: Me) => {
     qc.setQueryData(meKey, me);
     track("auth.login.succeeded");
-    // An agency that requires two-step sign-in, or blocks this network, shows its own gate in the app shell.
     const home =
       me.membership?.role === "client_viewer"
         ? "/portal"
@@ -177,8 +170,6 @@ export function LoginForm() {
   );
 }
 
-// ---------------------------------------------------------------------------------------------
-
 export function SignupForm() {
   const t = useTranslations("auth");
   const tv = useTranslations("validation");
@@ -197,14 +188,12 @@ export function SignupForm() {
   });
   type Values = z.infer<typeof schema>;
   const form = useForm<Values>({ resolver: zodResolver(schema), defaultValues: { country: "" } });
-  // The browser's zone preselects the country (after mount: the server doesn't know the zone). The
-  // server derives currency, weekend and SLA hours from the country.
+  // Preselect after mount: the server doesn't know the browser's zone.
   useEffect(() => {
     if (!form.getValues("country")) form.setValue("country", countryForTimeZone(browserTimeZone()));
   }, [form]);
   const apply = useApplyApiError(form.setError);
   const [error, setError] = useState<string | null>(null);
-  // Partner referral (6c): ?ref=CODE counts the visit; the new agency claims it right after signing up.
   const ref = useSearchParams().get("ref")?.trim().toLowerCase() || null;
   useEffect(() => {
     if (ref)
@@ -266,8 +255,6 @@ export function SignupForm() {
     </AuthShell>
   );
 }
-
-// ---------------------------------------------------------------------------------------------
 
 export function ForgotPasswordForm() {
   const t = useTranslations("auth");
@@ -389,8 +376,6 @@ export function VerifyEmail() {
   );
 }
 
-// ---------------------------------------------------------------------------------------------
-
 export function AcceptInvite({ token }: { token: string }) {
   const t = useTranslations("auth");
   const tv = useTranslations("validation");
@@ -406,7 +391,6 @@ export function AcceptInvite({ token }: { token: string }) {
     meta: { silent: true },
   });
   const newUser = lookup.data ? !lookup.data.user_exists : false;
-  // A phone invite (client staff, 17.0.3) is passwordless: they sign in later with an SMS code.
   const byPhone = !!lookup.data?.phone;
   const schema = z.object({
     name: newUser ? z.string().trim().min(1, tv("required")) : z.string().optional(),
@@ -428,7 +412,6 @@ export function AcceptInvite({ token }: { token: string }) {
     },
     onError: (e) => {
       const msg = apply(e, ["name", "password"]);
-      // An existing user who isn't signed in must log in first, then come back here.
       if (msg && e && (e as { code?: string }).code === "invite_login_required") {
         const login = byPhone ? "/lite/login" : "/login";
         router.replace(`${login}?returnTo=${encodeURIComponent(`/invite/${token}`)}`);

@@ -13,11 +13,10 @@ const DOT: Record<Status, string> = {
   offline: "bg-danger",
 };
 
-/** Live-updates indicator: text + dot (never color alone). */
+/** Text + dot: never color alone. */
 export function StreamStatus() {
   const t = useTranslations("shell.stream");
   const [status, setStatus] = useState<Status>("connecting");
-  // The stream client loads with the (lazy) realtime bridge, not in the first-load bundle.
   useEffect(() => {
     let off: (() => void) | undefined;
     let gone = false;

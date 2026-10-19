@@ -16,7 +16,6 @@ import { Card, CardContent, CardHeader, CardTitle, Skeleton } from "@/shared/ui/
 
 type Prefs = Schemas["NotificationPreferences"];
 
-/** Event × channel matrix, quiet hours, digest time; plus device settings (browser alerts, sound). */
 export function NotificationPreferences() {
   const t = useTranslations("notifications.prefs");
   const tt = useTranslations("notifications.type");

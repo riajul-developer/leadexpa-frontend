@@ -1,5 +1,3 @@
-// Product analytics (FRONTEND_PROMPT §15): consent-aware, PII-free. Events are named feature.object.action.
-// PostHog loads lazily and only when a key is configured and the user consented; otherwise calls are no-ops.
 type Props = Record<string, string | number | boolean | null | undefined>;
 
 interface Client {
@@ -15,7 +13,6 @@ const queue: [string, Props | undefined][] = [];
 
 const PII_KEYS = /name|phone|email|body|note|text|message/i;
 
-/** Drops anything that looks like PII before it leaves the browser. */
 export function scrub(props?: Props): Props | undefined {
   if (!props) return props;
   const out: Props = {};
@@ -46,7 +43,6 @@ export function track(event: string, props?: Props) {
   else if (queue.length < 50) queue.push([event, clean]);
 }
 
-/** Agency-level grouping for validation metrics (weekly active agents per agency). Ids only. */
 export function identify(userId: string, agencyId: string | null, role: string | null) {
   client?.identify(userId, { role: role ?? undefined });
   if (agencyId) client?.group("agency", agencyId);

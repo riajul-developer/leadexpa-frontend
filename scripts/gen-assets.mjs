@@ -1,12 +1,9 @@
-// Generates the Leadexpa brand assets (logo, mark, favicon, PWA icons) from assets/brand/leadexpa-original.png,
-// and a short alert tone. Run: node scripts/gen-assets.mjs
+// Generates brand assets (logo, mark, favicon, PWA icons) and an alert tone.
 import { mkdirSync, writeFileSync } from "node:fs";
 
 import sharp from "sharp";
 
-// --- Brand ----------------------------------------------------------------------------------------
-// The original logo sits on a light grid; light, near-grey pixels become transparent (the logo's maroon, bronze
-// and gold are all saturated), then the lockup and the mark (its left part) are trimmed out.
+// Light near-grey pixels become transparent (the logo's colours are saturated).
 const IVORY = "#fbf7f1"; // --c-bg
 const { data: raw, info } = await sharp("assets/brand/leadexpa-original.png")
   .ensureAlpha()
@@ -52,7 +49,6 @@ for (const size of [192, 512]) {
   await icon(size, 0.2, `public/icons/maskable-${size}.png`, 0); // full bleed; the mark stays in the safe zone
 }
 await icon(180, 0.12, "public/icons/apple-touch-icon.png", 0);
-// Favicon: an SVG wrapping a 64 px PNG of the mark (sharp at tab sizes, one request).
 const fav = await sharp(mark)
   .resize(64, 64, { fit: "contain", background: transparent })
   .png({ compressionLevel: 9 })
@@ -62,7 +58,6 @@ writeFileSync(
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><image width="64" height="64" href="data:image/png;base64,${fav.toString("base64")}"/></svg>`,
 );
 
-// 0.35 s two-tone chime, 16-bit mono PCM WAV.
 const rate = 22050;
 const samples = Math.round(rate * 0.35);
 const data = Buffer.alloc(samples * 2);

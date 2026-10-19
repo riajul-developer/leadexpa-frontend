@@ -8,7 +8,6 @@ import { SlaChip } from "./sla-chip";
 const MIN = 60_000;
 const at = (offsetMin: number) => new Date(Date.now() + offsetMin * MIN).toISOString();
 
-/** Every SLA state from §7, relative to the moment the story renders. */
 const STATES: Record<string, SlaInput> = {
   on_track: {
     sla: { status: "on_track", due_at: at(12), kind: "first_response" },
@@ -62,7 +61,6 @@ export const Overdue: Story = { args: { lead: STATES.overdue! } };
 export const Met: Story = { args: { lead: STATES.met! } };
 export const Paused: Story = { args: { lead: STATES.paused! } };
 
-/** Contrast check for all states. */
 export const AllStates: Story = {
   render: () => (
     <div className="flex flex-wrap gap-2">
@@ -94,7 +92,6 @@ export const SourceBadges: Story = {
   ),
 };
 
-/** Lead quality (17.0.1): nothing for plain valid leads; reasons in the title. */
 export const QualityBadges: Story = {
   render: () => (
     <div className="flex flex-wrap gap-2">

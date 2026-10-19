@@ -10,7 +10,6 @@ import { SheetModal } from "@/shared/ui/sheet";
 
 import { useLead } from "../api/hooks";
 
-// The timeline, AI panel and sales load with the detail, after the sheet is already on screen.
 const LeadDetail = dynamic(() => import("./lead-detail").then((m) => m.LeadDetail), {
   loading: () => (
     <div className="grid gap-3 p-4">
@@ -20,7 +19,6 @@ const LeadDetail = dynamic(() => import("./lead-detail").then((m) => m.LeadDetai
   ),
 });
 
-/** The lead side sheet; loaded by LeadSheet the first time a lead is opened. */
 export function LeadSheetPanel({ leadId, onClose }: { leadId: string | undefined; onClose: () => void }) {
   const t = useTranslations("leadDetail");
   const lead = useLead(leadId);

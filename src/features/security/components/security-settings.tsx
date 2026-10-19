@@ -35,7 +35,6 @@ import { RecoveryCodes } from "./recovery-codes";
 import { TOTPSetup } from "./totp-setup";
 import { VerifyForm } from "./verify-form";
 
-/** Settings › Security (FRONTEND_PROMPT 17.6): two-step sign-in, passkeys, devices, sign-in alerts, activity. */
 export function SecuritySettings() {
   const { data: s } = useSecurity();
   if (!s) return <Skeleton className="h-96 w-full" />;
@@ -49,13 +48,10 @@ export function SecuritySettings() {
   );
 }
 
-/** Localized text for an API error, for toasts. */
 function useErrorText() {
   const te = useTranslations("errors");
   return (e: unknown) => (isApiError(e) && te.has(e.code) ? te(e.code) : te("network"));
 }
-
-// ---------------------------------------------------------------------------------------------
 
 function TwoStepCard({ s }: { s: SecurityOverview }) {
   const t = useTranslations("security");
@@ -64,7 +60,6 @@ function TwoStepCard({ s }: { s: SecurityOverview }) {
   const supported = usePasskeysSupported();
   const methods = methodsOf(s);
   const enrolled = s.totp_enabled || s.passkeys.length > 0;
-  // Once there is a method, changing methods needs a login that proved one.
   const locked = enrolled && !s.session_verified;
   const [dialog, setDialog] = useState<"totp" | { codes: string[] } | null>(null);
   const [passkeyName, setPasskeyName] = useState("");
@@ -113,7 +108,6 @@ function TwoStepCard({ s }: { s: SecurityOverview }) {
           </div>
         )}
 
-        {/* Authenticator app */}
         <section className="grid gap-2" aria-labelledby="sec-totp">
           <div className="flex flex-wrap items-center gap-3">
             <Smartphone className="text-muted size-5" aria-hidden />
@@ -141,7 +135,6 @@ function TwoStepCard({ s }: { s: SecurityOverview }) {
           </div>
         </section>
 
-        {/* Passkeys */}
         <section className="grid gap-2" aria-labelledby="sec-passkeys">
           <div className="flex flex-wrap items-center gap-3">
             <Fingerprint className="text-muted size-5" aria-hidden />
@@ -202,7 +195,6 @@ function TwoStepCard({ s }: { s: SecurityOverview }) {
           )}
         </section>
 
-        {/* Recovery codes */}
         {enrolled && (
           <section className="grid gap-2" aria-labelledby="sec-recovery">
             <div className="flex flex-wrap items-center gap-3">
@@ -339,9 +331,6 @@ function PasskeyRow({ passkey, locked }: { passkey: Schemas["Passkey"]; locked: 
   );
 }
 
-// ---------------------------------------------------------------------------------------------
-
-/** "Chrome on Windows" in the viewer's language; the API sends the proper names. */
 export function useDeviceLabel() {
   const t = useTranslations("security.sessions");
   return (d: Schemas["Device"]) =>
@@ -465,8 +454,6 @@ function SessionsCard() {
     </Card>
   );
 }
-
-// ---------------------------------------------------------------------------------------------
 
 function AlertsCard({ s }: { s: SecurityOverview }) {
   const t = useTranslations("security.alerts");

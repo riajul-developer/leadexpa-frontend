@@ -10,17 +10,11 @@ import { cn } from "@/shared/lib/cn";
 import type { ReportWidget } from "./api";
 import { clamp, type Layout, place, stacked } from "./grid";
 
-/** Row height in px (desktop); on phones widgets stack in one column at h × this. */
 export const ROW = 56;
 const GAP = 12;
 
 type Drag = { id: string; mode: "move" | "resize"; startX: number; startY: number; start: Layout; layout: Layout };
 
-/**
- * The report grid: 12 columns × fixed rows from md up, one stacked column on phones (top-to-bottom reading order
- * in the DOM, which is also what screen readers follow). In edit mode a widget moves by its grip and resizes by
- * its corner, with the pointer or the keyboard (arrows move, Shift+arrows resize); whatever it lands on moves down.
- */
 export function Board({
   widgets,
   title,
@@ -48,13 +42,12 @@ export function Board({
   const [drag, setDrag] = useState<Drag | null>(null);
   const [said, setSaid] = useState("");
 
-  // While dragging, show where everything would settle.
   const shown = drag ? place(widgets, drag.id, drag.layout) : widgets;
 
   const steps = () => {
     const el = ref.current;
     if (!el) return null;
-    if (getComputedStyle(el).gridTemplateColumns.split(" ").length < 12) return null; // phone: one column
+    if (getComputedStyle(el).gridTemplateColumns.split(" ").length < 12) return null;
     const col = (el.clientWidth - GAP * 11) / 12 + GAP;
     return { col, row: ROW + GAP };
   };
@@ -105,7 +98,6 @@ export function Board({
 
   return (
     <>
-      {/* Rows are 56px but grow when a widget's content needs more (a horizontal bar chart with many rows). */}
       <div
         ref={ref}
         role="list"

@@ -5,7 +5,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { track } from "@/shared/lib/analytics";
 import { api, unwrap, type Schemas } from "@/shared/lib/api/client";
 
-/** Global billing (G2): plan summary, prices in the agency's market, Stripe checkout/portal, invoices and usage. */
 export const billingKeys = {
   summary: ["billing"] as const,
   prices: ["billing", "prices"] as const,
@@ -41,7 +40,6 @@ export function useUsage() {
   return useQuery({ queryKey: billingKeys.usage, queryFn: () => unwrap(api.GET("/v1/billing/usage")) });
 }
 
-/** Starts Stripe Checkout and leaves the app for it. */
 export function useCheckout() {
   return useMutation({
     mutationFn: (body: { plan: PaidPlan; interval: Interval }) => unwrap(api.POST("/v1/billing/checkout", { body })),

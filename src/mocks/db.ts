@@ -1,6 +1,4 @@
-// In-memory mock database for the clickable prototype (FRONTEND_PROMPT §2.9). Typed against the generated
-// OpenAPI schema, so a contract change breaks the mocks at compile time. Deterministic (seeded) so demos and
-// screenshots are stable; times are relative to "now" so every SLA state is visible on load.
+// Deterministic seed; times are relative to now so every SLA state shows on load.
 import { faker } from "@faker-js/faker";
 
 import type { components } from "@/shared/lib/api/schema";
@@ -119,14 +117,12 @@ export const me: S["Me"] = {
   availability: "available",
   mfa_required: null,
   access_blocked: null,
-  // One cell in the demo: the API is where the app booted from.
   region: "ap1",
   api_base_url: process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080",
   app_url: typeof location === "undefined" ? "" : location.origin,
   read_only: false,
 };
 
-// Predictive score (17.7): a plausible rules-v1 score with its top factors.
 export function mockScore(i: number, stage: string, responded: boolean, callback: boolean): S["LeadScore"] {
   const factors: S["LeadScore"]["factors"] = [];
   let value = 18 + ((i * 37) % 30);
@@ -416,7 +412,6 @@ export const notifications: S["Notification"][] = leads
     created_at: iso(now() - (i + 1) * 4 * min),
   }));
 
-/** Consent ledger rows recorded in the mock (the form baseline comes from lead.consent). */
 export const consentEvents = new Map<string, S["ConsentEvent"][]>();
 
 export const slaPolicies = new Map<string, S["SLAPolicy"]>();
@@ -440,7 +435,6 @@ for (const c of clients) {
 export const reports: S["Report"][] = [];
 export const shares = new Map<string, S["ReportShare"][]>();
 
-// 17.0.4: an email-in source with two forwarded emails waiting for review, and a Messenger lead.
 const demoClient = clients[0]!;
 sources.push(
   {
@@ -545,7 +539,6 @@ export const conversations = new Map<string, S["Conversation"][]>();
 
 export { id as newId, iso, now };
 
-// Step 3a: the shared inbox, a WhatsApp number with templates, and messaging settings.
 export const channelAccounts: S["ChannelAccount"][] = [
   {
     id: id(),
@@ -649,7 +642,6 @@ export const inboxMessages = new Map<string, S["Message"][]>();
   });
 }
 
-// Step 3b: an auto-responder (off) with some recent decisions to show.
 export const autoResponder: S["AutoResponderView"] = {
   enabled: false,
   channel: "whatsapp",
@@ -677,7 +669,6 @@ export const autoResponder: S["AutoResponderView"] = {
     })),
 };
 
-// Step 3c: a Twilio number for click-to-call, call settings, and a few calls with a recording and AI notes.
 export const voiceNumbers: S["VoiceNumber"][] = [
   {
     id: id(),
@@ -791,7 +782,6 @@ export const coaching: S["AgentCoaching"][] = [
   })),
 ];
 
-// Step 4a: recovery sequences — one running (with results), one draft.
 export const sequences: S["Sequence"][] = [
   {
     id: id(),
@@ -864,7 +854,6 @@ export const enrollments: S["SequenceEnrollment"][] = leads
     ended_at: i >= 2 ? iso(now() - i * 60 * min) : null,
   }));
 
-// Step 4b: automation rules — one running with a log, one switched off.
 export const rules: S["AutomationRule"][] = [
   {
     id: id(),
@@ -940,8 +929,7 @@ export const ruleRuns: S["AutomationRun"][] = leads
     created_at: iso(now() - (i + 1) * 47 * min),
   }));
 
-// ---------------------------------------------------------------------------------------------
-// Security (17.6). The mock accepts 123456 as every authenticator-app code.
+// The mock accepts 123456 as every authenticator-app code.
 
 export const security: S["SecurityOverview"] = {
   totp_enabled: false,
@@ -1017,10 +1005,6 @@ export const recoveryCodes = [
   "c8p5r-t3z7g",
   "n2w9e-f6d4q",
 ];
-
-// ---------------------------------------------------------------------------------------------
-// Lead-source connectors (G5, step 5a): Google Ads lead forms for the first client (healthy, with a test lead in
-// the log) and a Typeform webhook for the second one (degraded: the last two posts had no contact field).
 
 const TARGETS = [
   "full_name",
@@ -1221,10 +1205,6 @@ export const connectorInstalls: S["ConnectorInstallDetail"][] = [];
   connectorInstalls.push(w);
 }
 
-// ---------------------------------------------------------------------------------------------
-// Conversion feedback + spend sync (step 5b): the first client accepted the terms and sends to a Meta dataset
-// (healthy) and a Google Ads account (failing: a removed conversion action); one Meta ad account syncs spend.
-
 export const googleConnections: S["GoogleConnection"][] = [
   {
     id: id(),
@@ -1422,8 +1402,6 @@ export function newDestination(
   });
 }
 
-// Step 5c: the public API and outgoing webhooks. One seeded key, one endpoint with a short delivery log (one
-// failure, so the log and resend can be demoed).
 export const developerCatalog: S["DeveloperCatalog"] = {
   scopes: [
     {
@@ -1552,8 +1530,6 @@ export function webhookDelivery(
   );
 }
 
-// Step 5d: two-way CRM sync. The first client has HubSpot connected (with a short log); the others have none.
-// Only HubSpot and Pipedrive are "configured" so the unconfigured state shows too.
 export const crmProviders: S["CrmProvider"][] = [
   { key: "hubspot", name: "HubSpot", configured: true, amount_supported: false },
   { key: "salesforce", name: "Salesforce", configured: false, amount_supported: false },
@@ -1649,8 +1625,6 @@ export const crmLogs = new Map<string, S["CrmSyncLogEntry"][]>();
   c.stats = { linked: 128, queued: 2, last_24h: { created: 14, updated: 31, conflict: 1, failed: 1 } };
 }
 
-// Step 5e: the marketplace. Built-in listings mirror the backend catalog (texts come from translations); two
-// partner apps, one already reviewed by other agencies.
 const builtInListings: [string, S["MarketplaceCategory"], string, boolean][] = [
   ["meta_lead_ads", "lead_sources", "/integrations/meta", true],
   ["messenger_instagram", "lead_sources", "/integrations/meta", false],
@@ -1800,8 +1774,7 @@ export const listingReviews = new Map<string, S["MarketplaceReview"][]>([
 
 export const appInstallations: S["AppInstallation"][] = [];
 
-// Step 6a: payment links. The first client has a bKash sandbox account; its first lead has one paid and one open
-// link. Mock tokens are "mock-pay-<link id>" so the pay page works after a reload.
+// Mock pay tokens are "mock-pay-<link id>" so the pay page survives a reload.
 export const paymentAccounts: S["PaymentAccount"][] = [
   {
     id: id(),

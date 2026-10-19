@@ -68,13 +68,10 @@ export function Pipeline() {
     const to = e.over?.id as Stage | undefined;
     if (!lead || !to || lead.stage === to || !canMove(lead.stage, to)) return;
     track("pipeline.card.dropped", { from: lead.stage, to });
-    // Every move confirms through the stage dialog: contacted asks the outcome, lost a reason, won the sale.
     setPending({ lead, to });
   };
 
   return (
-    // Like the leads page: the board fills the app container edge to edge and the viewport (above the bottom navigation on
-    // phones), so only the board scrolls.
     <div className="flex h-[calc(100dvh-3.5rem-5rem)] flex-col pt-3 md:h-[calc(100dvh-3.5rem)] md:pt-4">
       <div className="bg-surface border-border flex min-h-0 flex-1 flex-col overflow-hidden border-x border-t">
         <div className="border-border flex items-center justify-between border-b px-4 py-3">
@@ -147,7 +144,7 @@ function Column({
       ref={setNodeRef}
       aria-labelledby={`col-${stage}`}
       className={cn(
-        "rounded-md border-border bg-surface-2 flex w-[85vw] max-w-80 shrink-0 snap-start flex-col border sm:w-72",
+        "border-border bg-surface-2 flex w-[85vw] max-w-80 shrink-0 snap-start flex-col rounded-md border sm:w-72",
         isOver && allowed && "border-primary bg-primary-soft",
         dragging && !allowed && "opacity-50",
       )}

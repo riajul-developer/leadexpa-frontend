@@ -26,7 +26,6 @@ export function UserAvatar({ name, away }: { name: string; away: boolean }) {
   );
 }
 
-/** Account menu. The dropdown (Radix, mutations) loads on first open; until then this is a plain button. */
 export function UserMenu() {
   const t = useTranslations("shell");
   const { data: me } = useMe();

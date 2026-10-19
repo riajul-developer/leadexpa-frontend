@@ -1,14 +1,12 @@
-// G-2 guard (GLOBAL_PROMPT §2): no Bangladesh-specific defaults in UI code. Zones, currencies and countries
-// come from the user/agency/client (useDisplayTimeZone, useAgencyCurrency, client.timezone…).
-// Usage: node scripts/check-hardcodes.mjs   (exit 1 on findings)
+// Fails on Bangladesh-specific defaults (zones, currencies, countries) in UI code.
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 
 const ROOT = join(import.meta.dirname, "..", "src");
 const PATTERN = /["'`](Asia\/Dhaka|BDT|BD|\+880\d*)["'`]/;
 const ALLOWED = [
-  "shared/config/countries.ts", // the country list itself
-  "shared/lib/format/", // BD-specific formatting (taka sign, national phone form), applied only to BD data
+  "shared/config/countries.ts",
+  "shared/lib/format/", // BD formatting, applied only to BD data
   "features/billing/", // plan prices are BDT until G3 price books
   "mocks/",
   "shared/lib/api/schema.d.ts",

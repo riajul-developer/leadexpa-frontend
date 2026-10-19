@@ -26,5 +26,4 @@ export function PlatformIcon({ platform }: { platform: Platform }) {
   return <Icon className="text-primary size-5 shrink-0" aria-hidden />;
 }
 
-/** Platform names are proper names, not translated. */
 export const PLATFORM_NAME: Record<Platform, string> = { meta: "Meta", google_ads: "Google Ads" };

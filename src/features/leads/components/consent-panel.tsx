@@ -16,10 +16,7 @@ type ConsentView = Schemas["ConsentView"];
 
 const consentKey = (id: string) => [...leadKeys.all, "consents", id] as const;
 
-/**
- * Consent state per channel and its history (GLOBAL_PROMPT §7.4): the form's checkbox, then every change a
- * person recorded. Recording is append-only; an any-channel opt-out turns off calls and messages everywhere.
- */
+/** Append-only; an any-channel opt-out blocks calls and messages everywhere. */
 export function ConsentPanel({ leadId, timeZone }: { leadId: string; timeZone: string }) {
   const t = useTranslations("consent");
   const f = useFormat();
@@ -131,7 +128,6 @@ export function ConsentPanel({ leadId, timeZone }: { leadId: string; timeZone: s
   );
 }
 
-/** Contact policy for the lead screen: quiet-hours warnings and blocked channels, explained. */
 export function useContactPolicy(leadId: string) {
   return useQuery({
     queryKey: [...leadKeys.all, "contact-policy", leadId],

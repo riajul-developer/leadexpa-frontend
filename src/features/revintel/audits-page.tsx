@@ -38,7 +38,6 @@ function StatusBadge({ a }: { a: LeakageAudit }) {
   return <Badge tone={tone}>{t(`status.${a.status}`)}</Badge>;
 }
 
-/** /audits: Lead Leakage Audits of prospects (10.3), the agency's sales tool. */
 export function AuditsPage() {
   const t = useTranslations("revintel.audit");
   const f = useFormat();
@@ -97,7 +96,6 @@ function NewAuditDialog({ onClose }: { onClose: () => void }) {
   const te = useTranslations("errors");
   const router = useRouter();
   const create = useCreateAudit();
-  // The agency's own country to start with; most prospects are local.
   const region = usePreferences((s) => s.region) ?? "";
   const [v, setV] = useState({
     prospect_name: "",
@@ -173,7 +171,6 @@ function NewAuditDialog({ onClose }: { onClose: () => void }) {
   );
 }
 
-/** /audits/[id]: load the prospect's lead log, set the assumptions, read and share the report. */
 export function AuditDetail({ id }: { id: string }) {
   const t = useTranslations("revintel.audit");
   const te = useTranslations("errors");

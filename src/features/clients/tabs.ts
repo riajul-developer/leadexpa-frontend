@@ -1,5 +1,4 @@
-// Plain module (not "use client"): the server route validates the tab with this list. Values exported from a
-// client module reach server code as client references, not arrays.
+// Not a client module: client exports reach server code as references, not arrays.
 export const CLIENT_TABS = [
   "overview",
   "health",

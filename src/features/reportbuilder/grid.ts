@@ -1,6 +1,4 @@
-// Report builder layout rules without React: the same limits the API enforces (reportbuilder/domain), so the
-// editor never produces a layout the server refuses. Widgets never overlap: whatever a move or resize lands on is
-// pushed down, then everything floats up into free space (a vertical compaction, like a dashboard grid).
+// Mirrors the API's layout limits so the editor never produces a layout the server refuses.
 import type { AskQuery } from "@/shared/lib/report-query";
 
 import type { ReportWidget } from "./api";
@@ -15,7 +13,6 @@ export type WidgetType = (typeof WIDGET_TYPES)[number];
 export type Layout = ReportWidget["layout"];
 type Metric = AskQuery["metrics"][number];
 
-/** How many metrics each type takes and which breakdowns fit it. */
 export const RULES: Record<Exclude<WidgetType, "text">, { min: number; max: number; by: AskQuery["by"][] }> = {
   kpi: { min: 1, max: 1, by: ["none"] },
   line: { min: 1, max: 3, by: ["day"] },
@@ -45,7 +42,6 @@ export function blankQuery(kind: AskQuery["kind"]): AskQuery {
   };
 }
 
-/** A widget's query reshaped to fit a (new) type: metrics trimmed or filled, breakdown moved to one that fits. */
 export function fitQuery(type: WidgetType, q: AskQuery | null | undefined): AskQuery | null {
   if (type === "text") return null;
   if (type === "leads") {
@@ -75,10 +71,7 @@ export function clamp(l: Layout): Layout {
 
 const byPosition = (a: ReportWidget, b: ReportWidget) => a.layout.y - b.layout.y || a.layout.x - b.layout.x;
 
-/**
- * Places `id` at `layout` and settles the rest: widgets it lands on move below it, then every widget except the
- * placed one floats up as far as it can. The placed widget keeps its spot so a drag feels exact.
- */
+/** The placed widget keeps its spot so a drag feels exact. */
 export function place(widgets: ReportWidget[], id: string, layout: Layout): ReportWidget[] {
   const moved = clamp(layout);
   const placed: ReportWidget[] = [];
@@ -86,7 +79,6 @@ export function place(widgets: ReportWidget[], id: string, layout: Layout): Repo
   if (target) placed.push({ ...target, layout: moved });
   for (const w of [...widgets].filter((w) => w.id !== id).sort(byPosition)) {
     let l = { ...w.layout };
-    // Float up first, then step down past anything in the way.
     while (l.y > 0 && !placed.some((p) => overlaps({ ...l, y: l.y - 1 }, p.layout))) l = { ...l, y: l.y - 1 };
     while (placed.some((p) => overlaps(l, p.layout))) l = { ...l, y: l.y + 1 };
     placed.push({ ...w, layout: l });
@@ -95,7 +87,6 @@ export function place(widgets: ReportWidget[], id: string, layout: Layout): Repo
   return placed.sort((a, b) => order.get(a.id)! - order.get(b.id)!);
 }
 
-/** Every widget floated up as far as it goes (after a delete). */
 export function compact(widgets: ReportWidget[]): ReportWidget[] {
   const placed: ReportWidget[] = [];
   for (const w of [...widgets].sort(byPosition)) {
@@ -107,7 +98,6 @@ export function compact(widgets: ReportWidget[]): ReportWidget[] {
   return placed.sort((a, b) => order.get(a.id)! - order.get(b.id)!);
 }
 
-/** The first free spot for a new widget of this size: the first row where it fits, scanning left to right. */
 export function freeSpot(widgets: ReportWidget[], w: number, h: number): Layout {
   for (let y = 0; y <= MAX_ROWS - h; y++)
     for (let x = 0; x + w <= COLUMNS; x++) {
@@ -117,7 +107,6 @@ export function freeSpot(widgets: ReportWidget[], w: number, h: number): Layout 
   return { x: 0, y: rows(widgets), w, h };
 }
 
-/** How many rows the layout uses. */
 export function rows(widgets: ReportWidget[]) {
   return widgets.reduce((m, w) => Math.max(m, w.layout.y + w.layout.h), 0);
 }
@@ -136,12 +125,10 @@ export function newWidget(type: WidgetType, widgets: ReportWidget[], text = ""):
   };
 }
 
-/** Reading order for one column (phones, screen readers): top to bottom, then start to end. */
 export function stacked(widgets: ReportWidget[]): ReportWidget[] {
   return [...widgets].sort(byPosition);
 }
 
-/** What's wrong with a widget before saving (the server checks the same), or null. */
 export function problem(w: ReportWidget): "text" | "metrics" | null {
   if (w.type === "text") return w.text.trim() ? null : "text";
   if (!w.query) return "metrics";
@@ -151,7 +138,6 @@ export function problem(w: ReportWidget): "text" | "metrics" | null {
   return n < rule.min || n > rule.max || !rule.by.includes(w.query.by) ? "metrics" : null;
 }
 
-/** Starter layouts for the template gallery. Titles come from the catalog at creation time. */
 export const STARTERS = {
   monthly: [
     { type: "kpi", metrics: ["leads"], layout: { x: 0, y: 0, w: 3, h: 2 } },

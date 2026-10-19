@@ -4,10 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 
 import { API_URL, api, unwrap, type Schemas } from "@/shared/lib/api/client";
 
-// Service status and SLAs (G7j). The public page reads the control plane, which measures every region from
-// outside and stays up when a region doesn't; the app reads its own region through the API.
+// The public page reads the control plane, so it stays up when a region is down.
 
-/** The control plane's public status API (NEXT_PUBLIC_STATUS_API_URL); in mock mode, the mocked API. */
 export const STATUS_API_URL = (process.env.NEXT_PUBLIC_STATUS_API_URL ?? API_URL).replace(/\/$/, "");
 
 export type ComponentKey = "app" | "lead_capture" | "automations" | "messaging";
@@ -43,7 +41,6 @@ export interface StatusIncident {
   components: string[];
   started_at: string;
   resolved_at?: string | null;
-  /** Opened by the prober from sustained down minutes, not by an operator (ADR 0052). */
   automatic?: boolean;
   scheduled_for: string | null;
   scheduled_until: string | null;
@@ -72,7 +69,6 @@ export async function fetchPublicStatus(signal?: AbortSignal): Promise<PublicSta
 export type ServiceStatus = Schemas["ServiceStatus"];
 export type AgencySLA = Schemas["AgencySLA"];
 
-/** This region's status for the app (incident banner, settings). */
 export function useServiceStatus() {
   return useQuery({
     queryKey: ["service-status"],

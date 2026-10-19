@@ -1,8 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// BACKEND_PROMPT 17.0.3: a manager shares a no-login link to one lead; client staff open it, call, and record
-// the outcome in one tap.
-
 test("share an action link and log an outcome without signing in", async ({ page }) => {
   await page.goto("/en/leads?stage=new");
   const rows = page.locator("tbody tr").filter({ hasNotText: "Junk" });
@@ -10,8 +7,7 @@ test("share an action link and log an outcome without signing in", async ({ page
   const sheet = page.getByRole("dialog");
   const create = sheet.getByRole("button", { name: "Create link" });
 
-  // Unassigned leads have no link (it acts as the owner), and do-not-contact leads have no call button: open
-  // rows until one fits.
+  // Unassigned and do-not-contact leads lack a link or call button: try rows.
   let found = false;
   for (let i = 0; i < 5 && !found; i++) {
     await rows.nth(i).click();
@@ -34,7 +30,6 @@ test("share an action link and log an outcome without signing in", async ({ page
   await page.goto(url.pathname);
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await expect(page.getByRole("link", { name: "Call" })).toHaveAttribute("href", /^tel:\+/);
-  // No app shell on this page.
   await expect(page.getByRole("navigation", { name: "Main navigation" })).toHaveCount(0);
 
   await page.getByRole("button", { name: "I called" }).click();

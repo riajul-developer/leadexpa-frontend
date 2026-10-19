@@ -22,10 +22,6 @@ import { AutoReplyCard } from "./auto-reply-card";
 const VARIABLES = ["lead.first_name", "lead.full_name", "lead.phone", "client.name", "campaign.name"] as const;
 type Variable = (typeof VARIABLES)[number];
 
-/**
- * A client's messaging channels (step 3): WhatsApp Business numbers with their approved templates, and SMS
- * senders. Templates map each {{n}} to a lead field so nobody types variables by hand.
- */
 export function ChannelsTab({ clientId }: { clientId: string }) {
   const t = useTranslations("channels");
   const canManage = useCan("integration.manage");

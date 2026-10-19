@@ -1,7 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-// WCAG 2.2 AA (FRONTEND_PROMPT §10): zero serious/critical axe violations on every main route, every locale.
 const ROUTES = [
   "/inbox",
   "/leads",
@@ -56,7 +55,7 @@ for (const locale of ["bn", "en", "ar"]) {
   }
 }
 
-// Leadexpa is light-only: a dark OS preference still gets the brand theme, with readable SLA chips.
+// Light-only theme: a dark OS preference still gets the brand theme.
 test("dark OS preference keeps the light brand theme and readable SLA chips", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark" });
   await page.goto("/bn/inbox");

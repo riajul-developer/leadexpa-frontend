@@ -37,7 +37,6 @@ import {
 const HOURS = Array.from({ length: 24 }, (_, h) => h);
 const hh = (h: number) => `${String(h).padStart(2, "0")}:00`;
 
-/** Settings › Single sign-on › Data warehouse export (G7h): daily Parquet snapshots in the agency's own bucket. */
 export function WarehouseExportsCard() {
   const t = useTranslations("sso.warehouse");
   const { data: me } = useMe();

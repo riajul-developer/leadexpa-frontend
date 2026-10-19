@@ -19,7 +19,6 @@ import { REPORT_LOCALES } from "./share-dialog";
 
 const HOURS = Array.from({ length: 24 }, (_, h) => h);
 
-/** A template's email schedules (weekly or monthly, in the client's time zone and language) and its sent reports. */
 export function ScheduleSheet({ templateId, defaultClient }: { templateId: string; defaultClient: string }) {
   const t = useTranslations("reportBuilder.schedules");
   const f = useFormat();

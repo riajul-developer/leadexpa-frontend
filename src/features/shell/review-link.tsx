@@ -9,10 +9,6 @@ import { api, unwrap } from "@/shared/lib/api/client";
 import { cn } from "@/shared/lib/cn";
 import { reviewKeys } from "@/shared/lib/query-keys";
 
-/**
- * Nav entry for forwarded emails waiting for review (17.0.4). Shown only while something waits, so agencies
- * that don't use email-in never see it. Loaded after first paint, like the Junk count.
- */
 export function ReviewLink({ onNavigate }: { onNavigate?: () => void }) {
   const t = useTranslations("nav");
   const pathname = usePathname();

@@ -17,7 +17,6 @@ import { useAccessPolicy, useSaveAccessPolicy } from "../api";
 const MAX_HOURS = [8, 12, 24, 72, 168, 720] as const;
 const IDLE_MINUTES = [30, 60, 120, 240, 480] as const;
 
-/** Settings › Single sign-on: where staff may sign in from, and how long a login lasts (G7b). */
 export function AccessPolicyCard() {
   const t = useTranslations("sso.access");
   const q = useAccessPolicy();

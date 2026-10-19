@@ -6,7 +6,6 @@ import { track } from "@/shared/lib/analytics";
 import { api, unwrap, unwrapEmpty, type Schemas } from "@/shared/lib/api/client";
 import { toast } from "@/shared/lib/toast";
 
-/** The AI agent (17.12): definition, knowledge base, approvals, monitor, evals, kill switch. */
 export const agentKeys = {
   all: ["agent"] as const,
   agent: (clientId: string) => ["agent", "def", clientId] as const,
@@ -129,7 +128,7 @@ export function useDrafts() {
   return useQuery({ queryKey: agentKeys.drafts, queryFn: () => unwrap(api.GET("/v1/agent/drafts")) });
 }
 
-/** Approve or discard a draft. The card leaves the queue at once, so the outcome toasts live here, not in the card. */
+/** The card leaves the queue at once, so outcome toasts live here, not in the card. */
 export function useDecideDraft(messages: { sent: string; discarded: string; failed: (e: unknown) => string }) {
   const qc = useQueryClient();
   return useMutation({
@@ -144,7 +143,7 @@ export function useDecideDraft(messages: { sent: string; discarded: string; fail
         : unwrap(api.POST("/v1/agent/drafts/{draftId}/reject", { params: { path: { draftId: id } } })),
     meta: { silent: true },
     onMutate: ({ id }) => {
-      // Swipe feels instant: drop the card now, put it back if the request fails.
+      // Optimistic: drop the card now, put it back if the request fails.
       const prev = qc.getQueryData<{ data: Draft[] }>(agentKeys.drafts);
       if (prev) qc.setQueryData(agentKeys.drafts, { data: prev.data.filter((d) => d.id !== id) });
       return { prev };

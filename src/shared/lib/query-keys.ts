@@ -1,4 +1,3 @@
-// Query-key factories (never ad-hoc arrays). Shared because realtime events touch several features' caches.
 export interface LeadFilters {
   client_id?: string;
   stage?: string;
@@ -25,7 +24,6 @@ export const leadKeys = {
   conversations: (id: string) => [...leadKeys.all, "conversations", id] as const,
 };
 
-/** Suspect/junk counts (Junk bucket badge). */
 export const qualityKeys = {
   counts: (clientId?: string) => ["lead-quality-counts", clientId ?? null] as const,
 };
@@ -76,14 +74,12 @@ export const reportKeys = {
   shares: (id: string) => ["reports", id, "shares"] as const,
 };
 
-/** Email-in review queue (17.0.4). */
 export const reviewKeys = {
   all: ["ingestion-review"] as const,
   list: ["ingestion-review", "list"] as const,
   count: ["ingestion-review", "count"] as const,
 };
 
-/** Shared inbox (step 3, 17.2). */
 export const conversationKeys = {
   all: ["conversations"] as const,
   list: (f: { client?: string; channel?: string; unread?: boolean }) => ["conversations", "list", f] as const,
@@ -91,7 +87,6 @@ export const conversationKeys = {
   messages: (id: string) => ["conversations", "messages", id] as const,
 };
 
-/** Channel accounts (WhatsApp numbers, SMS senders), templates and messaging settings. */
 export const channelKeys = {
   client: (clientId: string) => ["channels", clientId] as const,
   templates: (accountId: string) => ["channels", "templates", accountId] as const,

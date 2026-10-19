@@ -6,10 +6,7 @@ import { useState } from "react";
 import type { DialogModal } from "./dialog";
 import type { SheetModal } from "./sheet";
 
-/*
- * Controlled sheet/dialog whose Radix code loads the first time it opens (FRONTEND_PROMPT §9: the inbox ships
- * ≤ 170 KB). Once opened it stays mounted, so closing animates and focus returns as usual.
- */
+/* Stays mounted once opened, so closing animates and focus returns. */
 const SheetModalLazy = dynamic(() => import("./sheet").then((m) => m.SheetModal));
 const DialogModalLazy = dynamic(() => import("./dialog").then((m) => m.DialogModal));
 

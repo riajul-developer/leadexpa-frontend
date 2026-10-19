@@ -1,8 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// Tier 3 team tools (step 8h): opt-in coaching that compares you only with yourself, a sales-floor TV paired by
-// a kiosk link (counts only, dims at night, opt-in leaderboard), and live presence on a lead.
-
 test("coaching is opt-in and private", async ({ page }) => {
   await page.goto("/en/progress");
   await expect(page.getByRole("heading", { name: "My progress", level: 1 })).toBeVisible();
@@ -38,14 +35,13 @@ test("create a TV screen, pair it, see the board, unpair it", async ({ page, con
   expect(link).toMatch(/\/tv#k=wb_mock-/);
   const tvLink = link.replace(/\/(bn|ar|en)\/tv/, "/en/tv"); // the demo agency's language is Bangla
 
-  // The TV: token taken from the fragment, kept, and removed from the address bar.
   await page.goto(tvLink);
   await expect(page.getByRole("heading", { name: "Floor TV", level: 1 })).toBeVisible();
   await expect(page).not.toHaveURL(/#k=/);
   await expect(page.getByTestId("tv-overdue")).toBeVisible();
   await expect(page.getByTestId("tv-client").getByRole("heading", { name: "Dhaka Dental Care" })).toBeVisible();
   await page.reload();
-  await expect(page.getByRole("heading", { name: "Floor TV", level: 1 })).toBeVisible(); // still paired
+  await expect(page.getByRole("heading", { name: "Floor TV", level: 1 })).toBeVisible();
 
   await page.goto("/en/wallboards");
   const row = page.getByTestId("wallboard-row");
@@ -82,7 +78,7 @@ test("the leaderboard shows only people who opted in", async ({ page }) => {
 });
 
 test("presence: who else is on the lead", async ({ page }) => {
-  await page.goto("/en/appointments"); // lists leads as links
+  await page.goto("/en/appointments");
   const href = (await page.locator("main a[href*='/leads/']").first().getAttribute("href")) ?? "";
   await page.goto(href.replace(/^\/(en|bn|ar)/, "/en"));
   await expect(page).toHaveURL(/\/en\/leads\/[^/]+$/);

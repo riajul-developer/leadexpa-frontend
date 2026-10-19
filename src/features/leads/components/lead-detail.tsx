@@ -49,16 +49,13 @@ import { StageDialog } from "./stage-dialog";
 import { NEXT_STAGES, needsDialog } from "./stages";
 import { Composer, Timeline } from "./timeline";
 
-// Click-to-call (17.8) loads after first paint, only on the lead page (calls imports leads, so never statically).
+// Never static: calls imports leads.
 const ClickToCall = dynamic(() => import("@/features/calls").then((m) => m.ClickToCall), { ssr: false });
-// The lead's recovery sequence (17.3), loaded the same way.
-// Payment links (17.0.2) load with the Sales tab: most lead views never open it.
 const LeadPayments = dynamic(() => import("@/features/paylinks").then((m) => m.LeadPayments), { ssr: false });
 const LeadPrediction = dynamic(() => import("@/features/revintel").then((m) => m.LeadPrediction), { ssr: false });
 const LeadAppointments = dynamic(() => import("@/features/appointments").then((m) => m.LeadAppointments), {
   ssr: false,
 });
-// Presence (8h): teammates on this lead, loaded after first paint.
 const LeadPresence = dynamic(() => import("@/features/presence").then((m) => m.LeadPresence), { ssr: false });
 const SimulateReply = dynamic(() => import("@/features/sandbox").then((m) => m.SimulateReply), { ssr: false });
 const EnrollmentCard = dynamic(() => import("@/features/sequences").then((m) => m.EnrollmentCard), { ssr: false });
@@ -161,7 +158,6 @@ function LeadDetailView({ lead, compact }: { lead: LeadDetailT; compact: boolean
             <Composer lead={lead} />
             <Timeline lead={lead} timeZone={timeZone} />
           </section>
-          {/* Reserved: the WhatsApp conversation pane (Tier 1) slots in here without a redesign. */}
           {conversationPane && <section className="border-border min-w-0 border-e" aria-label={t("conversation")} />}
           <Tabs defaultValue="ai" className="min-w-0">
             <TabsList className="px-2">
@@ -183,7 +179,6 @@ function LeadDetailView({ lead, compact }: { lead: LeadDetailT; compact: boolean
         </div>
       )}
 
-      {/* Sticky action bar on phones: Call · WhatsApp · Log */}
       {lead.phone && !lead.do_not_contact && (
         <div className="border-border bg-surface sticky bottom-0 z-10 flex gap-2 border-t p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden">
           <Button asChild className="flex-1" size="lg">
@@ -219,7 +214,6 @@ function LeadDetailView({ lead, compact }: { lead: LeadDetailT; compact: boolean
   );
 }
 
-/** Moves that need no extra input apply immediately. */
 function DirectStage({ lead, to, onDone }: { lead: LeadDetailT; to: Stage; onDone: () => void }) {
   const { mutate } = useChangeStage(lead);
   const fired = useRef(false);
@@ -272,7 +266,6 @@ function Header({
           <QualityBadge quality={lead.quality} />
           <ScoreWhy lead={lead} />
           <SlaChip lead={lead} timeZone={timeZone} live />
-          {/* Tags set by automation rules (17.5). */}
           {(lead.tags ?? []).map((tag) => (
             <Badge key={tag} tone="info">
               #{tag}
@@ -293,10 +286,8 @@ function Header({
         </p>
       )}
 
-      {/* On the full page on big screens the sequence card and the contact row sit side by side. */}
       <div className={cn("grid gap-3", !compact && "xl:grid-cols-[minmax(0,1fr)_auto] xl:items-center xl:gap-x-6")}>
         <EnrollmentCard lead={lead} />
-        {/* Contact + owner and the stage moves share one row on big screens; they stack below lg. */}
         <div className="flex flex-col gap-3 lg:flex-row lg:flex-wrap lg:items-center lg:gap-x-4">
           <div className="flex flex-wrap items-center gap-2 text-sm">
             {lead.phone && (
@@ -375,7 +366,7 @@ function Header({
   );
 }
 
-/** The contact policy's heads-up for a person about to call: quiet hours in the lead's own time zone. */
+/** Quiet hours are in the lead's own time zone. */
 function QuietHoursHint({ leadId }: { leadId: string }) {
   const t = useTranslations("leadDetail");
   const f = useFormat();

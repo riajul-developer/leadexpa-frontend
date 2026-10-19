@@ -8,7 +8,6 @@ import { LeadsTable } from "./leads-table";
 import { OutcomeSheet } from "./outcome-sheet";
 import { Timeline } from "./timeline";
 
-// Seed leads from the MSW mock database (the loader in .storybook/preview.tsx answers their API calls).
 const byState = (pred: (l: (typeof leads)[number]) => boolean) => leads.find(pred) ?? leads[0]!;
 const overdue = byState((l) => l.sla?.status === "overdue");
 const dueSoon = byState((l) => l.sla?.status === "due_soon");
@@ -43,7 +42,6 @@ export const WithHint: Story = {
   args: { hint: <p className="text-muted text-xs">Asked about the Eid price twice — mention the offer.</p> },
 };
 
-/** The inbox list: one shared SLA ticker for every chip. */
 export const InboxList: Story = {
   render: (args) => (
     <>
@@ -54,7 +52,6 @@ export const InboxList: Story = {
   ),
 };
 
-/** One tap logs the outcome; only "callback requested" asks for a time. */
 export const Outcome: StoryObj<typeof OutcomeSheet> = {
   render: () => <OutcomeSheet lead={overdue} channel="call" onClose={fn()} />,
 };
@@ -72,7 +69,6 @@ export const LeadTimeline: StoryObj<typeof Timeline> = {
   ),
 };
 
-/** Leads table (TanStack Table + Virtual) with filters in the URL. */
 export const Table: Story = {
   parameters: { nextjs: { navigation: { pathname: "/bn/leads" } } },
   render: () => <LeadsTable />,

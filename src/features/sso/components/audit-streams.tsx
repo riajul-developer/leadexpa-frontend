@@ -33,7 +33,6 @@ import {
 type Kind = AuditStream["kind"];
 type Created = { name: string; secret: string };
 
-/** Settings › Single sign-on › Audit log streaming (G7g): the audit log sent to the agency's SIEM or S3 bucket. */
 export function AuditStreamsCard() {
   const t = useTranslations("sso.streams");
   const { data: me } = useMe();

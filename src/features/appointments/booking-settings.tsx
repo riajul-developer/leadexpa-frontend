@@ -46,7 +46,6 @@ const toInput = (b: Booking): BookingInput => ({
   hosts: b.hosts,
 });
 
-/** Client › Booking (10.1): the rules slots are computed from, who takes appointments, rooms, reminders. */
 export function BookingSettings({ clientId }: { clientId: string }) {
   const booking = useBooking(clientId);
   if (!booking.data) return <Skeleton className="h-96 w-full" />;

@@ -32,7 +32,6 @@ const FIELDS = {
   sslcommerz: ["store_id", "store_password"],
 } as const;
 
-/** Client › Payments: the client's own merchant accounts and the payment links sent to its leads (17.0.2). */
 export function ClientPayments({ clientId }: { clientId: string }) {
   const canIntegrate = useCan("integration.manage");
   return (

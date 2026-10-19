@@ -15,10 +15,6 @@ import { describeStep, describeTrigger } from "./describe";
 import { RecoveredCard } from "./recovered-card";
 import { SequenceStatusBadge } from "./status";
 
-/**
- * Recovery sequences (FRONTEND_PROMPT 17.3): leads that went cold, worked through a few simple steps until they
- * reply, buy or opt out, with recovered revenue measured against a holdout group.
- */
 export function SequencesPage() {
   const t = useTranslations("sequences");
   const tl = useTranslations("lostReason");

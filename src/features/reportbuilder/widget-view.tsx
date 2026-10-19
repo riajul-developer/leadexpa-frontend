@@ -12,20 +12,16 @@ import { Skeleton } from "@/shared/ui/primitives";
 
 import type { ReportWidget } from "./api";
 
-// Recharts loads only when a chart widget is on screen.
 const RbChart = dynamic(() => import("./rb-chart"), { ssr: false, loading: () => <Skeleton className="size-full" /> });
 
 export type WidgetData = {
   metrics?: Schemas["AskMetricsResult"] | null;
-  /** Lead widgets: the count (a shared report has only this). */
   count?: number | null;
-  /** Lead widgets in the app: the first few leads. */
   preview?: Schemas["Lead"][];
 };
 
 type T = ReturnType<typeof useTranslations>;
 
-/** The heading a widget shows when it has no title of its own. */
 export function autoTitle(ta: T, t: T, w: ReportWidget): string {
   if (w.title) return w.title;
   if (w.type === "text") return "";
@@ -35,7 +31,6 @@ export function autoTitle(ta: T, t: T, w: ReportWidget): string {
   return q.by && q.by !== "none" ? `${names} — ${ta(`by.${q.by}`).toLowerCase()}` : names;
 }
 
-/** One widget's content, sized to fill its grid cell. Used by the editor and by the shared report page. */
 export function WidgetView({ widget, data, loading }: { widget: ReportWidget; data?: WidgetData; loading?: boolean }) {
   const t = useTranslations("reportBuilder");
   const ta = useTranslations("ask");
@@ -140,7 +135,6 @@ export function WidgetView({ widget, data, loading }: { widget: ReportWidget; da
     );
   }
 
-  // line / bar
   if (m.rows.length === 0) return <p className="text-muted text-sm">{t("noData")}</p>;
   const series = q.metrics.map((k) => ({ key: k, label: ta(`metric.${k}`), format: (v: number) => fmt(v, k) }));
   const rows = m.rows.map((b) => ({

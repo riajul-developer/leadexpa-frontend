@@ -14,12 +14,6 @@ import { FINAL, useCall, usePlaceCall, useVoiceNumbers } from "./api";
 import { useCallErrorToast } from "./errors";
 import { CallStatusBadge } from "./status";
 
-/**
- * "Call via {number}" on the lead page, shown only when the client has a Twilio number: the caller's phone
- * rings, then the lead is dialled from the client's number and the call logs itself. The plain tel: link stays
- * next to it for phones and clients without a number. While the call runs its status shows here, and the
- * timeline refreshes when it ends.
- */
 export function ClickToCall({ lead }: { lead: { id: string; client_id: string } }) {
   const t = useTranslations("calls");
   const qc = useQueryClient();

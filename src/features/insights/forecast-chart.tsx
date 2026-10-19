@@ -1,6 +1,6 @@
 "use client";
 
-// Loaded lazily (next/dynamic) so Recharts never ships with other routes.
+// Loaded via next/dynamic so Recharts stays out of other routes.
 import { useTranslations } from "next-intl";
 import { Area, CartesianGrid, ComposedChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
@@ -8,7 +8,6 @@ import { useFormat } from "@/shared/hooks/use-format";
 
 import type { Forecast } from "./api";
 
-/** Cumulative revenue by week: the p10–p90 band with the p50 line (17.11). */
 export default function ForecastChart({ forecast }: { forecast: Forecast }) {
   const t = useTranslations("insights.forecast");
   const f = useFormat();

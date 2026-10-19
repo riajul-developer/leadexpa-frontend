@@ -6,8 +6,6 @@ import { track } from "@/shared/lib/analytics";
 import { api, unwrap, unwrapEmpty, type Schemas } from "@/shared/lib/api/client";
 import { channelKeys, leadKeys } from "@/shared/lib/query-keys";
 
-// Query keys local to this feature (kept out of the shared first-load bundle).
-/** Recovery sequences, their reports, previews, a lead's enrollments and recovered revenue. */
 const sequenceKeys = {
   all: ["sequences"] as const,
   list: (client?: string) => ["sequences", "list", client ?? null] as const,
@@ -81,7 +79,6 @@ export function useSetSequenceStatus(id: string) {
   });
 }
 
-/** "Who will be enrolled?" for a trigger, refreshed as the editor changes. */
 export function usePreview(client: string | null, trigger: Trigger, enabled: boolean) {
   return useQuery({
     queryKey: sequenceKeys.preview(client, trigger),
@@ -136,7 +133,6 @@ export function useStopEnrollment(leadId: string) {
   });
 }
 
-/** Approved WhatsApp templates of a client's numbers (for the template step). */
 export function useApprovedTemplates(clientId: string | null) {
   const accounts = useQuery({
     queryKey: channelKeys.client(clientId ?? ""),

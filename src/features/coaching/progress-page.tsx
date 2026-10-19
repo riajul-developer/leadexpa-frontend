@@ -30,10 +30,6 @@ function useSetCoaching() {
   });
 }
 
-/**
- * /progress: opt-in personal coaching (Tier 3, 8h). Streaks and personal bests compare you only with yourself;
- * nobody else sees this page. Coaching tone: what went well and what's next, never a ranking.
- */
 export function ProgressPage() {
   const t = useTranslations("coaching");
   const q = useCoaching();

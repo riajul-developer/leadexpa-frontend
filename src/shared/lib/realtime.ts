@@ -1,7 +1,4 @@
-// One SSE connection per browser (FRONTEND_PROMPT §4.3). Tabs elect a leader with the Web Locks API; the
-// leader owns the EventSource and rebroadcasts every event over a BroadcastChannel, so ten open tabs are
-// still one connection. Reconnects with backoff and resumes with last_event_id; pauses after 5 minutes
-// hidden and asks listeners to resync when the tab comes back.
+// One SSE connection per browser: a Web Locks leader rebroadcasts to other tabs.
 import { apiBase } from "./api/client";
 
 export const STREAM_EVENTS = [
@@ -60,7 +57,7 @@ export class Realtime {
   constructor(private readonly fixedUrl?: string) {}
 
   private get url() {
-    return this.fixedUrl ?? `${apiBase()}/v1/stream`; // the agency's region (G1)
+    return this.fixedUrl ?? `${apiBase()}/v1/stream`;
   }
 
   start() {
@@ -103,7 +100,6 @@ export class Realtime {
     fn(this.status);
     return () => this.statusListeners.delete(fn);
   }
-  /** Fired after a gap (reconnect, tab back from a long pause): refetch what may have been missed. */
   onResync(fn: () => void): () => void {
     this.resyncListeners.add(fn);
     return () => this.resyncListeners.delete(fn);
@@ -115,7 +111,7 @@ export class Realtime {
       this.becomeLeader();
       return;
     }
-    // Held until this tab closes or stops; the next tab in line takes over automatically.
+    // Held until this tab closes; the next tab in line then takes over.
     void locks.request(LOCK, () => {
       if (this.stopped) return Promise.resolve();
       this.becomeLeader();
@@ -143,8 +139,7 @@ export class Realtime {
       if (resumed) this.resync();
     };
     es.onerror = () => {
-      // EventSource retries by itself on network blips, but gives up on HTTP errors (e.g. 401 after
-      // logout). Take over with our own backoff; the API client refreshes the session meanwhile.
+      // EventSource gives up on HTTP errors (e.g. 401): retry with our own backoff.
       if (es.readyState === EventSource.CLOSED) this.scheduleReconnect();
       else this.setStatus("connecting");
     };
@@ -205,7 +200,6 @@ export class Realtime {
     }
     if (this.hiddenTimer) clearTimeout(this.hiddenTimer);
     this.hiddenTimer = null;
-    // A visible follower wakes a leader that paused while hidden in the background.
     if (!this.leader) this.channel?.postMessage({ kind: "wake" });
     if (this.leader && !this.source) {
       this.connect();

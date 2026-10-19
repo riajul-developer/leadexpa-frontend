@@ -6,7 +6,6 @@ import { track } from "@/shared/lib/analytics";
 import { api, unwrap, unwrapEmpty, type Schemas } from "@/shared/lib/api/client";
 import { leadKeys } from "@/shared/lib/query-keys";
 
-/** Payment links (17.0.2): merchant accounts per client, links per lead, and the payer's public page. */
 export const payKeys = {
   all: ["paylinks"] as const,
   accounts: (clientId: string) => ["paylinks", "accounts", clientId] as const,

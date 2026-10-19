@@ -11,12 +11,10 @@ import { NavLink } from "./nav-link";
 
 type Item = Schemas["InboxPage"]["data"][number];
 
-// Most urgent first, like the inbox (FRONTEND_PROMPT 17.0.3: Overdue → Due → New).
 const SECTIONS = ["overdue", "due_soon", "callback_due", "new", "in_progress"] as const;
 
 type State = { kind: "loading" } | { kind: "offline" } | { kind: "ready"; items: Item[] };
 
-/** "My leads" for client staff: big cards, one tap to call, one tap to record what happened. */
 export function LiteLeads() {
   const t = useTranslations("lite");
   const locale = useLocale();

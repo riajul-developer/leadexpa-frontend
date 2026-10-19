@@ -22,7 +22,7 @@ describe("report builder grid", () => {
     expect(noOverlaps(out)).toBe(true);
     expect(out.find((x) => x.id === "c")!.layout).toEqual({ x: 0, y: 0, w: 12, h: 2 });
     expect(out.find((x) => x.id === "a")!.layout.y).toBe(2);
-    expect(out.map((x) => x.id)).toEqual(["a", "b", "c"]); // order kept
+    expect(out.map((x) => x.id)).toEqual(["a", "b", "c"]);
   });
 
   it("clamps to the grid and floats the rest up", () => {

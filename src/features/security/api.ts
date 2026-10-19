@@ -21,7 +21,6 @@ export function useSessions() {
   return useQuery({ queryKey: sessionsKey, queryFn: () => unwrap(api.GET("/v1/me/sessions")) });
 }
 
-/** Methods the person can verify with, in the order offered. */
 export function methodsOf(s: SecurityOverview | undefined): MFAMethod[] {
   if (!s) return [];
   const m: MFAMethod[] = [];
@@ -31,10 +30,7 @@ export function methodsOf(s: SecurityOverview | undefined): MFAMethod[] {
   return m;
 }
 
-/**
- * After any change: the overview, the device list and /me (mfa_enabled, mfa_required) refresh. me: false holds
- * /me back while new recovery codes are on screen: refreshing it can lift the agency gate and unmount them.
- */
+/** me: false holds /me back so a lifted gate can't unmount on-screen recovery codes. */
 export function useRefreshSecurity() {
   const qc = useQueryClient();
   return ({ me = true }: { me?: boolean } = {}) =>
@@ -45,7 +41,6 @@ export function useRefreshSecurity() {
     ]);
 }
 
-/** Proves a second factor for this login (step-up). */
 export function useVerifySession() {
   const refresh = useRefreshSecurity();
   return useMutation({
@@ -66,7 +61,6 @@ export function useVerifySession() {
   });
 }
 
-/** Registers a passkey on this device; returns recovery codes when it was the first method. */
 export function useAddPasskey() {
   const refresh = useRefreshSecurity();
   return useMutation({

@@ -8,7 +8,6 @@ import { toast } from "@/shared/lib/toast";
 import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/overlays";
 
-/** Shows new recovery codes once, with copy and download, and asks the person to confirm they saved them. */
 export function RecoveryCodes({ codes, onDone }: { codes: string[]; onDone: () => void }) {
   const t = useTranslations("security.recovery");
   const [saved, setSaved] = useState(false);

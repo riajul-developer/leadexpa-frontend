@@ -25,7 +25,6 @@ import {
 
 import { TRIGGER_CLASS, UserAvatar } from "./user-menu";
 
-/** The account menu itself; loaded on first open by UserMenu. */
 export function UserMenuDropdown({ defaultOpen }: { defaultOpen?: boolean }) {
   const t = useTranslations("shell");
   const tr = useTranslations("roles");

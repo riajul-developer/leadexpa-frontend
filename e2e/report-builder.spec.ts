@@ -1,12 +1,9 @@
 import { expect, test } from "@playwright/test";
 
-// Tier 3 custom report builder (step 8g): a widget grid saved as a template, previewed for any client, moved and
-// resized (pointer or keyboard), shared as a frozen link without lead data, and emailed on a schedule.
-
 test("start from a layout, add a note, arrange it and save", async ({ page }) => {
   await page.goto("/en/report-builder");
   await expect(page.getByRole("heading", { name: "Report builder", level: 1 })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Monthly client results" }).first()).toBeVisible(); // the demo template
+  await expect(page.getByRole("link", { name: "Monthly client results" }).first()).toBeVisible();
   await page.getByRole("link", { name: /Team performance/ }).click();
 
   await expect(page).toHaveURL(/\/en\/report-builder\/new\?starter=team/);
@@ -15,11 +12,9 @@ test("start from a layout, add a note, arrange it and save", async ({ page }) =>
   await expect(board.locator("[data-testid^=rb-widget-]")).toHaveCount(6);
   await expect(board.getByTestId("rb-kpi").first()).not.toBeEmpty();
 
-  // Preview another client: the numbers rerun.
   await page.getByLabel("Preview for client").selectOption({ label: "Dhaka Dental Care" });
   await expect(board.getByTestId("rb-kpi").first()).toBeVisible();
 
-  // Add a note; its settings open.
   await page.getByRole("button", { name: "Add widget" }).click();
   await page.getByRole("menuitem", { name: /Note/ }).click();
   const sheet = page.getByRole("dialog", { name: "Widget settings" });
@@ -28,7 +23,6 @@ test("start from a layout, add a note, arrange it and save", async ({ page }) =>
   await page.keyboard.press("Escape");
   await expect(board.getByText("Great month for the front desk team.")).toBeVisible();
 
-  // Keyboard arranging: arrows move, Shift+arrows resize, and it's announced.
   const grip = page.getByRole("button", { name: "Move From your account manager", exact: true });
   await grip.focus();
   await page.keyboard.press("Shift+ArrowLeft");
@@ -36,10 +30,9 @@ test("start from a layout, add a note, arrange it and save", async ({ page }) =>
   await page.keyboard.press("ArrowUp");
   await expect(page.getByText(/^Moved to column 1, row/)).toBeAttached();
 
-  // A type change reshapes the query: a trend shows numbers by day.
   await page.getByRole("button", { name: "Edit Contact rate", exact: true }).click();
   await sheet.getByLabel("Widget type").selectOption("line");
-  await expect(sheet.getByLabel("Breakdown")).toHaveCount(0); // a trend is always by day
+  await expect(sheet.getByLabel("Breakdown")).toHaveCount(0);
   await page.keyboard.press("Escape");
 
   await page.getByRole("button", { name: "Save", exact: true }).click();
@@ -60,7 +53,7 @@ test("a widget that doesn't fit its type can't be saved", async ({ page }) => {
   await expect(sheet.getByText("Write the note, or remove the widget.")).toBeVisible();
   await page.keyboard.press("Escape");
   await page.getByRole("button", { name: "Save", exact: true }).click();
-  await expect(page.getByRole("dialog", { name: "Widget settings" })).toBeVisible(); // reopened on the problem
+  await expect(page.getByRole("dialog", { name: "Widget settings" })).toBeVisible();
   await expect(page).toHaveURL(/\/new$/);
 });
 
@@ -109,7 +102,7 @@ test("email it monthly, send a test, pause", async ({ page }) => {
 
   await row.getByRole("button", { name: "Send now" }).click();
   await expect(page.getByText("Report sent to its recipients.")).toBeVisible();
-  await expect(sheet.getByText("Emailed", { exact: false })).toBeVisible(); // history
+  await expect(sheet.getByText("Emailed", { exact: false })).toBeVisible();
 
   await row.getByRole("button", { name: "Pause" }).click();
   await expect(row.getByText("Paused", { exact: true })).toBeVisible();

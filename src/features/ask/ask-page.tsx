@@ -31,7 +31,6 @@ import {
   useRunQuery,
 } from "./api";
 
-// Recharts loads only when a numbers answer is shown.
 const AskChart = dynamic(() => import("./ask-chart"), {
   ssr: false,
   loading: () => <Skeleton className="h-56 w-full" />,
@@ -39,7 +38,6 @@ const AskChart = dynamic(() => import("./ask-chart"), {
 
 const EXAMPLES = ["overdue", "campaign", "agents", "trend"] as const;
 
-/** /ask: "Ask your data" (17.13). The question's interpretation is shown as chips you can change before trusting it. */
 export function AskPage() {
   const t = useTranslations("ask");
   const te = useTranslations("errors");

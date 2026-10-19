@@ -17,7 +17,6 @@ import { conversionKeys, useDisconnectGoogle, useGoogle } from "./api";
 
 const CALLBACK_MESSAGE = "recov-google-callback";
 
-/** /integrations: the agency's Google Ads sign-ins (used for offline conversions and spend sync). */
 export function GoogleAdsCard() {
   const t = useTranslations("google");
   const te = useTranslations("errors");
@@ -101,7 +100,6 @@ export function GoogleAdsCard() {
   );
 }
 
-/** /integrations/google/callback: Google redirects here; the code is posted to the API, then the popup closes. */
 export function GoogleCallback() {
   const t = useTranslations("google.callback");
   const te = useTranslations("errors");

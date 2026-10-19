@@ -1,5 +1,3 @@
-// Error reporting (FRONTEND_PROMPT §3, §10, §11). Sentry loads lazily (after first paint, and only when a DSN is
-// configured), so it never counts against the per-route JS budgets. Every event passes through scrubEvent.
 import type * as SentryNs from "@sentry/nextjs";
 
 import { DATA_COLLECTION, scrubBreadcrumb, scrubEvent } from "./scrub";
@@ -31,7 +29,6 @@ function load(): Promise<SentryModule | null> {
   return loading;
 }
 
-/** Starts the SDK when the browser is idle, so early unhandled errors are still caught. */
 export function initMonitoring() {
   if (typeof window === "undefined" || !process.env.NEXT_PUBLIC_SENTRY_DSN) return;
   const start = () => void load();
@@ -39,7 +36,6 @@ export function initMonitoring() {
   else setTimeout(start, 2000);
 }
 
-/** Reports an error and resolves to the Sentry event id (undefined when Sentry is not configured). */
 export async function captureError(error: unknown, tags?: Record<string, string>): Promise<string | undefined> {
   const Sentry = await load();
   return Sentry?.captureException(error, tags ? { tags } : undefined);

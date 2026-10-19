@@ -1,7 +1,3 @@
-/**
- * `toast.*` without sonner in the first-load bundle (FRONTEND_PROMPT §9): the library loads on the first toast,
- * the same module instance the lazily mounted <Toaster/> uses, so nothing raised early is lost.
- */
 import type * as SonnerModule from "sonner";
 
 type Sonner = typeof SonnerModule;

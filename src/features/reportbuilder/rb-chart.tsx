@@ -1,6 +1,5 @@
 "use client";
 
-// Loaded lazily (next/dynamic) so Recharts never ships with other routes.
 import {
   Bar,
   BarChart,
@@ -16,12 +15,10 @@ import {
 
 import { useFormat } from "@/shared/hooks/use-format";
 
-// Maroon, bronze, blue: the brand's two colors plus one that stays distinct from both.
 export const SERIES_COLORS = ["var(--c-primary)", "var(--c-accent)", "var(--c-info)"];
 
 export type Series = { key: string; label: string; format: (v: number) => string };
 
-/** A report widget's chart: lines for a trend by day, bars for a comparison (horizontal past 6). Up to three series. */
 export default function RbChart({
   rows,
   series,
@@ -34,7 +31,6 @@ export default function RbChart({
   label: string;
 }) {
   const f = useFormat();
-  // Past a handful of categories, upright bars squeeze their labels: switch to horizontal bars.
   const horizontal = !line && rows.length > 6;
   const byKey = new Map(series.map((s) => [s.key, s]));
   const tooltip = {
@@ -63,8 +59,6 @@ export default function RbChart({
     />
   ));
   if (horizontal) {
-    // Many categories: one row each, largest first, names straight on the left. The chart asks for ~22px a row and
-    // the board grows the widget to fit (no scrolling, no squeezed labels).
     const first = series[0]?.key ?? "";
     const sorted = [...rows].sort((a, b) => Number(b[first] ?? 0) - Number(a[first] ?? 0));
     const minHeight = sorted.length * (14 + 8 * series.length) + (legend ? 64 : 40);

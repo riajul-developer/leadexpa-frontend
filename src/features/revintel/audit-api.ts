@@ -6,7 +6,6 @@ import { track } from "@/shared/lib/analytics";
 import { api, API_URL, CSRF_COOKIE, readCookie, unwrap, unwrapEmpty, type Schemas } from "@/shared/lib/api/client";
 import { toApiError } from "@/shared/lib/api/errors";
 
-/** Lead Leakage Audits and AI business reviews (10.3). */
 export const auditKeys = {
   list: ["audits"] as const,
   one: (id: string) => ["audits", id] as const,
@@ -53,7 +52,7 @@ export function useCreateAudit() {
 export function useUploadAuditLog(id: string) {
   const qc = useQueryClient();
   return useMutation({
-    // Multipart: openapi-fetch serializes JSON, so post the file directly (CSRF + idempotency by hand).
+    // Multipart: openapi-fetch only serializes JSON, so CSRF + idempotency by hand.
     mutationFn: async (file: File) => {
       const body = new FormData();
       body.append("file", file);

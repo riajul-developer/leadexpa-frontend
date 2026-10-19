@@ -10,7 +10,6 @@ import { NavLink } from "./nav-link";
 
 type State = { kind: "loading" } | { kind: "missing" } | { kind: "ready"; lead: Schemas["LeadDetail"] };
 
-/** One lead: what they asked, and the same call / WhatsApp / outcome buttons as the list. */
 export function LiteLead({ leadId }: { leadId: string }) {
   const t = useTranslations("lite");
   const locale = useLocale();

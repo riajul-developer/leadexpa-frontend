@@ -1,19 +1,12 @@
-// PII scrubbing for error reports (FRONTEND_PROMPT §11): no names, phones, emails or note bodies leave the app.
-// Pure functions shared by the browser and server Sentry setups, so they are unit-tested without the SDK.
 import type { Breadcrumb, ErrorEvent, init } from "@sentry/nextjs";
 
 const EMAIL = /[\w.+-]+@[\w-]+(?:\.[\w-]+)+/g;
-// Phone-like runs: 7+ digits (Latin or Bangla) with optional +, spaces, dashes, dots or parentheses between them.
 const PHONE = /\+?[\d০-৯][\d০-৯\s().-]{5,}[\d০-৯]/g;
-// Secrets carried in paths: public report links, invites, password resets, action links.
 const PATH_TOKEN = /\/(r|invite|reset-password|verify-email|a)\/[^/?#\s]+/g;
 const PII_KEYS = /name|phone|email|body|note|text|message|address|password|token|cookie|authorization/i;
 const FILTERED = "[Filtered]";
 
-/**
- * SDK-side collection switched off (Sentry 11 collects cookies, headers, bodies, query params and local variables by
- * default). beforeSend/beforeBreadcrumb below are the second line of defence for what the SDK can't know is PII.
- */
+/** Sentry collects cookies, headers, bodies and locals by default: switch it all off. */
 export const DATA_COLLECTION = {
   userInfo: false,
   cookies: false,
@@ -27,12 +20,11 @@ export const DATA_COLLECTION = {
   genAI: { inputs: false, outputs: false },
 } satisfies NonNullable<Parameters<typeof init>[0]>["dataCollection"];
 
-/** Replaces emails, phone numbers and path tokens in free text. */
 export function scrubText(value: string): string {
   return value.replace(EMAIL, FILTERED).replace(PATH_TOKEN, `/$1/${FILTERED}`).replace(PHONE, FILTERED);
 }
 
-/** Drops the query string (search terms are often phones or names) and masks path tokens. */
+/** Drops the query string (often phones or names) and masks path tokens. */
 export function scrubUrl(url: string): string {
   return scrubText(url.replace(/[?#].*$/, ""));
 }

@@ -6,7 +6,6 @@ import { track } from "@/shared/lib/analytics";
 import { api, unwrap, type Schemas } from "@/shared/lib/api/client";
 import type { AskQuery } from "@/shared/lib/report-query";
 
-/** "Ask your data" (17.13): a question → a checked reporting query → leads or numbers. */
 export const askKeys = { history: ["ask", "history"] as const };
 
 export type AskAnswer = Schemas["AskAnswer"];
@@ -47,7 +46,6 @@ export function useRunQuery() {
   });
 }
 
-/** The leads-table URL for a leads answer (the table reads these keys; see leads-table FILTER_KEYS). */
 export function leadsHref(a: AskAnswer): string {
   const f = a.query.filters;
   const p = new URLSearchParams();

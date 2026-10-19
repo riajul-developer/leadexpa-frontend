@@ -5,7 +5,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { track } from "@/shared/lib/analytics";
 import { api, unwrap, type Schemas } from "@/shared/lib/api/client";
 
-/** Client health & anomalies (17.10), attribution and forecast (17.11). */
 export const insightKeys = {
   all: ["insights"] as const,
   overview: ["insights", "health"] as const,

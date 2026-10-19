@@ -35,10 +35,6 @@ async function call(path: string, init?: RequestInit): Promise<View> {
   return body as View;
 }
 
-/**
- * No-login page for one lead (BACKEND_PROMPT 17.0.3): call or WhatsApp, then one tap to record what happened.
- * Plain fetch, no query client or app shell, so it stays small on a cheap phone.
- */
 export function ActionLinkPage({ token }: { token: string }) {
   const t = useTranslations("actionLink");
   const locale = useLocale() as AppLocale;

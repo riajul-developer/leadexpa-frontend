@@ -6,12 +6,7 @@ import * as React from "react";
 
 import { cn } from "../lib/cn";
 
-/**
- * A password field with an eye button that shows or hides what was typed. Input renders it for type="password", so
- * every password and secret field has one. The button keeps one label ("Show password") and reports its state with
- * aria-pressed (the toggle-button pattern). It stays out of the tab order, so keyboard users go from the field to the
- * next one, and pressing it never takes focus (or the caret) away from the field.
- */
+/** Out of the tab order and never steals focus; state via aria-pressed. */
 export const PasswordInput = React.forwardRef<
   HTMLInputElement,
   Omit<React.InputHTMLAttributes<HTMLInputElement>, "type"> & { fieldClass: string }

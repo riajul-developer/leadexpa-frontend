@@ -14,7 +14,6 @@ type State = "viewing" | "editing";
 
 const BEAT_MS = 20_000;
 
-/** Focus inside a [data-lead-edit] area (the note composer) means "editing". */
 function useEditing(): State {
   const [state, setState] = useState<State>("viewing");
   useEffect(() => {
@@ -30,11 +29,6 @@ function useEditing(): State {
   return state;
 }
 
-/**
- * Real-time presence (Tier 3, 8h): teammates on the same lead, and a soft lock — a note when someone else is
- * writing, never a block. Heartbeats every 20 s while the tab is visible; changes arrive over the stream.
- * Loaded lazily from the lead header so it adds nothing to first load.
- */
 export default function LeadPresence({ leadId }: { leadId: string }) {
   const t = useTranslations("presence");
   const { data: me } = useMe();
@@ -71,7 +65,6 @@ export default function LeadPresence({ leadId }: { leadId: string }) {
     };
   }, [resource]);
 
-  // Tell the others at once when I start or stop writing.
   useEffect(() => {
     void api
       .POST("/v1/presence", { body: { resource, state } })

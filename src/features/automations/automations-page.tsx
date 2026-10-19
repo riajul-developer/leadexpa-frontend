@@ -14,7 +14,6 @@ import { Badge, Card, CardContent, EmptyState, Skeleton } from "@/shared/ui/prim
 import { useRules, useSetEnabled, type Rule } from "./api";
 import { describeRule } from "./describe";
 
-/** Automation rules (FRONTEND_PROMPT 17.5): "When a lead arrives, if it's from Meta, then assign it to Rahim". */
 export function AutomationsPage() {
   const t = useTranslations("automations");
   const client = useActiveClient();

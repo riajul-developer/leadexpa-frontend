@@ -6,7 +6,6 @@ import { NEXT_STAGES, type Lead, type Stage } from "@/features/leads";
 import { Button } from "@/shared/ui/button";
 import { DialogModal } from "@/shared/ui/dialog";
 
-/** Next-stage choices for a lead (inbox `s`). Loaded on first use, like the rest of the inbox's dialogs. */
 export function StagePicker({
   lead,
   onPick,

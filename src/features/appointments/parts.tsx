@@ -23,7 +23,6 @@ export function AppointmentStatusBadge({ status }: { status: Appointment["status
   return <Badge tone={STATUS_TONE[status]}>{t(status)}</Badge>;
 }
 
-/** No-show risk: shown only when it matters (high), with its reasons. */
 export function RiskBadge({ appt }: { appt: Pick<Appointment, "risk_score" | "risk_factors" | "status"> }) {
   const t = useTranslations("appointments.risk");
   if (appt.risk_score < 60 || (appt.status !== "booked" && appt.status !== "confirmed")) return null;
@@ -35,10 +34,6 @@ export function RiskBadge({ appt }: { appt: Pick<Appointment, "risk_score" | "ri
   );
 }
 
-/**
- * Slots grouped by day in the client's time zone: pick a day, then a time. Built for a phone: big targets, no
- * calendar widget.
- */
 export function SlotPicker({
   slots,
   timeZone,

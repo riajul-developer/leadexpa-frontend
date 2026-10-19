@@ -1,7 +1,5 @@
 "use client";
 
-// Pickers for the global settings (GLOBAL_PROMPT §5.2): language, country and timezone. Names come from
-// Intl in the UI language, so no country or zone list needs translating.
 import { useLocale } from "next-intl";
 import * as React from "react";
 

@@ -8,10 +8,6 @@ import { cn } from "../lib/cn";
 
 import { Input, NativeSelect } from "./input";
 
-/**
- * Phone field with a country code picker (GLOBAL_PROMPT §5.2). The picker starts at the client's country;
- * combine the parts with composePhone() before sending. Digits in any script are accepted.
- */
 export const PhoneInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & {
@@ -24,7 +20,7 @@ export const PhoneInput = React.forwardRef<
   const options = React.useMemo(() => countryOptions(locale).filter((o) => DIAL_CODES[o.code]), [locale]);
   return (
     <div className={cn("flex gap-2", className)} dir="ltr">
-      {/* The list shows "BD +880 — Bangladesh"; the closed control only "BD +880", drawn over a transparent value. */}
+      {/* The closed control shows only "BD +880", drawn over a transparent value. */}
       <div className="relative w-[6.75rem] shrink-0">
         <NativeSelect
           aria-label={countryLabel}

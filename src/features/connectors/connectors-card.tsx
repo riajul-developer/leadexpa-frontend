@@ -17,7 +17,6 @@ import { HealthBadge } from "./parts";
 
 const AddConnectorDialog = dynamic(() => import("./add-connector-dialog").then((m) => m.AddConnectorDialog));
 
-/** /integrations: Google Ads, webhooks and API keys set up in this agency (or for one client), with health. */
 export function ConnectorsCard({ clientId }: { clientId?: string }) {
   const t = useTranslations("connectors");
   const f = useFormat();

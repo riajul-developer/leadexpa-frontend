@@ -6,7 +6,6 @@ import { track } from "@/shared/lib/analytics";
 import { api, API_URL, CSRF_COOKIE, readCookie, unwrap, type Schemas } from "@/shared/lib/api/client";
 import { toApiError } from "@/shared/lib/api/errors";
 
-/** Revenue intelligence (GLOBAL_PROMPT 10.3): offline sales, deal predictions, benchmarks. */
 export const revKeys = {
   offline: (clientId: string, status?: string) => ["revintel", "offline", clientId, status ?? "all"] as const,
   prediction: (leadId: string) => ["revintel", "prediction", leadId] as const,
@@ -30,7 +29,7 @@ export function useOfflineSales(clientId: string, status?: "review" | "matched" 
 export function useUploadOffline(clientId: string) {
   const qc = useQueryClient();
   return useMutation({
-    // Multipart: openapi-fetch serializes JSON, so post the file directly (CSRF + idempotency by hand).
+    // Multipart: openapi-fetch only serializes JSON, so CSRF + idempotency by hand.
     mutationFn: async (file: File) => {
       const body = new FormData();
       body.append("file", file);

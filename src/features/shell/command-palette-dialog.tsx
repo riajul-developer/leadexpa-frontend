@@ -37,7 +37,6 @@ const PAGES = [
   { href: "/settings/profile", key: "settings", icon: Settings },
 ] as const;
 
-/** The palette itself; loaded on the first ⌘K by CommandPalette (cmdk stays out of the first load). */
 export function CommandPaletteDialog({
   open,
   onOpenChange: setOpen,
@@ -66,7 +65,6 @@ export function CommandPaletteDialog({
     enabled: open && canSearch && debounced.length >= 2,
     meta: { silent: true },
   });
-  // A question ("overdue leads for Dhaka Dental this week") goes to Ask your data (17.13); short text is a search.
   const trimmed = query.trim();
   const canAsk = canSearch && trimmed.length >= 4;
   const looksLikeQuestion = trimmed.split(/\s+/).length >= 3 || /[?？؟]$/.test(trimmed);

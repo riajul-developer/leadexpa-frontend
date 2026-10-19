@@ -24,10 +24,6 @@ const Coaching = dynamic(() => import("./coaching").then((m) => m.Coaching));
 const VIEWS = ["calls", "dialer", "coaching"] as const;
 type View = (typeof VIEWS)[number];
 
-/**
- * Calls (FRONTEND_PROMPT 17.8): every click-to-call and PBX call with its recording, transcript and AI notes;
- * a power dialer over the caller's queue; and per-agent coaching for managers.
- */
 export function CallsPage() {
   const t = useTranslations("calls");
   const params = useSearchParams();
@@ -46,7 +42,6 @@ export function CallsPage() {
   };
 
   return (
-    // Like leads and pipeline: space above, then one bordered box (header and panel) filling the rest of the screen.
     <div className="flex h-[calc(100dvh-3.5rem-5rem)] min-h-0 flex-col pt-3 md:h-[calc(100dvh-3.5rem)] md:pt-4">
       <div className="bg-surface border-border flex min-h-0 flex-1 flex-col overflow-hidden border-x border-t">
         <div className="border-border flex flex-wrap items-center gap-2 border-b px-4 py-3">

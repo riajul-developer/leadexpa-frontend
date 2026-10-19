@@ -78,7 +78,6 @@ export function CallDetail({ callId, onBack }: { callId: string; onBack?: () => 
         <Transcript turns={c.transcript} onSeek={seek} canSeek={c.recording_status === "stored"} />
       )}
 
-      {/* Nothing recorded or transcribed: say so in the middle of the pane rather than leaving it blank. */}
       {c.recording_status === "none" &&
         !c.summary &&
         c.transcript_status !== "pending" &&

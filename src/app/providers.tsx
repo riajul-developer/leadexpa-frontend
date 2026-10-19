@@ -15,12 +15,10 @@ import { toast } from "@/shared/lib/toast";
 
 import { MockGate } from "./mock-gate";
 
-// The toast renderer loads after first paint; toasts raised before it mounts are queued by sonner.
+// Toasts raised before the lazy Toaster mounts are queued by sonner.
 const Toaster = dynamic(() => import("sonner").then((m) => m.Toaster), { ssr: false });
-// Only fetched the first time a plan limit is hit.
 const PlanLimitDialog = dynamic(() => import("@/features/billing").then((m) => m.PlanLimitDialog), { ssr: false });
 
-/** Errors the UI handles specially (plan limits) or locally (validation, conflicts) don't get a generic toast. */
 function handledLocally(e: unknown) {
   return (
     isApiError(e) && (e.status === 401 || e.status === 404 || e.status === 409 || e.status === 422 || e.isPlanLimit)
@@ -35,8 +33,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     // eslint-disable-next-line prefer-const -- assigned below; onError needs the client it belongs to
     let qc: QueryClient;
     const onError = (e: unknown) => {
-      // The agency started requiring two-step sign-in mid-session: /me now reports it and the shell shows the gate.
-      // Likewise when it starts allowing only its own networks (G7b): /me reports access_blocked.
+      // 2FA or IP allowlist turned on mid-session: refetch /me so the shell shows the gate.
       if (isApiError(e) && (e.code === "mfa_required" || e.code === "ip_not_allowed")) {
         void qc.invalidateQueries({ queryKey: meKey });
         return;
@@ -45,7 +42,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         showPlanLimit(e.limit);
         return;
       }
-      // A sandbox refuses anything that would reach a real account or person (G7i): always say so.
+      // A sandbox refuses anything reaching a real account or person: always say so.
       if (isApiError(e) && e.code === "sandbox_unsupported") {
         toast.error(t("sandbox_unsupported"));
         return;
@@ -76,7 +73,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   const consent = usePreferences((s) => s.analyticsConsent);
   useEffect(() => initAnalytics(consent === true), [consent]);
   useEffect(() => initMonitoring(), []);
-  // PWA: offline shell + push. Production only, and never alongside MSW (both workers want scope "/").
+  // PWA: production only, never alongside MSW (both workers want scope "/").
   useEffect(() => {
     if (process.env.NODE_ENV !== "production" || process.env.NEXT_PUBLIC_API_MOCKING === "enabled") return;
     if ("serviceWorker" in navigator) void navigator.serviceWorker.register("/sw.js").catch(() => undefined);

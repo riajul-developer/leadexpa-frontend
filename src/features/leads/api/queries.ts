@@ -1,7 +1,6 @@
 "use client";
 
-// Read-only lead queries, apart from the mutations in hooks.ts: a shared module keeps every export any route
-// uses, so list pages that only read (the inbox) would otherwise ship all mutations and the offline queue.
+// Kept apart from hooks.ts so read-only pages don't ship the mutations and offline queue.
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
 import { api, unwrap, type Schemas } from "@/shared/lib/api/client";
@@ -52,7 +51,6 @@ export function useNextAction(id: string, enabled = true) {
   });
 }
 
-/** Messenger / Instagram conversations with their 24-hour window (17.0.4). Only asked for DM leads. */
 export function useConversations(id: string, enabled: boolean) {
   return useQuery({
     queryKey: leadKeys.conversations(id),

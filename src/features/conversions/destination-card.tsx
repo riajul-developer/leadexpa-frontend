@@ -319,7 +319,6 @@ function EventLog({ id, now, format: f }: { id: string; now: number; format: Ret
   );
 }
 
-/** "policy:opted_out" → the policy reason label; plain reasons have their own. */
 function skipLabel(t: ReturnType<typeof useTranslations<"conversions">>, reason: string) {
   if (reason.startsWith("policy:")) {
     const r = reason.slice(7);

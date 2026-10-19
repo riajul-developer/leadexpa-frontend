@@ -1,9 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
 
-// GLOBAL_PROMPT 10.1 (step 7d): the appointment engine. Booking rules per client; booking from the lead page; the
-// appointments list with outcomes and the show-rate funnel; the lead's own pages (book, confirm, move, cancel);
-// connecting a calendar.
-
 async function firstLeadId(page: Page) {
   await page.goto("/en/appointments");
   const link = page.locator("main a[href*='/leads/']").first();
@@ -35,7 +31,6 @@ test("book from the lead page, then record the outcome and read the funnel", asy
   await expect(page.getByRole("heading", { name: "Show-rate funnel" })).toBeVisible();
   await expect(page.getByText("Show rate", { exact: true }).first()).toBeVisible();
 
-  // A past appointment needs an outcome.
   const needs = page.getByRole("group", { name: /^Did .+ come\?$/ });
   const before = await needs.count();
   expect(before).toBeGreaterThan(0);
@@ -69,7 +64,7 @@ test("the lead books, confirms, moves and cancels from their links", async ({ pa
   await expect(page.getByText("Confirmed", { exact: true })).toBeVisible();
 
   await page.getByRole("button", { name: "Change the time" }).click();
-  // Another day: late in the day today may have no other time left.
+  // Another day: late in the day, today may have no other time left.
   await page.getByRole("tab").nth(1).click();
   await page.getByRole("radiogroup", { name: "Available times" }).getByRole("radio").first().click();
   await page.getByRole("button", { name: "Move to this time" }).click();

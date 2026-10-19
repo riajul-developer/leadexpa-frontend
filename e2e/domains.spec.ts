@@ -1,8 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// Tier 3 white-label domains (step 8f-2): the portal on the agency's own domain (DNS records, verify, status) and
-// client email from its own address (SPF, DKIM, DMARC).
-
 test("connect a custom portal domain: records to add, verify, failures explained", async ({ page }) => {
   await page.goto("/en/settings/branding");
   await expect(page.getByRole("heading", { name: "Your own portal address" })).toBeVisible();
@@ -26,7 +23,6 @@ test("connect a custom portal domain: records to add, verify, failures explained
   await expect(list.getByText("Verified", { exact: true })).toBeVisible();
   await expect(list.getByRole("link", { name: "Open" })).toHaveAttribute("href", "https://portal.bright.test");
 
-  // A CNAME pointing elsewhere is explained.
   await host.fill("wrong.bright.test");
   await page.getByRole("button", { name: "Connect domain" }).click();
   const wrong = list.getByRole("listitem").filter({ hasText: "wrong.bright.test" });

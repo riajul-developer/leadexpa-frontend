@@ -11,7 +11,6 @@ import { Textarea } from "@/shared/ui/input";
 
 import { useSandboxOf, useSimulateReply } from "../api";
 
-/** In a sandbox (G7i): make the lead answer on WhatsApp, to see how auto-replies and AI agents react. */
 export function SimulateReply({ leadId, hasPhone }: { leadId: string; hasPhone: boolean }) {
   const t = useTranslations("sandbox.reply");
   const inSandbox = useSandboxOf() !== null;

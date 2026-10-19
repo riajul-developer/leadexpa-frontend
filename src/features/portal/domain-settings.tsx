@@ -28,7 +28,6 @@ function StatusBadge({ status }: { status: Status }) {
   return <Badge tone={tone}>{t(`status.${status}`)}</Badge>;
 }
 
-/** The DNS records to add, each with a copy button and whether it was found. */
 function Records({ records }: { records: DNSRecord[] }) {
   const t = useTranslations("portal.domains");
   const copy = (v: string) =>
@@ -117,7 +116,6 @@ function errorMessage(e: unknown, t: ReturnType<typeof useTranslations>) {
   return t("failed");
 }
 
-/** Settings › Branding: the portal on the agency's own domain (portal.youragency.com, automatic HTTPS). */
 export function CustomDomains() {
   const t = useTranslations("portal.domains");
   const qc = useQueryClient();
@@ -229,7 +227,6 @@ export function CustomDomains() {
   );
 }
 
-/** Settings › Branding: client email from the agency's own domain (SPF, DKIM and DMARC). */
 export function SenderDomains() {
   const t = useTranslations("portal.domains");
   const qc = useQueryClient();

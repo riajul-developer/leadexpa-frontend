@@ -15,7 +15,6 @@ import { Badge, Card, CardContent, CardHeader, CardTitle, EmptyState, Skeleton }
 
 import { useCreateGroup, useMyGroups } from "../api";
 
-/** /groups: the holding groups I belong to, and starting one from my agency (its owner). */
 export function GroupsPage() {
   const t = useTranslations("groups");
   const q = useMyGroups();

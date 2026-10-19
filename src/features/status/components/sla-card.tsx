@@ -13,7 +13,7 @@ import { Badge, Card, CardContent, CardHeader, CardTitle, Skeleton } from "@/sha
 
 import { useAgencySLA, useServiceStatus } from "../api";
 
-/** The last six calendar months (UTC), newest first; the first is the current, partial one. */
+/** The last six calendar months (UTC), newest first; the first is partial. */
 function recentMonths(): string[] {
   const now = new Date();
   return Array.from({ length: 6 }, (_, i) => {
@@ -22,14 +22,13 @@ function recentMonths(): string[] {
   });
 }
 
-/** Settings › Single sign-on › Uptime & SLA (G7j): this region's status and the agency's monthly SLA report. */
 export function SLACard() {
   const t = useTranslations("serviceStatus.sla");
   const ts = useTranslations("serviceStatus");
   const locale = useLocale();
   const fmt = useFormat();
   const months = useMemo(recentMonths, []);
-  const [month, setMonth] = useState(months[1] ?? months[0] ?? ""); // last full month
+  const [month, setMonth] = useState(months[1] ?? months[0] ?? "");
   const status = useServiceStatus();
   const sla = useAgencySLA(month);
   const monthName = (m: string) =>

@@ -38,15 +38,10 @@ const REASONS = new Set([
 
 const responderKey = (clientId: string) => ["auto-responder", clientId] as const;
 
-/** Sample values for the preview: what a lead named Karim would receive. */
 function render(body: string, vars: string[], sample: Record<string, string>) {
   return body.replace(/\{\{(\d+)\}\}/g, (m, n: string) => sample[vars[Number(n) - 1] ?? ""] ?? m);
 }
 
-/**
- * Speed-to-lead auto-reply (FRONTEND_PROMPT 17.2): per-client toggle, template, delay, a phone preview in each
- * language the template exists in, and a monthly cost estimate from the client's lead volume.
- */
 export function AutoReplyCard({ clientId }: { clientId: string }) {
   const t = useTranslations("autoReply");
   const te = useTranslations("errors");
@@ -85,7 +80,6 @@ export function AutoReplyCard({ clientId }: { clientId: string }) {
   if (q.isPending || !draft || !q.data) return <Skeleton className="h-48 w-full" />;
   const est = q.data.estimate;
   const selected = approved.find((x) => x.name === draft.template_name && x.language === draft.template_language);
-  // The same template in other languages (bn / en / ar): preview each one.
   const variants: MessageTemplate[] = selected ? approved.filter((x) => x.name === selected.name) : [];
   const sample = {
     "lead.first_name": "Karim",
@@ -244,7 +238,6 @@ export function AutoReplyCard({ clientId }: { clientId: string }) {
   );
 }
 
-/** A phone-shaped bubble showing exactly what the lead receives. */
 function PhonePreview({ label, text, empty }: { label: string; text: string; empty: string }) {
   return (
     <figure className="border-border bg-surface-2 rounded-3xl border-4 p-3">

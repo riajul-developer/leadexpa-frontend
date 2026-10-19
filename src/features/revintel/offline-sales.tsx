@@ -21,7 +21,6 @@ import {
   useUploadOffline,
 } from "./api";
 
-/** Client › Offline sales (10.3): sales closed in a shop, ERP or CRM, matched back to the leads that caused them. */
 export function ClientOfflineSales({ clientId, timeZone }: { clientId: string; timeZone: string }) {
   const t = useTranslations("revintel.offline");
   const te = useTranslations("errors");

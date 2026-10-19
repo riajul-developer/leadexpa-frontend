@@ -18,7 +18,6 @@ import { Card, CardContent, CardHeader, CardTitle, Skeleton } from "@/shared/ui/
 
 import { useAgencyGroup, useAgencyGroupActions } from "../api";
 
-/** Settings › Holding group (G7e): which group this agency is in; its owner joins with a code or leaves. */
 export function GroupSettings() {
   const t = useTranslations("groups.agencySide");
   const fmt = useFormat();

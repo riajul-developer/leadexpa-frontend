@@ -1,8 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// GLOBAL_PROMPT 10.3 (step 7f-2): the Lead Leakage Audit (consent, lead log, report with visible assumptions, share)
-// and AI client business reviews (numbers only as linked facts; edit, approve, share).
-
 test("start an audit with consent, load the log, see the report and its assumptions", async ({ page }) => {
   await page.goto("/en/audits");
   await expect(page.getByRole("heading", { name: "Lead Leakage Audits", level: 1 })).toBeVisible();
@@ -58,7 +55,6 @@ test("a business review: linked numbers, edits checked, approve and share", asyn
   await expect(doc.locator('[data-fact="leads.current"]')).toHaveText("184");
   await expect(doc.locator('[data-fact="leads.current"]')).toHaveAttribute("title", "Leads received · this period");
 
-  // A typed number is refused; inserting from the list works.
   await page.getByRole("button", { name: "Edit", exact: true }).click();
   const editor = page.getByTestId("review-editor");
   await editor.getByLabel("Headline").fill("Leads up 18% this month");

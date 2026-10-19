@@ -31,7 +31,6 @@ function Shell({ children, brand }: { children: React.ReactNode; brand?: Schemas
   );
 }
 
-/** /rb/[token]: a shared custom report, frozen when it was created. Counts only: no leads, no internal ids. */
 export function PublicBuiltReportPage({ token }: { token: string }) {
   const t = useTranslations("reportBuilder.public");
   const tb = useTranslations("reportBuilder");

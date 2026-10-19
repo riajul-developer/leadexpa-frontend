@@ -1,5 +1,4 @@
-// Plain fetch for the lite app (FRONTEND_PROMPT 17.0.3): no query client, no openapi-fetch runtime, so the
-// whole app stays small on a cheap phone. Same session cookies and CSRF double-submit as the main app.
+// Plain fetch keeps the lite app small: no query client or openapi-fetch runtime.
 import type { components } from "@/shared/lib/api/schema";
 
 export type Schemas = components["schemas"];
@@ -34,7 +33,6 @@ async function once(method: string, path: string, body?: unknown): Promise<Respo
   });
 }
 
-/** Calls the API; refreshes the session once when the access token expired. */
 export async function lite<T>(method: string, path: string, body?: unknown): Promise<T> {
   let res = await once(method, path, body);
   if (res.status === 401 && path !== "/v1/auth/refresh") {
@@ -52,7 +50,6 @@ export async function lite<T>(method: string, path: string, body?: unknown): Pro
   return data as T;
 }
 
-/** The device's IANA timezone; the API reads a local phone number in that country. */
 export function deviceTimeZone(): string | undefined {
   try {
     return Intl.DateTimeFormat().resolvedOptions().timeZone || undefined;
@@ -61,13 +58,11 @@ export function deviceTimeZone(): string | undefined {
   }
 }
 
-/** "/lite" → "/bn/lite" (plain next/link and router, without next-intl's navigation runtime). */
 export function localePath(locale: string, path: string): string {
   return path.startsWith(`/${locale}/`) || path === `/${locale}` ? path : `/${locale}${path}`;
 }
 
-// Tiny local helpers instead of the shared formatter module (it carries every number/date format the main app
-// uses; the lite app needs four lines of it).
+// Local helpers: the shared formatter module is too heavy for the lite app.
 export const telHref = (e164: string) => `tel:${e164}`;
 export const whatsappHref = (e164: string) => `https://wa.me/${e164.replace(/\D/g, "")}`;
 
@@ -77,7 +72,6 @@ const UNITS: [Intl.RelativeTimeFormatUnit, number][] = [
   ["minute", 60],
 ];
 
-/** "5 min ago" in the UI language. */
 export function ago(iso: string, locale: string): string {
   const secs = Math.round((Date.parse(iso) - Date.now()) / 1000);
   const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto", style: "short" });

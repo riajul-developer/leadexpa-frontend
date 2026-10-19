@@ -40,7 +40,6 @@ const RESULT_TONE = {
   unauthorized: "danger",
 } as const;
 
-/** /integrations/sources/[id]: one connector's health, deliveries, field mapping and credentials. */
 export function ConnectorInstallPage({ id }: { id: string }) {
   const t = useTranslations("connectors");
   const q = useConnectorInstall(id);
@@ -273,7 +272,6 @@ function DeliveryRow({ d, when }: { d: ConnectorDelivery; when: string }) {
   );
 }
 
-/** "_ignore" and "custom.x" are mapping targets, not message keys. */
 function fieldKey(target: string) {
   return target === "_ignore" ? "ignore" : target.startsWith("custom.") ? "custom" : target;
 }
@@ -286,7 +284,6 @@ function toRows(map: Record<string, string>): Row[] {
   );
 }
 
-/** Incoming field path → lead field. Unmapped fields keep their name (common names are recognised). */
 function MappingCard({ install, manifest }: { install: ConnectorInstallDetail; manifest: ConnectorManifest }) {
   const t = useTranslations("connectors.mapping");
   const tf = useTranslations("connectors.field");

@@ -16,7 +16,6 @@ import {
 
 import { ClientSwitcherButton } from "./client-switcher";
 
-/** The client filter menu itself; loaded on first open by ClientSwitcher. */
 export function ClientSwitcherMenu({ defaultOpen }: { defaultOpen?: boolean }) {
   const t = useTranslations("shell");
   const active = useActiveClient();

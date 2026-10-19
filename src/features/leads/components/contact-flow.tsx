@@ -8,7 +8,6 @@ import { track } from "@/shared/lib/analytics";
 import { telHref, whatsappHref } from "@/shared/lib/format";
 
 import type { Lead } from "../api/hooks";
-// The sheet loads on the first contact; list pages don't pay for it up front.
 const OutcomeSheet = dynamic(() => import("./outcome-sheet").then((m) => m.OutcomeSheet));
 
 export type Channel = "call" | "whatsapp";
@@ -16,9 +15,7 @@ export type Channel = "call" | "whatsapp";
 type ContactLead = Pick<Lead, "id" | "full_name" | "phone" | "received_at" | "first_response_at" | "stage">;
 
 interface ContactFlowState {
-  /** Lead the agent just contacted; its outcome sheet opens when they come back to the tab. */
   pending: { lead: ContactLead; channel: Channel; startedAt: number } | null;
-  /** Lead whose outcome sheet is open. */
   open: { lead: ContactLead; channel: Channel } | null;
   start: (lead: ContactLead, channel: Channel) => void;
   showOutcome: (lead: ContactLead, channel: Channel) => void;
@@ -33,10 +30,7 @@ export const useContactFlow = create<ContactFlowState>((set) => ({
   close: () => set({ open: null }),
 }));
 
-/**
- * Opens the phone dialer / WhatsApp and arms the outcome prompt. Works as a plain link (so long-press,
- * "open in new tab" and accessibility behave like a link), with the outcome flow attached.
- */
+/** A plain link so long-press, "open in new tab" and a11y behave natively. */
 export function contactHref(lead: ContactLead, channel: Channel, text?: string): string | undefined {
   if (!lead.phone) return undefined;
   return channel === "call" ? telHref(lead.phone.e164) : whatsappHref(lead.phone.e164, text);
@@ -47,11 +41,7 @@ export function onContactClick(lead: ContactLead, channel: Channel) {
   useContactFlow.getState().start(lead, channel);
 }
 
-/**
- * Mounted once per page that offers Call/WhatsApp. When the tab becomes visible again after a contact
- * (visibilitychange), the outcome sheet opens. Desktops without a dialer never leave the tab, so the sheet
- * also opens after a short delay.
- */
+/** Opens the outcome sheet on visibilitychange, or after a delay on desktops without a dialer. */
 export function ContactFlowHost() {
   const { pending, open, showOutcome, close } = useContactFlow();
   useEffect(() => {

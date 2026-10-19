@@ -18,10 +18,9 @@ import { Badge, Card, CardContent, CardHeader, CardTitle, Skeleton, Spinner } fr
 import { apptKeys, useConnectCalendar, useDisconnectCalendar, useMyCalendar } from "./api";
 
 const PROVIDERS = ["google", "microsoft"] as const;
-// The provider returns to one fixed (English) callback URL; this brings the member back to their own language.
+// The provider's callback URL is English-only; this restores the member's locale.
 const RETURN_LOCALE = "calendar-return-locale";
 
-/** Settings › Calendar: each member connects their own calendar; busy times block slots, bookings land on it. */
 export function CalendarSettings() {
   const t = useTranslations("appointments.calendar");
   const te = useTranslations("errors");
@@ -95,7 +94,6 @@ export function CalendarSettings() {
   );
 }
 
-/** /settings/calendar/callback: the provider sends the browser back here with a code. */
 export function CalendarCallback() {
   const t = useTranslations("appointments.calendar");
   const te = useTranslations("errors");

@@ -24,7 +24,7 @@ import { AdoptionCard } from "./adoption-card";
 import { AiProfileTab, CampaignsTab, ClientSettings, TeamTab } from "./client-tabs";
 import { RoutingLog } from "./routing";
 
-// Conversion feedback and spend sync load only on their tabs (the client page is close to its JS budget).
+// Lazy-loaded: the client page is close to its JS budget.
 const ClientPayments = dynamic(() => import("@/features/paylinks").then((m) => m.ClientPayments));
 const AgentSettings = dynamic(() => import("@/features/agent").then((m) => m.AgentSettings));
 const ClientBusinessReviews = dynamic(() => import("@/features/revintel").then((m) => m.ClientBusinessReviews));

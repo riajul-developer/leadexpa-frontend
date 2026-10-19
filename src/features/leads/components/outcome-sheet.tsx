@@ -34,7 +34,6 @@ const OUTCOMES: { value: Outcome; icon: typeof Check; tone: string }[] = [
   { value: "fake_or_junk", icon: ShieldAlert, tone: "text-danger" },
 ];
 
-/** datetime-local value for "today 3 hours from now, rounded to 15 min" or "tomorrow 10:00". */
 function presets(now = new Date()) {
   const later = new Date(Math.ceil((now.getTime() + 3 * 3600_000) / 900_000) * 900_000);
   const tomorrow = setMinutes(setHours(addDays(now, 1), 10), 0);
@@ -46,10 +45,6 @@ function toLocalInput(d: Date) {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
-/**
- * One tap logs the outcome (FRONTEND_PROMPT §5.2). Only "callback requested" asks for a time; the note is
- * optional. The SLA chip turns "met" immediately (optimistic).
- */
 export function OutcomeSheet({
   lead,
   channel,
@@ -77,10 +72,7 @@ export function OutcomeSheet({
 
   return (
     <Sheet open onOpenChange={(o) => !o && onClose()}>
-      <SheetContent
-        title={t("title", { name: lead.full_name || "—" })}
-        side="center"
-      >
+      <SheetContent title={t("title", { name: lead.full_name || "—" })} side="center">
         <div className="grid gap-4 p-4">
           {callback === null ? (
             <>

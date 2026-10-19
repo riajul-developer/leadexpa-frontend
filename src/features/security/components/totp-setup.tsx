@@ -20,10 +20,6 @@ import { useRefreshSecurity } from "../api";
 
 import { RecoveryCodes } from "./recovery-codes";
 
-/**
- * Adding an authenticator app: scan the QR code (or type the key), confirm with a code, then save the
- * recovery codes when this is the first method.
- */
 export function TOTPSetup({ onDone }: { onDone: () => void }) {
   const t = useTranslations("security.totp");
   const te = useTranslations("errors");

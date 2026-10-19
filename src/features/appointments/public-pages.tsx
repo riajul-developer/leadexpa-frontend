@@ -47,7 +47,6 @@ function Gone({ title }: { title: string }) {
   );
 }
 
-/** /book/[token]: the lead picks a time. Built for the WhatsApp in-app browser on a cheap phone. */
 export function BookPage({ token }: { token: string }) {
   const t = useTranslations("bookPage");
   const te = useTranslations("errors");
@@ -110,7 +109,6 @@ export function BookPage({ token }: { token: string }) {
   );
 }
 
-/** /appt/[token]: the lead's appointment — confirm, change or cancel. */
 export function ApptPage({ token, booked }: { token: string; booked: boolean }) {
   const t = useTranslations("bookPage");
   const ts = useTranslations("appointments.status");

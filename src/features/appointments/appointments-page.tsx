@@ -31,7 +31,6 @@ const day = (offset: number) => {
   return d.toISOString().slice(0, 10);
 };
 
-/** /appointments: what's coming up, what needs an outcome, and the booked → attended funnel (10.1). */
 export function AppointmentsPage() {
   const t = useTranslations("appointments.page");
   const active = useActiveClient();
@@ -290,7 +289,6 @@ function Row({ a, tz, timeOnly }: { a: Appointment; tz: string; timeOnly?: boole
   );
 }
 
-/** Right side of an upcoming row: how soon, how long and with whom. */
 function Details({ a, now }: { a: Appointment; now: number }) {
   const t = useTranslations("appointments.page");
   const f = useFormat();

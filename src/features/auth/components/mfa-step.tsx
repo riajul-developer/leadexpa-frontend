@@ -18,10 +18,6 @@ import { Input } from "@/shared/ui/input";
 type Challenge = Schemas["MFAChallenge"];
 type Proof = { method: Schemas["MFAMethod"]; code?: string; credential?: Schemas["WebAuthnCredential"] };
 
-/**
- * The second step of a sign-in (17.6): a passkey, a code from the authenticator app, or a recovery code. No
- * session exists until it succeeds; the challenge lasts 5 minutes and allows 5 tries.
- */
 export function MFAStep({
   challenge,
   onDone,
@@ -146,7 +142,6 @@ export function MFAStep({
   );
 }
 
-/** "Sign in with a passkey" on the sign-in page: no email or password, counts as two-step sign-in. */
 export function PasskeySignIn({ onDone, onError }: { onDone: (me: Me) => void; onError: (msg: string) => void }) {
   const t = useTranslations("auth.mfa");
   const te = useTranslations("errors");

@@ -5,7 +5,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { track } from "@/shared/lib/analytics";
 import { api, unwrap, unwrapEmpty, type Schemas } from "@/shared/lib/api/client";
 
-/** Reseller mode (6c): the agency's Stripe connected account, client plans, checkout links and earnings. */
 export const resellerKeys = {
   all: ["reseller"] as const,
   account: ["reseller", "account"] as const,
@@ -26,7 +25,6 @@ export function useConnectedAccount() {
   return useQuery({ queryKey: resellerKeys.account, queryFn: () => unwrap(api.GET("/v1/reseller/account")) });
 }
 
-/** Sends the owner to Stripe's hosted onboarding (a fresh link each time). */
 export function useOnboarding() {
   return useMutation({
     mutationFn: () => unwrap(api.POST("/v1/reseller/account/onboarding")),

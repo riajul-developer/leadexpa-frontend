@@ -1,6 +1,4 @@
-// Generates src/shared/lib/api/schema.d.ts from the backend's OpenAPI spec (never hand-write API types).
-// The CSRF header parameter is removed first: the API client middleware injects it on every unsafe
-// request, so call sites must not have to pass it.
+// Generates src/shared/lib/api/schema.d.ts from the backend's OpenAPI spec.
 import { execFileSync } from "node:child_process";
 import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -21,8 +19,7 @@ for (const item of Object.values(spec.paths ?? {})) {
   }
 }
 
-// `type: object` without properties means "free-form" in our spec (custom_fields, consent, meta, payload);
-// openapi-typescript would emit Record<string, never>. Make the intent explicit: Record<string, unknown>.
+// Free-form objects become Record<string, unknown>, not Record<string, never>.
 (function openObjects(node) {
   if (!node || typeof node !== "object") return;
   if (Array.isArray(node)) return node.forEach(openObjects);

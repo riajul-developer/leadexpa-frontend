@@ -1,6 +1,5 @@
 import { ClientRoot } from "../client-root";
 
-// A shared report link: public, only its own strings, no app shell.
 const NAMESPACES = ["revintel", "clients", "errors", "errorBoundary", "common", "units"];
 
 export default function ReviewLayout({

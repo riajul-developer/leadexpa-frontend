@@ -1,8 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
 
-// GLOBAL_PROMPT §5 (G0): the app works right-to-left in Arabic, every main route renders in the pseudo-locale
-// without missing or broken messages, and country-dependent inputs behave.
-
 const ROUTES = [
   "/inbox",
   "/leads",
@@ -14,7 +11,7 @@ const ROUTES = [
   "/settings/security",
 ];
 
-/** next-intl reports missing keys and ICU errors on the console; any of them fails the page. */
+/** next-intl logs missing keys and ICU errors; any of them fails the page. */
 function watchMessages(page: Page) {
   const problems: string[] = [];
   page.on("console", (m) => {
@@ -44,7 +41,7 @@ for (const route of ROUTES) {
     await page.goto(`/en-XA${route}`);
     const h1 = page.locator("h1").first();
     await h1.waitFor();
-    // Every catalog string is wrapped in [...]: plain text here would be a hard-coded string.
+    // Every catalog string is wrapped in [...]; plain text means a hard-coded string.
     await expect(h1).toHaveText(/^\[.+\]$/);
     await page.waitForLoadState("networkidle");
     expect(problems).toEqual([]);
@@ -54,7 +51,7 @@ for (const route of ROUTES) {
 test("native digits follow the profile preference", async ({ page }) => {
   await page.goto("/ar/settings/profile");
   await page.getByLabel("الأرقام").selectOption("native");
-  // In-app navigation: the mock API keeps state in the page, so a reload would forget the preference.
+  // No reload: the mock API keeps state in the page.
   await page.getByRole("link", { name: "لوحة المؤشرات" }).first().click();
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await expect(page.locator("main")).toContainText(/[٠-٩]/);

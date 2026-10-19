@@ -1,5 +1,3 @@
-// The reporting query DSL ("Ask your data", 17.13), shared by /ask and the report builder (8g): the metrics,
-// periods and breakdowns a query may use, and how to read a metric out of a breakdown row.
 import type { Schemas } from "./api/client";
 
 export type AskQuery = Schemas["AskQuery"];
@@ -34,7 +32,6 @@ export const PRESETS = [
 export const BREAKDOWNS = ["none", "day", "client", "campaign", "owner"] as const;
 export const STAGES = ["new", "contacted", "qualified", "won", "lost"] as const;
 
-/** The value of one DSL metric in a breakdown row (null: not available, e.g. money across currencies). */
 export function metricValue(b: Breakdown, m: string): number | null {
   switch (m) {
     case "leads":

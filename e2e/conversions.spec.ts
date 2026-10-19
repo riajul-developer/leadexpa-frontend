@@ -1,7 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// B-17.4 + GLOBAL_PROMPT 9.3 (step 5b): conversion feedback per client and ad spend sync.
-
 test("a client's conversions tab shows destinations, stats and the delivery log", async ({ page }) => {
   await page.goto("/en/clients");
   await page.getByRole("link", { name: "Dhaka Dental Care" }).first().click();

@@ -7,7 +7,6 @@ import { Link } from "@/i18n/navigation";
 
 import { localized, useServiceStatus } from "../api";
 
-/** Shown in the app while an incident or maintenance affects this region (G7j). */
 export function IncidentBanner() {
   const t = useTranslations("serviceStatus.banner");
   const locale = useLocale();

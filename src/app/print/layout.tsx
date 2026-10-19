@@ -9,7 +9,6 @@ const arabic = Noto_Sans_Arabic({ subsets: ["arabic"], weight: ["400", "600", "7
 
 export const metadata = { robots: { index: false, follow: false } };
 
-/** Root layout for print-only routes (rendered to PDF by the backend's Gotenberg). No app shell, no JS UI. */
 export default function PrintLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" data-theme="light" className={`${inter.variable} ${bengali.variable} ${arabic.variable}`}>

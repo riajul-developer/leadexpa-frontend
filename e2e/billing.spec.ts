@@ -1,14 +1,11 @@
 import { expect, test } from "@playwright/test";
 
-// GLOBAL_PROMPT G2 (step 6b): an owner picks a plan priced in the agency's currency (tax noted), checks out on
-// Stripe and comes back subscribed; invoices show tax; usage budgets alert at 80 % / 100 %.
-
 test("choose a plan, check out, and come back subscribed", async ({ page }) => {
   await page.goto("/en/settings/billing");
   await expect(page.getByRole("heading", { name: "Plans" })).toBeVisible();
   await expect(page.getByText("Prices exclude VAT", { exact: false })).toBeVisible();
 
-  // Annual shows a year's price (10 months).
+  // Annual = 10 months' price.
   const growth = page.locator('[data-plan="growth"]');
   await expect(growth.getByText("/ month", { exact: true })).toBeVisible();
   await page.getByRole("tab", { name: /Annual/ }).click();
@@ -21,11 +18,9 @@ test("choose a plan, check out, and come back subscribed", async ({ page }) => {
   await expect(page.getByText("Active", { exact: true })).toBeVisible();
   await expect(growth.getByText("Your plan")).toBeVisible();
 
-  // A paying agency switches plan instead of checking out again.
   await page.locator('[data-plan="pro"]').getByRole("button", { name: "Switch to Pro" }).click();
   await expect(page.getByText("You're now on Pro.")).toBeVisible();
 
-  // The invoice shows tax separately.
   await expect(page.getByRole("heading", { name: "Invoices" })).toBeVisible();
   await expect(page.getByText("LDX-0001")).toBeVisible();
   await expect(page.getByText(/incl\. .+ tax/)).toBeVisible();

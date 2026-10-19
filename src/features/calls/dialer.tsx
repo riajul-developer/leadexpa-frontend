@@ -20,10 +20,6 @@ import { CallStatusBadge } from "./status";
 
 const CALLABLE = new Set(["overdue", "due_soon", "callback_due", "new", "unassigned"]);
 
-/**
- * Power dialer (17.8): the caller's queue, most urgent first, one lead at a time. Each call rings the
- * caller's phone, connects the lead, and logs itself; "Next" moves on without filling in a form.
- */
 export function Dialer() {
   const t = useTranslations("calls.dialer");
   const client = useActiveClient();

@@ -6,7 +6,6 @@ import { CallDetail } from "./call-detail";
 import { Coaching } from "./coaching";
 import { VoiceNumbers } from "./voice-numbers";
 
-/** Calls (17.8): a recorded call with its transcript and AI notes, per-agent coaching, and calling numbers. */
 const meta = {
   title: "Calls/CallDetail",
   component: CallDetail,

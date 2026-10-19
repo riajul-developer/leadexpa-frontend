@@ -27,14 +27,13 @@ import {
   useGroupReport,
 } from "../api";
 
-/** YYYY-MM-DD in a time zone (the report takes each agency's local dates). */
+/** YYYY-MM-DD in a time zone: the report uses each agency's local dates. */
 function isoDay(d: Date, tz: string) {
   return new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit" }).format(
     d,
   );
 }
 
-/** /groups/[id]: one report across the group's agencies, and (for owners) its agencies, people and invites. */
 export function GroupPage({ id }: { id: string }) {
   const t = useTranslations("groups");
   const q = useGroup(id);
@@ -64,8 +63,6 @@ export function GroupPage({ id }: { id: string }) {
     </div>
   );
 }
-
-// ---------------------------------------------------------------------------------------------
 
 function GroupReport({ group }: { group: HoldingGroupDetail }) {
   const t = useTranslations("groups.report");
@@ -171,8 +168,6 @@ function GroupReport({ group }: { group: HoldingGroupDetail }) {
     </Card>
   );
 }
-
-// ---------------------------------------------------------------------------------------------
 
 function Agencies({ group }: { group: HoldingGroupDetail }) {
   const t = useTranslations("groups.agencies");
@@ -330,8 +325,6 @@ function People({ group }: { group: HoldingGroupDetail }) {
     </Card>
   );
 }
-
-// ---------------------------------------------------------------------------------------------
 
 function Invites({ group }: { group: HoldingGroupDetail }) {
   const t = useTranslations("groups.invites");

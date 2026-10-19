@@ -50,14 +50,10 @@ export function DialogContent({
   );
 }
 
-/**
- * Modal Content fills the screen so the close button can sit in the screen's corner and stay inside the focus trap;
- * the panel animates on its own (an animated `scale` would carry a fixed child with it).
- */
+/** Full-screen Content keeps the corner close button inside the focus trap. */
 export const screenClass =
   "group data-[state=closed]:animate-fade-out fixed inset-0 z-50 flex items-center justify-center p-4 pt-16 sm:pt-4";
 
-/** The dimmed area (closes, as Radix's outside click would) and the close button in the screen's top corner. */
 export function ScreenClose() {
   const t = useTranslations("common");
   return (
@@ -73,7 +69,6 @@ export function ScreenClose() {
   );
 }
 
-/** Root + content in one: what LazyDialog loads on first open. */
 export function DialogModal({
   open,
   onOpenChange,

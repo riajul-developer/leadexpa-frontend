@@ -5,7 +5,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { track } from "@/shared/lib/analytics";
 import { api, unwrap, unwrapEmpty, type Schemas } from "@/shared/lib/api/client";
 
-/** Two-way CRM sync (G5 step 5d): connections per client, field rules, stage map, sync log. */
 export const crmKeys = {
   all: ["crm"] as const,
   providers: ["crm", "providers"] as const,

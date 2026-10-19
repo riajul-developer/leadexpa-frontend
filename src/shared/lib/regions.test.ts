@@ -1,6 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-// G1: sign-in asks the control plane which region holds the account (email only).
 async function load(control: string) {
   vi.resetModules();
   vi.stubEnv("NEXT_PUBLIC_CONTROL_URL", control);

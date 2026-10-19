@@ -2,7 +2,6 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { api, API_URL, apiBase, setApiBase } from "./client";
 
-// G1: the API base follows the agency's region (from /v1/me); a 421 sends the browser to that region's app.
 describe("region-aware API client", () => {
   afterEach(() => {
     setApiBase(API_URL);

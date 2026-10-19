@@ -15,7 +15,6 @@ const QuickAddForm = dynamic(() => import("./quick-add-form").then((m) => m.Quic
   loading: () => <Skeleton className="h-64 w-full" />,
 });
 
-/** Floating "+ Lead" on phones, a header button and the `n` shortcut on desktop. */
 export function QuickAddLead() {
   const t = useTranslations("quickAdd");
   const canAdd = useCan("activity.create");
@@ -53,8 +52,7 @@ export function QuickAddLead() {
         <Plus aria-hidden />
         {t("button")}
       </Button>
-      {/* Portaled to <body>: the header has backdrop-blur, and a backdrop-filter ancestor becomes the containing
-          block for position:fixed children, which put this button above the viewport on phones. */}
+      {/* Portaled: the header's backdrop-filter would contain position:fixed children. */}
       {mounted &&
         createPortal(
           <button

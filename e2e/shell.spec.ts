@@ -1,7 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-// Header overlays load their code on first use (docs/adr/0001). One click must still open them, with keyboard
-// focus inside, exactly as when they shipped up front.
+// Header overlays lazy-load; one click must still open them with focus inside.
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/bn/inbox");

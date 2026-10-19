@@ -1,9 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// FRONTEND_PROMPT 17.10 + 17.11 (step 7b): client health with components and an anomaly timeline, an AI draft
-// update, the agency's clients by health, attribution with a model switcher that labels every number, and the
-// forecast's range chart with the weighted pipeline.
-
 test("client health: score, components, anomaly timeline and a drafted update", async ({ page }) => {
   await page.goto("/en/clients");
   await page.getByRole("link", { name: "Bashundhara Homes" }).first().click();

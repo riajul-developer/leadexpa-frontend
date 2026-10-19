@@ -1,4 +1,3 @@
-/** A normalized RFC 9457 problem. The UI localizes by `code` (messages: errors.<code>). */
 export class ApiError extends Error {
   readonly status: number;
   readonly code: string;

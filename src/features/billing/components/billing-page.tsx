@@ -222,7 +222,6 @@ export function BillingPage() {
   );
 }
 
-/** Stripe sends the owner back with ?checkout=success|cancelled; say so once and tidy the URL. */
 function useCheckoutReturn() {
   const t = useTranslations("billing.checkout");
   const params = useSearchParams();

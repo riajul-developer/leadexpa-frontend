@@ -21,10 +21,8 @@ import { type Paired, type Screen, useDeleteScreen, useReplaceToken, useSaveScre
 
 const ROTATIONS = [10, 15, 20, 30, 60, 120] as const;
 const HOURS = Array.from({ length: 24 }, (_, h) => h);
-/** A TV that read its board in the last few minutes counts as on. */
 const ONLINE_MS = 3 * 60_000;
 
-/** /wallboards: TV screens for the sales floor (Tier 3, 8h). Pair a TV by opening a link or scanning a code. */
 export function WallboardsPage() {
   const t = useTranslations("wallboard");
   const f = useFormat();
@@ -225,7 +223,6 @@ function ScreenForm({ screen, onDone }: { screen: Screen | null; onDone: (p: Pai
         </div>
       </fieldset>
       <div className="grid gap-2">
-        {/* Rotation and the night-dim switch share a row; the dim hours open underneath. */}
         <div className="grid items-end gap-3 sm:grid-cols-2">
           <Field label={t("rotate")}>
             <NativeSelect value={rotate} onChange={(e) => setRotate(Number(e.target.value))}>

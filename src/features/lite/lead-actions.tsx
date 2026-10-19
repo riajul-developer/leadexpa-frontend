@@ -16,7 +16,6 @@ const OUTCOMES: Record<Channel, Outcome[]> = {
 
 const big = "flex min-h-12 items-center justify-center gap-2 rounded-lg text-base font-medium";
 
-/** Call / WhatsApp, then one big tap for what happened. Logged outcomes count for the SLA like in the app. */
 export function LeadActions({ lead, onLogged }: { lead: Schemas["Lead"]; onLogged: () => void }) {
   const t = useTranslations("lite");
   const [channel, setChannel] = useState<Channel | null>(null);

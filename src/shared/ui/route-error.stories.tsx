@@ -3,7 +3,6 @@ import { fn } from "storybook/test";
 
 import { RouteError } from "./route-error";
 
-/** What every route segment shows instead of a white screen. Without a Sentry DSN the reference is the digest. */
 const meta = {
   title: "UI/RouteError",
   component: RouteError,

@@ -1,6 +1,5 @@
 import { ClientRoot } from "../client-root";
 
-// The lead's booking pages (10.1) are public: only their own strings, no app shell. Opened from WhatsApp on cheap phones.
 const NAMESPACES = ["bookPage", "appointments", "errors", "errorBoundary", "common", "units"];
 
 export default function BookLayout({

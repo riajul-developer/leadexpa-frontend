@@ -1,4 +1,3 @@
-// Small presentational primitives: Card, Badge, Skeleton, EmptyState, Avatar, Spinner.
 import { cva, type VariantProps } from "class-variance-authority";
 import { Loader2, type LucideIcon } from "lucide-react";
 import * as React from "react";
@@ -51,7 +50,6 @@ export function Badge({
   return <span className={cn(badgeVariants({ tone }), className)} {...props} />;
 }
 
-/** Skeletons match the final layout's size, so first paint never shifts (CLS < 0.05). */
 export function Skeleton({ className }: { className?: string }) {
   return <div aria-hidden className={cn("bg-surface-2 animate-pulse rounded-md", className)} />;
 }
@@ -101,7 +99,6 @@ function toneFor(seed: string) {
   return TONES[Math.abs(h) % TONES.length];
 }
 
-/** Initials avatar; Bangla names keep whole grapheme clusters (ক্ষ, রা). */
 export function Avatar({ name, size = "md", className }: { name: string; size?: "sm" | "md"; className?: string }) {
   return (
     <span

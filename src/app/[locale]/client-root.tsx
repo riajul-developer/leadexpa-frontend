@@ -5,13 +5,7 @@ import { Providers } from "../providers";
 
 type Params = Promise<{ locale: string }>;
 
-/**
- * Client-side runtime (i18n, React Query, toasts, plan-limit dialog) for the route groups that need it.
- * Not in the root layout: the public shared report is server-rendered and ships none of this.
- * `namespaces` limits the messages serialized to the browser (the full catalog is ~1k strings).
- * The locale comes from the route params: layouts render in parallel during static prerender, so relying on
- * the root layout's setRequestLocale would fall back to the default locale (every /en page rendered in bn).
- */
+/** Locale comes from params: parallel prerender would fall back to the default. */
 export async function ClientRoot({
   children,
   params,

@@ -5,7 +5,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { track } from "@/shared/lib/analytics";
 import { api, unwrap, unwrapEmpty, type Schemas } from "@/shared/lib/api/client";
 
-/** The app marketplace (G5 step 5e): built-in integrations and partner apps, installs and reviews. */
 export const marketplaceKeys = {
   all: ["marketplace"] as const,
   list: (category?: string, q?: string) => ["marketplace", "list", category ?? null, q ?? null] as const,

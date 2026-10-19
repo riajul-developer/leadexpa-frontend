@@ -1,11 +1,9 @@
 "use client";
 
-// Loaded lazily (next/dynamic) so Recharts never ships with other routes.
 import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import { useFormat } from "@/shared/hooks/use-format";
 
-/** One metric across the breakdown: bars for clients/campaigns/agents, a line for days. */
 export default function AskChart({
   rows,
   line,

@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { createPasskey, getPasskey, PasskeyCancelled, passkeysSupported } from "./webauthn";
 
-// jsdom has no WebAuthn: these tests stand in a browser without the JSON helpers (the hand conversion path).
+// jsdom has no WebAuthn: these tests cover the hand-conversion path.
 
 const bytes = (...b: number[]) => new Uint8Array(b).buffer;
 

@@ -48,9 +48,7 @@ function SheetDemo({ side }: { side: "right" | "bottom" }) {
 }
 
 export const Dialog: Story = { render: () => <DialogDemo /> };
-/** Desktop: lead detail slides in from the right. */
 export const SheetRight: Story = { render: () => <SheetDemo side="right" /> };
-/** Phone: bottom sheet (outcome logging). */
 export const SheetBottom: Story = { render: () => <SheetDemo side="bottom" /> };
 
 export const TabsStory: Story = {

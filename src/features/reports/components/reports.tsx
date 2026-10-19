@@ -41,7 +41,6 @@ export function ClientReports({ clientId }: { clientId: string }) {
   const q = useQuery({
     queryKey: clientKeys.reports(clientId),
     queryFn: () => unwrap(api.GET("/v1/clients/{clientId}/reports", { params: { path: { clientId } } })),
-    // A new report renders its PDF in the background: poll while one is pending.
     refetchInterval: (query) => (query.state.data?.data.some((r) => r.pdf_status === "pending") ? 3000 : false),
   });
   return (
@@ -175,7 +174,6 @@ function CreateReportDialog({ clientId, onClose }: { clientId: string; onClose: 
   );
 }
 
-/** /reports: reports are per client — pick one (or use the global client filter). */
 export function ReportsPage() {
   const t = useTranslations("reports");
   const active = useActiveClient();
@@ -202,8 +200,6 @@ export function ReportsPage() {
     </div>
   );
 }
-
-// ---------------------------------------------------------------------------------------------
 
 export function ReportDetail({ reportId }: { reportId: string }) {
   const t = useTranslations("reports");

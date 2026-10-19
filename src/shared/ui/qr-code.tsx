@@ -6,10 +6,7 @@ import { Skeleton } from "@/shared/ui/primitives";
 
 const SIZE = 184;
 
-/**
- * A QR code (an otpauth:// link, a TV pairing link). Always dark on white (scanners need the contrast in dark mode too). The
- * encoder (uqr) loads only when a setup dialog opens.
- */
+/** Always dark on white: scanners need the contrast in dark mode too. */
 export function QRCode({ value, label }: { value: string; label: string }) {
   const [cells, setCells] = useState<boolean[][] | null>(null);
   useEffect(() => {

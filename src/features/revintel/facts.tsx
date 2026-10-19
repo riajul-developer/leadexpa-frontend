@@ -9,7 +9,6 @@ import type { ReviewFact } from "./audit-api";
 
 const REF = /\{\{\s*([a-z0-9_.:-]+)\s*\}\}/g;
 
-/** A fact's value, formatted for the reader's locale. */
 export function useFactFormatter() {
   const f = useFormat();
   const t = useTranslations("revintel.review");
@@ -42,10 +41,6 @@ export function useFactFormatter() {
   };
 }
 
-/**
- * Renders review text: each {{fact}} becomes its formatted value, marked up so the reader can see which metric
- * (and which period) it comes from.
- */
 export function FactText({ text, facts }: { text: string; facts: ReviewFact[] }) {
   const t = useTranslations("revintel.review");
   const fmt = useFactFormatter();

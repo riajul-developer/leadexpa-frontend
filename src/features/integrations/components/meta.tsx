@@ -57,7 +57,6 @@ export function MetaIntegration() {
     },
   });
 
-  // The callback page (popup) posts the result back here.
   useEffect(() => {
     const onMessage = (e: MessageEvent<{ type?: string; connectionId?: string; pages?: AvailablePage[] }>) => {
       if (e.origin !== window.location.origin || e.data?.type !== CALLBACK_MESSAGE) return;
@@ -65,7 +64,7 @@ export function MetaIntegration() {
       if (e.data.connectionId && e.data.pages) setChoose({ connectionId: e.data.connectionId, pages: e.data.pages });
     };
     window.addEventListener("message", onMessage);
-    // Full-page fallback (popup blocked): the callback page left the result in sessionStorage.
+    // Popup blocked: the callback page left the result in sessionStorage.
     try {
       const saved = sessionStorage.getItem("recov-meta-pages");
       if (saved) {
@@ -381,7 +380,6 @@ function FormsCard({ forms, pages }: { forms: Schemas["MetaForm"][]; pages: Sche
   );
 }
 
-/** Messenger / Instagram DM capture per page (17.0.4): DMs from new people become leads for the chosen client. */
 function MessagingCard({ pages }: { pages: Schemas["MetaPage"][] }) {
   const t = useTranslations("meta.messaging");
   const te = useTranslations("errors");
@@ -482,7 +480,6 @@ function UnroutedCard({ forms }: { forms: Schemas["MetaForm"][] }) {
   );
 }
 
-/** Facebook Login redirects here (in the popup, or full page if popups are blocked). */
 export function MetaCallback() {
   const t = useTranslations("meta.callback");
   const te = useTranslations("errors");

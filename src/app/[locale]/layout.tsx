@@ -10,8 +10,7 @@ import { dir } from "@/shared/config/locales";
 import "../globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
-// Script fonts are not preloaded: unicode-range subsets download only when a page shows that script, so an
-// English page never pays for Bengali or Arabic glyphs.
+// Script fonts aren't preloaded: unicode-range subsets load only when used.
 const bengali = Hind_Siliguri({
   subsets: ["bengali"],
   weight: ["400", "500", "600", "700"],
@@ -47,7 +46,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#fbf7f1", // the brand's ivory (Leadexpa is light-only)
+  themeColor: "#fbf7f1",
 };
 
 export default async function LocaleLayout({

@@ -9,7 +9,6 @@ import { Button } from "@/shared/ui/button";
 
 import { useAddTestLeads, useSandboxOf, useSwitchWorkspace } from "../api";
 
-/** Shown on every page of a sandbox (G7i): what it is, test leads on demand, and the way back. */
 export function SandboxBanner() {
   const t = useTranslations("sandbox.banner");
   const liveId = useSandboxOf();

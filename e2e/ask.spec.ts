@@ -1,8 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// FRONTEND_PROMPT 17.13 (step 7e): Ask your data. A question from the ⌘K palette is shown as editable chips before
-// its results; leads open in the leads table, numbers in a table and chart; any language.
-
 test("ask from the palette, check the chips, open the leads", async ({ page }) => {
   await page.goto("/en/inbox");
   await expect(page.getByRole("button", { name: "Account menu" })).toBeVisible(); // hydrated: the shortcut is live
@@ -17,7 +14,6 @@ test("ask from the palette, check the chips, open the leads", async ({ page }) =
   await expect(chips.getByLabel("Period")).toHaveValue("this_week");
   await expect(page.getByTestId("ask-count")).toBeVisible();
 
-  // Remove a chip: the answer reruns without the model.
   await chips.getByRole("button", { name: "Remove Overdue" }).click();
   await expect(chips.getByText("Overdue", { exact: true })).toHaveCount(0);
   await chips.getByLabel("Period").selectOption("");

@@ -1,7 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// FRONTEND_PROMPT 17.0.4: email-in forwarding, the "Needs review" queue and Messenger/Instagram DM leads.
-
 test("forwarded emails that need a person are accepted or rejected in the review queue", async ({ page }) => {
   await page.goto("/en/inbox");
   const link = page
@@ -12,7 +10,6 @@ test("forwarded emails that need a person are accepted or rejected in the review
   await link.click();
   await expect(page.getByRole("heading", { level: 1, name: "Needs review" })).toBeVisible();
 
-  // Original email next to the extracted fields.
   await expect(page.getByText("Please call me on 01712-345678 after 5pm.")).toBeVisible();
   await expect(page.getByLabel("Phone")).toHaveValue("+8801712345678");
   await expect(page.getByText("45% sure")).toBeVisible();

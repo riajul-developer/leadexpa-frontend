@@ -20,9 +20,6 @@ import { Avatar, Badge, Card, CardContent, CardHeader, CardTitle, EmptyState, Sk
 import { INDUSTRIES } from "./clients-list";
 import { SmartRoutingFields } from "./routing";
 
-// ---------------------------------------------------------------------------------------------
-// Overview: client settings
-
 export function ClientSettings({ client }: { client: Client }) {
   const t = useTranslations("clients");
   const ts = useTranslations("source.subType");
@@ -204,9 +201,6 @@ export function ClientSettings({ client }: { client: Client }) {
   );
 }
 
-// ---------------------------------------------------------------------------------------------
-// Team: who works this client, rotation and escalations
-
 export function TeamTab({ clientId, smart = false }: { clientId: string; smart?: boolean }) {
   const t = useTranslations("clients.team");
   const tr = useTranslations("roles");
@@ -225,7 +219,7 @@ export function TeamTab({ clientId, smart = false }: { clientId: string; smart?:
       routing_weight?: number;
       max_open?: number | null;
     }) => {
-      // Send the row's current switches too, so changing one never resets the other.
+      // Send both switches so changing one never resets the other.
       const cur = q.data?.data.find((a) => a.user_id === v.userId);
       return unwrap(
         api.PUT("/v1/clients/{clientId}/assignments/{userId}", {
@@ -406,9 +400,6 @@ export function TeamTab({ clientId, smart = false }: { clientId: string; smart?:
   );
 }
 
-// ---------------------------------------------------------------------------------------------
-// Campaigns + ad spend CSV import
-
 export function CampaignsTab({ clientId }: { clientId: string }) {
   const t = useTranslations("clients.campaigns");
   const canImport = useCan("lead.import");
@@ -419,7 +410,7 @@ export function CampaignsTab({ clientId }: { clientId: string }) {
     queryFn: () => unwrap(api.GET("/v1/clients/{clientId}/campaigns", { params: { path: { clientId } } })),
   });
   const upload = useMutation({
-    // Multipart: openapi-fetch serializes JSON, so post the file directly (CSRF + idempotency by hand).
+    // openapi-fetch only sends JSON: post multipart by hand (CSRF + idempotency).
     mutationFn: async (file: File) => {
       const body = new FormData();
       body.append("file", file);
@@ -496,9 +487,6 @@ export function CampaignsTab({ clientId }: { clientId: string }) {
     </Card>
   );
 }
-
-// ---------------------------------------------------------------------------------------------
-// AI profile: what the assistant knows about this client
 
 export function AiProfileTab({ clientId }: { clientId: string }) {
   const t = useTranslations("clients.ai");

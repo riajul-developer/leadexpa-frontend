@@ -18,7 +18,6 @@ const KEY = ["scoring"] as const;
 
 type Metrics = { auc?: number; baseline_auc?: number; brier?: number; baseline_brier?: number; n?: number } | null;
 
-/** Settings › Lead scoring (17.7): which model scores leads, how good it is, and what drives it. */
 export function ScoringSettings() {
   const t = useTranslations("scoringSettings");
   const tf = useTranslations("score.feature");

@@ -1,7 +1,5 @@
 "use client";
 
-// Cross-cutting reference data (clients, members, sources). Every screen needs names for ids, so these are
-// cached once with long stale times and patched by mutations that change them.
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
@@ -28,7 +26,6 @@ export function useClients() {
   return { ...q, clients: data ?? [], byId };
 }
 
-/** Members are visible to roles with member.read; client agents get an empty list (names fall back). */
 export function useMembers() {
   const canRead = useCan("member.read");
   const q = useQuery({

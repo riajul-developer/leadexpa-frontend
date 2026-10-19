@@ -16,7 +16,6 @@ import { Badge, Skeleton } from "@/shared/ui/primitives";
 import { payKeys } from "./api";
 import { providerName } from "./parts";
 
-/** /pay/[token]: what the lead opens. Built for the WhatsApp in-app browser on a cheap phone (17.0.2). */
 export function PayPage({ token }: { token: string }) {
   const t = useTranslations("payPage");
   const te = useTranslations("errors");

@@ -6,7 +6,7 @@ import { useCallback, useState } from "react";
 
 const LeadSheetPanel = dynamic(() => import("./lead-sheet-panel").then((m) => m.LeadSheetPanel));
 
-/** Lead side sheet state lives in the URL (?lead=…): Back closes it and the link can be shared. */
+/** State lives in the URL (?lead=…): Back closes it and the link can be shared. */
 export function useLeadSheet() {
   const params = useSearchParams();
   const router = useRouter();
@@ -27,7 +27,6 @@ export function useLeadSheet() {
   return { leadId, open: (id: string) => set(id), close: () => set(null) };
 }
 
-/** Mounts the sheet (and fetches its code) the first time a lead is opened; list pages don't ship it. */
 export function LeadSheet() {
   const { leadId, close } = useLeadSheet();
   const [opened, setOpened] = useState(!!leadId);

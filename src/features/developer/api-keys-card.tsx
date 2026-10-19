@@ -19,7 +19,6 @@ import { KeyStatusBadge, SecretOnce } from "./parts";
 
 const EXPIRY_DAYS = [0, 30, 90, 365] as const;
 
-/** Agency API keys: each acts as the member who created it, limited to its scopes (G-6). */
 export function ApiKeysCard() {
   const t = useTranslations("developer.keys");
   const { data, isPending } = useApiKeys();

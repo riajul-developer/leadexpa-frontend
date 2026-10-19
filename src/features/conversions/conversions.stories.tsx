@@ -6,7 +6,6 @@ import { AdAccountsCard } from "./ad-accounts";
 import { ConversionsTab } from "./conversions-tab";
 import { GoogleAdsCard } from "./google";
 
-/** Conversion feedback (B-17.4): terms, Meta + Google destinations with stats and log; spend sync; Google sign-in. */
 const meta = {
   title: "Conversions/ConversionsTab",
   component: ConversionsTab,

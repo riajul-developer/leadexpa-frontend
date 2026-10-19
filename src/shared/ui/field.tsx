@@ -13,7 +13,6 @@ Label.displayName = "Label";
 
 type ControlProps = { id?: string; "aria-invalid"?: boolean; "aria-describedby"?: string };
 
-/** Label + control + hint/error, wired for screen readers (aria-describedby, aria-invalid). */
 export function Field({
   label,
   hint,
@@ -33,8 +32,6 @@ export function Field({
   const controlId = id ?? auto;
   const describedBy = error ? `${controlId}-error` : hint ? `${controlId}-hint` : undefined;
   return (
-    // content-start: a field stretched to a taller neighbour (one with a hint) keeps label and control at the top, so
-    // controls in the same row line up.
     <div className={cn("grid content-start gap-1.5", className)}>
       <Label htmlFor={controlId}>{label}</Label>
       {React.cloneElement(children, { id: controlId, "aria-invalid": !!error, "aria-describedby": describedBy })}

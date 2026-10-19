@@ -26,7 +26,6 @@ export const WithError: Story = {
   ),
 };
 
-/** Phone input: type=tel with the numeric keypad; Bangla digits are normalized before validation. */
 export const PhoneInput: Story = {
   render: () => (
     <Field label="ফোন" hint="01712-345678 অথবা ০১৭১২৩৪৫৬৭৮">

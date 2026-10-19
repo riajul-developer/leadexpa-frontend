@@ -3,10 +3,6 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
 
-/**
- * Typed URL search-param state: every list filter lives in the URL so Back works and links are shareable
- * between teammates. Values are strings (or comma lists); empty values are removed from the URL.
- */
 export function useSearchState<K extends string>(keys: readonly K[]) {
   const params = useSearchParams();
   const router = useRouter();

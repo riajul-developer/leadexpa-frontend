@@ -25,7 +25,6 @@ type Lead = Schemas["Lead"];
 type Notification = Schemas["Notification"];
 type NotificationPage = { data: Notification[]; next_cursor: string | null; unread_count?: number };
 
-/** Coalesces list invalidations: a burst of 50 events refetches each list once. */
 function makeDebouncedInvalidate(qc: QueryClient, wait = 400) {
   let timer: ReturnType<typeof setTimeout> | null = null;
   const pending = new Set<string>();
@@ -35,7 +34,7 @@ function makeDebouncedInvalidate(qc: QueryClient, wait = 400) {
     pipeline: pipelineKeys.all,
     notifications: notificationKeys.all,
     conversations: conversationKeys.all,
-    // Kept literal: importing the connectors feature here would pull it into every page.
+    // Literal keys: importing features here would pull them into every page.
     connectors: ["connectors"],
     conversions: ["conversions"],
   };
@@ -50,7 +49,6 @@ function makeDebouncedInvalidate(qc: QueryClient, wait = 400) {
   };
 }
 
-/** Applies one stream event to the query cache. Exported for unit tests. */
 export function applyEvent(
   qc: QueryClient,
   e: StreamEvent,
@@ -67,7 +65,7 @@ export function applyEvent(
       if (leadId) {
         const cached = qc.getQueryData<Lead>(leadKeys.detail(leadId));
         const version = typeof d.version === "number" ? d.version : undefined;
-        // Only refetch a detail we hold an older version of; our own optimistic writes already match.
+        // Only refetch older versions; our own optimistic writes already match.
         if (cached && (version === undefined || cached.version < version)) {
           void qc.invalidateQueries({ queryKey: leadKeys.detail(leadId), exact: true });
         }
@@ -130,7 +128,6 @@ export function applyEvent(
       break;
     }
     case "payment.paid":
-      // A lead paid a payment link (17.0.2): the sale, stage and timeline changed. Keys kept literal (no feature import).
       if (leadId) {
         void qc.invalidateQueries({ queryKey: leadKeys.detail(leadId) });
         void qc.invalidateQueries({ queryKey: leadKeys.sales(leadId) });
@@ -142,17 +139,14 @@ export function applyEvent(
       break;
     case "agent.handoff":
     case "agent.draft":
-      // The AI agent handed off or drafted a reply (17.12). Key kept literal (no feature import).
       void qc.invalidateQueries({ queryKey: ["agent"] });
       break;
     case "reseller.sale":
-      // A reseller customer paid the agency (6c). Key kept literal (no feature import).
       void qc.invalidateQueries({ queryKey: ["reseller"] });
       break;
   }
 }
 
-/** Opens the shared stream for the signed-in session and keeps caches in sync; SLA alerts for me → toast. */
 export function RealtimeBridge() {
   const qc = useQueryClient();
   const { data: me } = useMe();
@@ -200,7 +194,6 @@ export function RealtimeBridge() {
           action: leadId ? { label: tt("open"), onClick: () => r.push(`/leads/${leadId}`) } : undefined,
         });
         if (playSound) void new Audio("/sounds/alert.wav").play().catch(() => undefined);
-        // Browser notifications only after explicit opt-in, and only when the tab isn't in front.
         if (
           typeof Notification !== "undefined" &&
           Notification.permission === "granted" &&

@@ -46,7 +46,6 @@ const sendFeedback = (generationId: string, outcome: "used" | "edited" | "discar
     }),
   ).catch(() => undefined); // feedback is best effort
 
-/** Templates used when AI is unavailable or disabled (FRONTEND_PROMPT §6 graceful fallback). */
 function templates(t: ReturnType<typeof useTranslations>, name: string) {
   return [t("template.greeting", { name }), t("template.followUp", { name }), t("template.callback", { name })];
 }
@@ -63,7 +62,6 @@ export function AiPanel({
   const t = useTranslations("ai");
   const storageKey = `recov-ai-draft:${lead.id}`;
   const [channel, setChannel] = useState<Channel>("whatsapp");
-  // Drafts default to the UI language; the agent switches to the lead's language when it differs.
   const [language, setLanguage] = useState<Language>(toApiLocale(useLocale()));
   const [tone, setTone] = useState<Tone>("friendly");
   const [draft, setDraft] = useState<DraftState | null>(() => sessionStore.get<DraftState>(storageKey));
@@ -94,7 +92,6 @@ export function AiPanel({
       ),
     meta: { silent: true },
     onSuccess: (r) => {
-      // Generating again discards the previous, unused variants.
       if (draft) void sendFeedback(draft.generationId, "discarded");
       setFallback(null);
       setDraft({

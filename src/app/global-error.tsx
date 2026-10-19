@@ -6,8 +6,7 @@ import { captureError } from "@/shared/lib/monitoring";
 
 import "./globals.css";
 
-// Last-resort boundary: it replaces the root layout, so there is no i18n provider here. The strings are inlined
-// (importing the message catalog would put all of it into every route's bundle).
+// Replaces the root layout (no i18n provider), so strings are inlined.
 const COPY = {
   bn: { title: "কিছু একটা ভুল হয়েছে", retry: "আবার চেষ্টা করুন", reference: "রেফারেন্স:" },
   en: { title: "Something went wrong", retry: "Try again", reference: "Reference:" },

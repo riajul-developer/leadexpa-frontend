@@ -1,6 +1,5 @@
 "use client";
 
-// Loaded lazily (next/dynamic) so Recharts never ships with other routes.
 import { useTranslations } from "next-intl";
 import {
   Bar,
@@ -60,7 +59,6 @@ export function LeadsChart({ rows }: { rows: Row[] }) {
   );
 }
 
-/** Compliance by agent, sorted best first — coaching, not shaming (no red-only ranking). */
 export function ComplianceChart({ rows }: { rows: Row[] }) {
   const t = useTranslations("dashboard.charts");
   const data = rows

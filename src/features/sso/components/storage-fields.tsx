@@ -10,9 +10,6 @@ import { Button } from "@/shared/ui/button";
 import { Field } from "@/shared/ui/field";
 import { Input } from "@/shared/ui/input";
 
-// Google Cloud Storage and Azure Blob Storage destinations (ADR 0056), shared by audit streams and warehouse
-// exports: Cloud Storage takes a bucket and an HMAC key, Azure a container URL and a SAS token. Keys are write-only.
-
 export type CloudKind = "gcs" | "azure_blob";
 export const isCloudKind = (k: string): k is CloudKind => k === "gcs" || k === "azure_blob";
 
@@ -27,7 +24,6 @@ export type CloudValues = {
 export const CLOUD_FIELDS = ["bucket", "prefix", "container_url", "access_key", "storage_secret"] as const;
 export type CloudErrors = Partial<Record<(typeof CLOUD_FIELDS)[number], string>>;
 
-/** The request body fields for a Cloud Storage or Azure destination, trimmed. */
 export function cloudBody(kind: CloudKind, v: CloudValues): CloudValues {
   const prefix = v.prefix?.trim() || undefined;
   return kind === "gcs"
@@ -35,7 +31,6 @@ export function cloudBody(kind: CloudKind, v: CloudValues): CloudValues {
     : { container_url: v.container_url?.trim(), prefix, storage_secret: v.storage_secret?.trim() };
 }
 
-/** Maps a 422's field errors to this component's messages; returns null when none of its fields are named. */
 export function useCloudErrors() {
   const t = useTranslations("sso.storage");
   return (e: unknown): CloudErrors | null => {
@@ -137,7 +132,6 @@ export function CloudStorageFields({
   );
 }
 
-/** Replace a destination's HMAC key or SAS token (they expire or get rotated); the destination stays. */
 export function ReplaceKey({
   kind,
   pending,
@@ -216,7 +210,6 @@ export function ReplaceKey({
   );
 }
 
-/** Where a destination writes, as its own tools name it. */
 export function cloudLocation(kind: string, d: { bucket: string; prefix: string; container_url: string }): string {
   if (kind === "gcs") return `gs://${d.bucket}/${d.prefix}`;
   if (kind === "azure_blob") return `${d.container_url}/${d.prefix}`;

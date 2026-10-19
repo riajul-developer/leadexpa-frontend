@@ -1,14 +1,11 @@
 import { expect, test } from "@playwright/test";
 
-// GLOBAL_PROMPT 9.5 (step 5e): the app marketplace — browse and filter, set up built-ins, install a partner app
-// with scope consent (key shown once), uninstall, and anonymous reviews.
-
 test("the marketplace lists integrations and partner apps, filtered and searched", async ({ page }) => {
   await page.goto("/en/marketplace");
   await expect(page.getByRole("heading", { level: 1, name: "Marketplace" })).toBeVisible();
   await expect(page.getByRole("link", { name: /LeadSheet/ })).toBeVisible();
   await expect(page.getByText("Built in").first()).toBeVisible();
-  await expect(page.getByText(/^marketplace./)).toHaveCount(0); // no raw translation keys
+  await expect(page.getByText(/^marketplace./)).toHaveCount(0);
   await page.getByRole("button", { name: "CRM", exact: true }).click();
   await expect(page.getByRole("link", { name: /HubSpot/ })).toBeVisible();
   await expect(page.getByRole("link", { name: /LeadSheet/ })).toHaveCount(0);

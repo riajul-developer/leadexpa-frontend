@@ -34,7 +34,6 @@ import {
 } from "./api";
 import { ChannelIcon } from "./channel-icon";
 
-/** One conversation: messages, the 24-hour window, the reply lock and the composer. */
 export function Thread({ conversationId, onBack }: { conversationId: string; onBack?: () => void }) {
   const t = useTranslations("conversations");
   const conv = useConversation(conversationId);
@@ -164,8 +163,6 @@ function Ticks({ m }: { m: Message }) {
   }
   return null;
 }
-
-// ---------------------------------------------------------------------------------------------
 
 const KNOWN_ERRORS = new Set([
   "conversation_claimed",

@@ -21,11 +21,7 @@ import { RecoveryCodes } from "./recovery-codes";
 import { TOTPSetup } from "./totp-setup";
 import { VerifyForm } from "./verify-form";
 
-/**
- * Shown instead of the app when the active agency requires two-step sign-in and this login hasn't proven it
- * (17.6). The agency's data stays out of reach on the server until then; this screen gets the person through:
- * set up a method, or verify this login with the one they have.
- */
+/** UI only: the server withholds agency data until this login proves MFA. */
 export function MFAGate({ me }: { me: Me }) {
   const t = useTranslations("security.gate");
   const te = useTranslations("errors");

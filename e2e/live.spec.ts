@@ -1,7 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 
-// Against a real, seeded backend (E2E_LIVE=1 E2E_BASE_URL=http://localhost:3000, API on :8080, `go run ./cmd/seed`).
-// Covers what mocks can't: cookies + CSRF + refresh, SSE, permissions, the public report rendered on the server.
+// Needs a seeded backend: E2E_LIVE=1 E2E_BASE_URL=http://localhost:3000, API :8080.
 test.skip(!process.env.E2E_LIVE, "set E2E_LIVE=1 with a seeded backend");
 
 const PASSWORD = process.env.E2E_PASSWORD ?? "DemoPass#2026";

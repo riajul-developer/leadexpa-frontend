@@ -37,7 +37,6 @@ function asText(v: unknown): string {
   return JSON.stringify(v);
 }
 
-/** Original form answers (every submission, incl. duplicates), attribution, custom fields and consent. */
 export function InfoPanel({ lead, timeZone }: { lead: LeadDetail; timeZone: string }) {
   const t = useTranslations("leadInfo");
   const f = useFormat();
@@ -106,8 +105,6 @@ export function InfoPanel({ lead, timeZone }: { lead: LeadDetail; timeZone: stri
   );
 }
 
-// ---------------------------------------------------------------------------------------------
-
 export function SalesPanel({ lead, currency, timeZone }: { lead: LeadDetail; currency: string; timeZone: string }) {
   const t = useTranslations("sales");
   const tv = useTranslations("validation");
@@ -119,7 +116,7 @@ export function SalesPanel({ lead, currency, timeZone }: { lead: LeadDetail; cur
   const [text, setText] = useState("");
   const [minor, setMinor] = useState<number | null>(null);
   const [note, setNote] = useState("");
-  // One key per form instance: a retry or double tap replays the same sale instead of recording two.
+  // One key per form instance: a retry replays the same sale.
   const [key, setKey] = useState(() => crypto.randomUUID());
 
   const submit = () => {
@@ -203,9 +200,6 @@ export function SalesPanel({ lead, currency, timeZone }: { lead: LeadDetail; cur
   );
 }
 
-// ---------------------------------------------------------------------------------------------
-
-/** Current timer, due time in the client's timezone, breach and escalation history. */
 export function SlaPanel({ leadId, timeZone }: { leadId: string; timeZone: string }) {
   const t = useTranslations("slaPanel");
   const f = useFormat();

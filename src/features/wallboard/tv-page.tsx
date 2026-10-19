@@ -17,7 +17,7 @@ type State =
   { kind: "loading" } | { kind: "unpaired" } | { kind: "inactive" } | { kind: "ready"; board: Board; stale: boolean };
 
 function readToken(): string | null {
-  // The pairing link carries the token in the fragment (#k=…): keep it, then take it out of the address bar.
+  // The pairing token is in the fragment (#k=…): keep it, then strip it from the URL.
   const m = /[#&]k=([\w-]+)/.exec(window.location.hash);
   try {
     if (m) {
@@ -31,7 +31,6 @@ function readToken(): string | null {
   }
 }
 
-/** mm:ss under an hour, then h:mm — readable from across a room. */
 function clockDuration(seconds: number | null | undefined, fmt: (n: number) => string): string {
   if (seconds == null) return "—";
   const s = Math.round(seconds);
@@ -40,10 +39,6 @@ function clockDuration(seconds: number | null | undefined, fmt: (n: number) => s
   return `${fmt(Math.floor(s / 3600))}:${pad(Math.floor((s % 3600) / 60))}`;
 }
 
-/**
- * /tv: the sales-floor wallboard (Tier 3, 8h). Paired by a kiosk token, no login. Big numbers, clients rotating,
- * an opt-in leaderboard, dimmed at night. Plain fetch, no app shell: TVs and sticks are slow.
- */
 export function TvPage() {
   const t = useTranslations("wallboard.tv");
   const locale = useLocale() as AppLocale;
@@ -98,7 +93,6 @@ export function TvPage() {
     return () => clearInterval(id);
   }, []);
 
-  // Keep the screen awake (where the browser allows it).
   useEffect(() => {
     let lock: { release: () => Promise<void> } | null = null;
     const nav = navigator as Navigator & { wakeLock?: { request: (t: "screen") => Promise<typeof lock> } };

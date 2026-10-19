@@ -43,7 +43,6 @@ import { CopyValue, useCopy } from "./copy-value";
 import { EncryptionKeysCard } from "./encryption-keys";
 import { WarehouseExportsCard } from "./warehouse-exports";
 
-/** Settings › Single sign-on (G7a): domains, the identity provider, enforcement and SCIM provisioning. */
 export function SSOSettings() {
   const canEdit = useCan("agency.update");
   const t = useTranslations("sso");
@@ -63,8 +62,6 @@ export function SSOSettings() {
     </div>
   );
 }
-
-// ---------------------------------------------------------------------------------------------
 
 function DomainStatus({ status }: { status: SSODomain["status"] }) {
   const t = useTranslations("sso.domains");
@@ -179,8 +176,6 @@ function Domains() {
   );
 }
 
-// ---------------------------------------------------------------------------------------------
-
 type Form = Required<Omit<SSOConnectionInput, "default_role">> & { default_role: "admin" | "manager" | "agent" };
 
 const EMPTY: Form = {
@@ -226,7 +221,6 @@ function Toggle({
   );
 }
 
-/** The agency's SAML service-provider certificate (G7d): for providers that verify signed requests or encrypt. */
 function SPCertificate({ cert }: { cert: SAMLSPCert }) {
   const t = useTranslations("sso.connection.spCert");
   const fmt = useFormat();
@@ -338,7 +332,6 @@ function Connection() {
       },
     });
   };
-  // Beside the issuer for OIDC; on its own row for SAML, which has no issuer.
   const roleField = (
     <Field label={t("defaultRole")} hint={t("defaultRoleHint")}>
       <NativeSelect
@@ -507,8 +500,6 @@ function Connection() {
   );
 }
 
-// ---------------------------------------------------------------------------------------------
-
 function ScimTokens() {
   const t = useTranslations("sso.scim");
   const fmt = useFormat();
@@ -598,8 +589,6 @@ function ScimTokens() {
   );
 }
 
-// ---------------------------------------------------------------------------------------------
-
 const MAPPABLE: MappableRole[] = ["agent", "manager", "admin"];
 
 function GroupRoleSelect({ group }: { group: SSOGroupMapping }) {
@@ -642,7 +631,6 @@ function GroupRoleSelect({ group }: { group: SSOGroupMapping }) {
   );
 }
 
-/** The groups the identity provider pushed over SCIM and the role each one grants (G7c). */
 function GroupRoles() {
   const t = useTranslations("sso.groups");
   const q = useSSOGroups();

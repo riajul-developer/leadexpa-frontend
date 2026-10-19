@@ -5,7 +5,6 @@ import { leads } from "@/mocks/db";
 
 import { AiPanel } from "./ai-panel";
 
-/** AI draft card: channel/language/tone, draft, and the template fallback when AI is unavailable. */
 const meta = {
   title: "Leads/AiDraftCard",
   component: AiPanel,

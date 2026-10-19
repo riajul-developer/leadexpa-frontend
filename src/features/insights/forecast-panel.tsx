@@ -13,7 +13,6 @@ const ForecastChart = dynamic(() => import("./forecast-chart"), {
   loading: () => <Skeleton className="h-64 w-full" />,
 });
 
-/** Pipeline forecast for one client: range chart and the weighted pipeline by stage (17.11). */
 export function ForecastPanel({ clientId }: { clientId?: string }) {
   const t = useTranslations("insights.forecast");
   const ts = useTranslations("stage");

@@ -2,7 +2,7 @@ import { Download, FileX } from "lucide-react";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-// Direct imports: the barrels also export client components, which would ship to this server page.
+// Direct imports: the barrels also export client components.
 // eslint-disable-next-line no-restricted-imports
 import { BrandHeader, BrandTheme } from "@/features/portal/brand-theme";
 // eslint-disable-next-line no-restricted-imports
@@ -18,11 +18,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return { title: t("publicTitle"), robots: { index: false, follow: false, nocache: true }, referrer: "no-referrer" };
 }
 
-/** Public shared client report: server-rendered, no app shell, no session, mobile-first. */
 export default async function SharedReport({ params }: { params: Promise<{ locale: string; token: string }> }) {
   const { locale, token } = await params;
   const report = await serverGet<PublicReport>(`/v1/public/reports/${encodeURIComponent(token)}`);
-  // Content follows the report's language (chosen per report), whatever the URL locale.
+  // Content follows the report's language, whatever the URL locale.
   setRequestLocale(report?.locale ?? locale);
   const t = await getTranslations({ locale: report?.locale ?? locale, namespace: "report" });
   if (!report) {

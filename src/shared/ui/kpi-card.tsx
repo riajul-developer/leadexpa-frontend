@@ -16,10 +16,7 @@ const ICON_TONES = {
   danger: "text-danger",
 } as const;
 
-/**
- * One KPI as the API defines it. `definition` is the server's formula text (shown verbatim);
- * `delta` is the server's previous-period value rendered by the caller — the card never computes metrics.
- */
+/** Values come from the server; the card never computes metrics. */
 export function KpiCard({
   label,
   value,
@@ -38,13 +35,11 @@ export function KpiCard({
   value: React.ReactNode;
   secondary?: React.ReactNode;
   definition?: string;
-  /** Direction of change vs. the previous period, and whether that direction is good. */
   trend?: { direction: "up" | "down" | "flat"; good: boolean };
   trendLabel?: React.ReactNode;
   footnote?: React.ReactNode;
   href?: string;
   loading?: boolean;
-  /** A related icon, drawn large and faded in the corner behind the numbers. */
   icon?: LucideIcon;
   tone?: keyof typeof ICON_TONES;
   className?: string;

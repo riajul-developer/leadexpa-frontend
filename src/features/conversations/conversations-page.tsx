@@ -20,10 +20,6 @@ import { useConversation, useInbox, type Conversation } from "./api";
 import { ChannelIcon } from "./channel-icon";
 import { Thread } from "./thread";
 
-/**
- * The shared inbox (FRONTEND_PROMPT 17.1): conversation list · thread · lead info on desktop, a WhatsApp-like
- * single pane on phones. Every reply is logged on the lead and counts as the SLA response.
- */
 export function ConversationsPage() {
   const t = useTranslations("conversations");
   const params = useSearchParams();
@@ -42,8 +38,7 @@ export function ConversationsPage() {
   };
 
   return (
-    // The lead column only exists while a conversation is open; with none, the message area takes the width (an empty
-    // third column drew a stray border). The height leaves room for the bottom navigation on phones.
+    // The lead column renders only when open: an empty column drew a stray border.
     <div className="flex h-[calc(100dvh-3.5rem-5rem)] min-h-0 flex-col pt-3 md:h-[calc(100dvh-3.5rem)] md:pt-4">
       <div
         className={cn(

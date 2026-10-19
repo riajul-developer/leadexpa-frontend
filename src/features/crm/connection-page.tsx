@@ -35,7 +35,6 @@ import { HealthBadge, ProviderMark } from "./parts";
 const DIRECTIONS = ["both", "push", "pull", "off"] as const;
 const POLICIES = ["newest_wins", "crm_wins", "leadexpa_wins"] as const;
 
-/** /integrations/crm/[id]: one client's CRM connection — health, rules, stage map and the sync log. */
 export function CrmConnectionPage({ id }: { id: string }) {
   const t = useTranslations("crm");
   const { data: c, isPending, isError } = useCrmConnection(id);

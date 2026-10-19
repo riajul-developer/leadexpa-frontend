@@ -5,7 +5,6 @@ import { useTranslations } from "next-intl";
 import { ApiKeysCard } from "./api-keys-card";
 import { WebhooksCard } from "./webhooks-card";
 
-/** Settings › Developer: the public API's agency side (API keys) and outgoing webhooks. */
 export function DeveloperSettings() {
   const t = useTranslations("developer");
   return (

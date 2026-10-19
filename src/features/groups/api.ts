@@ -4,8 +4,6 @@ import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tansta
 
 import { api, unwrap, unwrapEmpty, type Schemas } from "@/shared/lib/api/client";
 
-// Holding groups (G7e): a group of agencies with one report across them.
-
 export type HoldingGroup = Schemas["HoldingGroup"];
 export type HoldingGroupDetail = Schemas["HoldingGroupDetail"];
 export type HoldingGroupReport = Schemas["HoldingGroupReport"];
@@ -57,7 +55,6 @@ export function useCreateGroup() {
   });
 }
 
-/** Owner actions on one group; each refreshes the group. */
 export function useGroupActions(id: string) {
   const qc = useQueryClient();
   const refresh = () => qc.invalidateQueries({ queryKey: groupKey(id) });
@@ -110,8 +107,6 @@ export function useGroupActions(id: string) {
     }),
   };
 }
-
-// The agency's side: its own link, joining with a code, leaving.
 
 export function useAgencyGroup() {
   return useQuery({ queryKey: agencyGroupKey, queryFn: () => unwrap(api.GET("/v1/agencies/current/group")) });

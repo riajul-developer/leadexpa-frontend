@@ -5,7 +5,6 @@ import { recovered, sequences } from "@/mocks/db";
 import { RecoveredView } from "./recovered-card";
 import { SequenceEditor } from "./sequence-editor";
 
-/** Recovery sequences (17.3): the step-list editor and the recovered-revenue hero card. */
 const meta = {
   title: "Sequences/Editor",
   component: SequenceEditor,

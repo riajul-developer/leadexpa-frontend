@@ -12,7 +12,6 @@ import { Button } from "@/shared/ui/button";
 const load = () => import("./client-switcher-menu");
 const ClientSwitcherMenu = lazy(() => load().then((m) => ({ default: m.ClientSwitcherMenu })));
 
-/** The trigger, shared by the placeholder and the real menu (Radix passes its props and ref through). */
 export const ClientSwitcherButton = forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<"button">>(
   function ClientSwitcherButton(props, ref) {
     const t = useTranslations("shell");
@@ -36,7 +35,6 @@ export const ClientSwitcherButton = forwardRef<HTMLButtonElement, React.Componen
   },
 );
 
-/** Global client filter in the top bar, persisted as ?client= so links stay shareable. Menu loads on first open. */
 export function ClientSwitcher() {
   const { clients } = useClients();
   const { mounted, triggerProps } = useDeferredOverlay(load);

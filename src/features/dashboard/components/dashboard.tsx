@@ -22,8 +22,6 @@ import { Input } from "@/shared/ui/input";
 import { KpiCard } from "@/shared/ui/kpi-card";
 import { Card, CardContent, CardHeader, CardTitle, EmptyState, Skeleton } from "@/shared/ui/primitives";
 
-// Recharts only loads on this route, after first paint (dashboard JS budget).
-// Recovered revenue (17.3): the hero number, loaded after the KPIs.
 const RecoveredCard = dynamic(() => import("@/features/sequences").then((m) => m.RecoveredCard), { ssr: false });
 const LeadsChart = dynamic(() => import("./charts").then((m) => m.LeadsChart), {
   ssr: false,
@@ -38,7 +36,7 @@ type Dashboard = Schemas["Dashboard"];
 type KPIs = Schemas["KPIs"];
 type PeriodKey = "today" | "7d" | "30d" | "month" | "custom";
 
-/** Period → client-local dates (inclusive) in the selected client's (or agency's) timezone. */
+/** Period → client-local dates (inclusive) in the client's timezone. */
 export function periodDates(period: PeriodKey, tz: string, now: Date, custom?: { from?: string; to?: string }) {
   const today = localDate(now, tz);
   switch (period) {
@@ -192,8 +190,7 @@ function Kpis({ d, loading, clientId }: { d?: Dashboard; loading: boolean; clien
   const coverage = k?.coverage != null ? t("coverage", { pct: f.percent(k.coverage) }) : t("coverageUnknown");
   const money = (m: Schemas["Money"][] | undefined) =>
     m && m.length ? m.map((x) => f.money(x)).join(" + ") : f.money({ amount_minor: 0, currency: agencyCurrency });
-  // Several currencies: show the server's conversion into the reporting currency, always labeled with the
-  // rates it used (GLOBAL_PROMPT G-4); raw per-currency totals stay visible underneath.
+  // Several currencies: show the server's conversion, labeled with the rates it used.
   const conv = k?.converted ?? null;
   const roas = k?.roas ?? conv?.roas ?? null;
   const convertedNote = conv
@@ -377,7 +374,6 @@ function BreakdownTable({
   );
 }
 
-/** Junk rate per campaign, worst first (17.0.1): the ads producing fake leads are the ones to pause. */
 function JunkByCampaign({ rows }: { rows: Schemas["Breakdown"][] }) {
   const t = useTranslations("dashboard.junk");
   const f = useFormat();

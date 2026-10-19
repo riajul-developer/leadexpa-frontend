@@ -4,7 +4,7 @@ import type { Schemas } from "@/shared/lib/api/client";
 
 export type Brand = Schemas["Brand"];
 
-// The fonts a brand can pick (backend branding/domain.Fonts): a Google Fonts family, or the system stack.
+// Mirrors backend branding/domain.Fonts.
 const FONTS: Record<string, { family: string; google?: string }> = {
   system: { family: "" },
   inter: { family: "Inter", google: "Inter:wght@400;500;600" },
@@ -19,11 +19,7 @@ function mix(hex: string, alpha: string) {
   return `${hex}${alpha}`;
 }
 
-/**
- * Runtime brand tokens: the agency's colours and font for everything inside (the client portal and shared
- * pages). Both the raw tokens (--c-*) and Tailwind's (--color-*) are set, because the latter are resolved where
- * they're defined. Empty colours keep the default theme.
- */
+/** Sets both --c-* and Tailwind's --color-* (the latter resolve where defined). */
 export function BrandTheme({
   brand,
   children,
@@ -72,7 +68,6 @@ export function BrandTheme({
   );
 }
 
-/** The brand's logo, or its name when there is no logo. */
 export function BrandMarkOf({ brand, className }: { brand: Brand; className?: string }) {
   if (brand.logo_url)
     // eslint-disable-next-line @next/next/no-img-element -- an uploaded image on the API's origin
@@ -80,7 +75,6 @@ export function BrandMarkOf({ brand, className }: { brand: Brand; className?: st
   return <span className="text-primary text-xl font-semibold">{brand.display_name}</span>;
 }
 
-/** The top of a branded shared page (report, audit, review, PDF): the agency's logo or name over its colour rule. */
 export function BrandHeader({ brand }: { brand: Brand }) {
   return (
     <div className="grid gap-3" data-testid="brand-header">

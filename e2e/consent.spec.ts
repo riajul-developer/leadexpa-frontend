@@ -1,15 +1,12 @@
 import { expect, test } from "@playwright/test";
 
-// GLOBAL_PROMPT §7 (G2 core): consent is visible on the lead, an opt-out is recorded in one click, and the
-// lead is then marked do-not-contact everywhere.
-
 test("record an opt-out and the lead becomes do-not-contact", async ({ page }) => {
   await page.goto("/en/leads?stage=new");
   await page.locator("tbody tr").filter({ hasNotText: "Junk" }).first().click();
   const sheet = page.getByRole("dialog");
   await sheet.getByRole("tab", { name: "Info" }).click();
   await expect(sheet.getByRole("heading", { name: "Consent" })).toBeVisible();
-  // The seed has one lead that already opted out; start from "may contact" either way.
+  // The seed has one opted-out lead; start from "may contact" either way.
   const again = sheet.getByRole("button", { name: "They agreed to be contacted again" });
   const optOut = sheet.getByRole("button", { name: "Asked not to be contacted" });
   await expect(again.or(optOut)).toBeVisible();

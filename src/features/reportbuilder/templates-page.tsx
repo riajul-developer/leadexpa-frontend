@@ -14,7 +14,6 @@ import { Card, CardContent, EmptyState, Skeleton } from "@/shared/ui/primitives"
 import { useDeleteTemplate, useTemplates } from "./api";
 import { STARTERS, type Starter } from "./grid";
 
-/** /report-builder: saved report templates and a gallery of starting points. */
 export function ReportBuilderPage() {
   const t = useTranslations("reportBuilder");
   const f = useFormat();
@@ -122,7 +121,6 @@ export function ReportBuilderPage() {
   );
 }
 
-/** A thumbnail of a starter's grid. */
 function MiniLayout({ starter }: { starter: Starter }) {
   return (
     <div aria-hidden className="grid grid-cols-12 gap-0.5" style={{ gridAutoRows: "6px" }}>

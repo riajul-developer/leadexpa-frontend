@@ -18,7 +18,6 @@ const BAR_TONE: Record<string, string> = {
   never: "bg-danger",
 };
 
-/** The Leakage Audit report: speed, missed leads, the estimate with its assumptions, and the fix plan. */
 export function AuditReportView({
   report,
   currency,

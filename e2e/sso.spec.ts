@@ -1,8 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// Enterprise identity (G7a): an admin claims and verifies a domain, connects an identity provider and creates a
-// SCIM token; people on an SSO domain are sent to "Sign in with SSO" and come back signed in.
-
 test("set up single sign-on: domain, identity provider, SCIM token", async ({ page }) => {
   await page.goto("/en/settings/sso");
   await expect(page.getByRole("heading", { name: "Your email domains" })).toBeVisible();
@@ -21,7 +18,6 @@ test("set up single sign-on: domain, identity provider, SCIM token", async ({ pa
   await expect(list.getByText("Verified", { exact: true })).toBeVisible();
   await expect(page.getByText("Verify at least one email domain first", { exact: false })).toHaveCount(0);
 
-  // The redirect URI to paste into the provider; the issuer must be https.
   await expect(page.getByText("https://app.leadexpa.app/en/sso/callback")).toBeVisible();
   await page.getByRole("textbox", { name: "Issuer URL" }).fill("http://idp.bright.test");
   await page.getByRole("textbox", { name: "Client ID" }).fill("leadexpa");
@@ -29,17 +25,15 @@ test("set up single sign-on: domain, identity provider, SCIM token", async ({ pa
   await page.getByRole("button", { name: "Save", exact: true }).click();
   await expect(page.getByText("the identity provider's https issuer URL")).toBeVisible();
   await page.getByRole("textbox", { name: "Issuer URL" }).fill("https://idp.bright.test");
-  page.once("dialog", (d) => void d.accept()); // requiring SSO asks first
+  page.once("dialog", (d) => void d.accept());
   await page.getByRole("switch", { name: "Require single sign-on" }).click();
   await page.getByRole("button", { name: "Save", exact: true }).click();
   await expect(page.getByText("Single sign-on saved")).toBeVisible();
   await expect(page.getByText("A secret is saved. Leave empty to keep it.")).toBeVisible();
 
-  // SAML shows the service provider values instead.
   await page.getByRole("combobox", { name: "Protocol" }).selectOption("saml");
   await expect(page.getByText("https://api.leadexpa.app/v1/auth/sso/saml/mock/acs")).toBeVisible();
 
-  // A SCIM token is shown once.
   await page.getByRole("textbox", { name: "Token name" }).fill("Okta");
   await page.getByRole("button", { name: "Create token" }).click();
   const created = page.getByTestId("scim-token-created");
@@ -112,7 +106,7 @@ test("group roles: a SCIM group is mapped to a role and unmapped", async ({ page
   await expect(groups.getByText("12 members")).toBeVisible();
   const floor = groups.getByRole("combobox", { name: "Role for Sales Floor" });
   await expect(floor).toHaveValue("");
-  page.once("dialog", (d) => void d.accept()); // a group with members asks first
+  page.once("dialog", (d) => void d.accept());
   await floor.selectOption("agent");
   await expect(page.getByText("Sales Floor now grants Agent.")).toBeVisible();
   await expect(floor).toHaveValue("agent");
@@ -219,7 +213,6 @@ test("audit log streaming: an HTTPS stream with its secret, a failing S3 stream,
   await splunk.getByRole("button", { name: "Send test" }).click();
   await expect(page.getByText("The destination accepted the test entry.")).toBeVisible();
 
-  // S3: our role to grant, and a bucket that refuses us.
   await page.getByRole("button", { name: "Add a stream" }).click();
   await form.getByRole("combobox", { name: "Destination" }).selectOption("s3");
   await expect(form.getByText("arn:aws:iam::123456789012:role/leadexpa-audit")).toBeVisible();
@@ -227,7 +220,6 @@ test("audit log streaming: an HTTPS stream with its secret, a failing S3 stream,
   await form.getByRole("textbox", { name: "Bucket" }).fill("bright-denied");
   await form.getByRole("textbox", { name: "Region" }).fill("eu-west-1");
   await form.getByRole("switch", { name: "Send the existing log too" }).click();
-  // Only some actions (ADR 0053): a bad entry is refused, then the stream says what it sends.
   await form.getByRole("textbox", { name: "Only these actions" }).fill("Auth.*");
   await form.getByRole("button", { name: "Start streaming" }).click();
   await expect(form.getByText("Use actions like lead.deleted or groups like auth.*, at most 50.")).toBeVisible();
@@ -288,7 +280,6 @@ test("data warehouse export: a daily Parquet snapshot, contact details, a manual
   await expect(page.getByText("Contact details will be in the next snapshot.")).toBeVisible();
   await expect(row.getByRole("switch", { name: "Include contact details" })).toBeChecked();
 
-  // A bucket that refuses us: the failure and its reason.
   await page.getByRole("button", { name: "Add an export" }).click();
   await form.getByRole("textbox", { name: "Name" }).fill("Locked");
   await form.getByRole("textbox", { name: "Bucket" }).fill("bright-denied");
@@ -314,7 +305,6 @@ test("Cloud Storage and Azure: an audit stream to an Azure container and an expo
   await page.goto("/en/settings/sso");
   await expect(page.getByRole("heading", { name: "Audit log streaming" })).toBeVisible();
 
-  // Azure Blob Storage (ADR 0056): a container URL and a SAS token; a token without a signature is refused.
   await page.getByRole("button", { name: "Add a stream" }).click();
   const form = page.getByTestId("add-stream");
   await form.getByRole("combobox", { name: "Destination" }).selectOption("azure_blob");
@@ -334,7 +324,6 @@ test("Cloud Storage and Azure: an audit stream to an Azure container and an expo
   await sentinel.getByRole("button", { name: "Save key" }).click();
   await expect(page.getByText("Key replaced. The next delivery uses it.")).toBeVisible();
 
-  // Google Cloud Storage for the warehouse: a bucket and an HMAC key; the location says gs://.
   await page.getByRole("button", { name: "Add an export" }).click();
   const wh = page.getByTestId("add-warehouse-export");
   await wh.getByRole("combobox", { name: "Destination" }).selectOption("gcs");

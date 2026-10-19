@@ -26,7 +26,6 @@ import { FactText, useFactFormatter } from "./facts";
 
 const LANGUAGES = ["en", "bn", "ar"] as const;
 
-/** A review as the client reads it: every number is a fact, marked with the metric it comes from. */
 export function ReviewDocument({ review }: { review: BusinessReview }) {
   const t = useTranslations("revintel.review");
   const c = review.content;
@@ -66,7 +65,6 @@ export function ReviewDocument({ review }: { review: BusinessReview }) {
   );
 }
 
-/** Client › Business reviews (10.3): AI drafts the agency edits and approves before the client sees them. */
 export function ClientBusinessReviews({ clientId }: { clientId: string }) {
   const t = useTranslations("revintel.review");
   const te = useTranslations("errors");

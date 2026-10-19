@@ -6,7 +6,6 @@ import { ConversationWindow } from "./conversation-window";
 
 const dmLead = leads.find((l) => conversations.has(l.id))!;
 
-/** The 24-hour Messenger / Instagram window on a DM lead (17.0.4). */
 const meta = {
   title: "Leads/ConversationWindow",
   component: ConversationWindow,

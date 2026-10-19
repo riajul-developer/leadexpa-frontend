@@ -5,9 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { track } from "@/shared/lib/analytics";
 import { api, unwrap, unwrapEmpty, type Schemas } from "@/shared/lib/api/client";
 
-// Query keys local to this feature (kept out of the shared first-load bundle). The realtime bridge invalidates
-// ["conversions"] by literal when a destination's health changes.
-/** Conversion feedback (B-17.4), the Google Ads connection and ad spend sync (GLOBAL_PROMPT 9.3). */
+// The realtime bridge invalidates ["conversions"] by literal key.
 export const conversionKeys = {
   all: ["conversions"] as const,
   overview: (clientId: string) => ["conversions", "overview", clientId] as const,
@@ -144,8 +142,6 @@ export function useRetryDestination(id: string) {
   });
 }
 
-// --- Google Ads connection ----------------------------------------------------------------------
-
 export function useGoogle(enabled = true) {
   return useQuery({
     queryKey: conversionKeys.google,
@@ -199,8 +195,6 @@ export function useDisconnectGoogle() {
     },
   });
 }
-
-// --- Ad accounts (spend sync) --------------------------------------------------------------------
 
 export function useAdAccounts(clientId: string) {
   return useQuery({

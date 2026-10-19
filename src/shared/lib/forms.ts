@@ -7,10 +7,6 @@ import type { FieldValues, Path, UseFormSetError } from "react-hook-form";
 import { isApiError } from "./api/errors";
 import { toLatinDigits } from "./format";
 
-/**
- * Maps a 422's field errors onto React Hook Form fields by name; returns a form-level message for anything
- * else (localized by error code). Returns null when every error landed on a field.
- */
 export function useApplyApiError<T extends FieldValues>(setError: UseFormSetError<T>) {
   const t = useTranslations("errors");
   return useCallback(
@@ -31,7 +27,6 @@ export function useApplyApiError<T extends FieldValues>(setError: UseFormSetErro
   );
 }
 
-/** For number/phone inputs: accept Bangla digits as typed and normalize before validation. */
 export function normalizeDigits(v: unknown): unknown {
   return typeof v === "string" ? toLatinDigits(v) : v;
 }

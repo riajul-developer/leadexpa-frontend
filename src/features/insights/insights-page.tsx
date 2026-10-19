@@ -17,11 +17,9 @@ import { AttributionPanel } from "./attribution-panel";
 import { ForecastPanel } from "./forecast-panel";
 import { HealthRing, TrendLine } from "./health-parts";
 
-// Revenue intelligence (10.3) loads on its tabs.
 const BenchmarksPanel = dynamic(() => import("@/features/revintel").then((m) => m.BenchmarksPanel));
 const CalibrationCard = dynamic(() => import("@/features/revintel").then((m) => m.CalibrationCard));
 
-/** /insights: client health across the agency, attribution and the pipeline forecast (17.10–17.11). */
 export function InsightsPage() {
   const t = useTranslations("insights");
   const active = useActiveClient();
@@ -89,7 +87,7 @@ export function InsightsPage() {
   );
 }
 
-// The three parts that weigh most in the score (25%, 20%, 20%), in a fixed order so the columns line up.
+// Fixed order so the columns line up.
 const KEY_COMPONENTS = ["volume", "speed", "conversion"] as const;
 
 function keyComponents<C extends { key: string }>(all: C[]) {
@@ -124,7 +122,6 @@ function HealthOverview() {
                   <span className="block truncate font-medium">{r.name}</span>
                   <span className="text-muted text-xs">
                     {r.band ? th(`band.${r.band}`) : th("noScore")}
-                    {/* Phones: the week's change stays inline; bigger screens show it under the trend. */}
                     <span className="md:hidden">
                       {r.delta_7d != null && r.delta_7d !== 0 && ` · ${deltaText(t, r.delta_7d)}`}
                     </span>

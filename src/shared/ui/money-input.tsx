@@ -7,7 +7,6 @@ import { parseMoney } from "../lib/format";
 
 import { Input } from "./input";
 
-/** The currency's narrow symbol in the UI language (৳, $, €…), or its ISO code when Intl has none. */
 function currencySymbol(currency: string, locale: string): string {
   try {
     const part = new Intl.NumberFormat(locale, { style: "currency", currency, currencyDisplay: "narrowSymbol" })
@@ -19,10 +18,6 @@ function currencySymbol(currency: string, locale: string): string {
   }
 }
 
-/**
- * Amount input accepting digits in any script, separators and currency signs. Reports minor units (or null
- * when invalid) through onValueChange; the text stays exactly as typed.
- */
 export const MoneyInput = React.forwardRef<
   HTMLInputElement,
   Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "value"> & {

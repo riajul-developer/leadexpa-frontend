@@ -15,7 +15,6 @@ import { Badge, Card, CardContent, CardHeader, CardTitle, Skeleton } from "@/sha
 
 export const partnerKeys = { program: ["partner"] as const, activity: ["partner", "activity"] as const };
 
-/** /partners: refer agencies, earn a share of what they pay, get paid to your Stripe account (6c). */
 export function PartnersPage() {
   const t = useTranslations("partners");
   const f = useFormat();

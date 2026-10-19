@@ -19,7 +19,6 @@ import { Card, CardContent, CardHeader, CardTitle, EmptyState, Skeleton } from "
 
 import { BrandMarkOf, BrandTheme } from "./brand-theme";
 
-/** /p/[slug]: the agency's branded sign-in for its clients (before anyone is signed in). */
 export function PortalLogin({ slug }: { slug: string }) {
   const t = useTranslations("portal");
   const brand = useQuery({
@@ -68,7 +67,6 @@ export function PortalLogin({ slug }: { slug: string }) {
 
 const day = (offset: number, tz: string) => localDate(new Date(Date.now() + offset * 864e5), tz);
 
-/** /portal: what a client sees — their results and the reviews their agency approved, in the agency's brand. */
 export function PortalHome() {
   const t = useTranslations("portal");
   const f = useFormat();

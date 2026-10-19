@@ -25,7 +25,6 @@ import { CredentialsPanel } from "./parts";
 
 const ICON: Record<string, LucideIcon> = { ads: Megaphone, forms: Webhook, developer: Code2 };
 
-/** Pick a connector and a client; the credentials are shown once on success. */
 export function AddConnectorDialog({ clientId, onClose }: { clientId?: string; onClose: () => void }) {
   const t = useTranslations("connectors.add");
   const te = useTranslations("errors");

@@ -19,7 +19,6 @@ import { HealthRing, TrendLine, useAnomalyText } from "./health-parts";
 
 const LANGUAGE_NAMES: Record<string, string> = { en: "English", bn: "Bangla", ar: "Arabic" };
 
-/** Client › Health (17.10): score with components, trend, anomaly timeline, and an AI draft update. */
 export function ClientHealth({
   clientId,
   clientName,

@@ -10,11 +10,7 @@ import { type Me } from "@/shared/lib/session";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent } from "@/shared/ui/primitives";
 
-/**
- * Shown instead of the app when the active agency only allows its staff from its own networks and this request
- * comes from elsewhere (G7b). The server keeps the agency out of reach; the person can retry from the office
- * network or VPN, switch to another agency, or sign out.
- */
+/** UI only: the server enforces the agency's IP allowlist. */
 export function AccessBlockedGate({ me }: { me: Me }) {
   const t = useTranslations("security.accessGate");
   const qc = useQueryClient();

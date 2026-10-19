@@ -22,10 +22,6 @@ import { Badge, Card, EmptyState, Skeleton } from "@/shared/ui/primitives";
 
 type Item = Schemas["ReviewItem"];
 
-/**
- * "Needs review" (17.0.4): forwarded emails the parser wasn't sure about. The original email sits next to
- * the extracted fields; a manager corrects them and accepts (a lead through the normal pipeline) or rejects.
- */
 export function ReviewQueue() {
   const t = useTranslations("review");
   const f = useFormat();

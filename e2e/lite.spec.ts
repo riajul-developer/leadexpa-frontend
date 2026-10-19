@@ -1,8 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// FRONTEND_PROMPT 17.0.3: client staff sign in with an SMS code and work their leads from big cards; the agency
-// sees an adoption card and invites staff by phone.
-
 test("client staff sign in with a code and log an outcome from My leads", async ({ page }) => {
   await page.goto("/en/lite/login");
   await expect(page.getByRole("heading", { level: 1, name: "Sign in with your phone" })).toBeVisible();

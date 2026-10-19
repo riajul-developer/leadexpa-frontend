@@ -36,7 +36,6 @@ function useDateTime() {
     ) + " UTC";
 }
 
-/** The public status page (G7j): every region's components, 90 days of uptime, incidents and maintenance. */
 export function StatusPage() {
   const t = useTranslations("serviceStatus");
   const [data, setData] = useState<PublicStatus | null>(null);
@@ -165,7 +164,7 @@ function ComponentRow({ component: c }: { component: StatusComponent }) {
         <span className="text-muted text-xs">{t(`state.${c.state}`)}</span>
         <span className="text-muted ms-auto text-xs">{t("uptime90", { value: c.uptime_90d })}</span>
       </div>
-      {/* 90 days, oldest first; direction stays left-to-right like a timeline in every locale. */}
+      {/* Stays left-to-right in every locale, like a timeline. */}
       <div className="flex h-6 gap-px" dir="ltr" role="img" aria-label={t("bars", { name: t(`components.${c.key}`) })}>
         {c.days.map((d) => (
           <span

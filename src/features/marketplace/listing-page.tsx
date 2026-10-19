@@ -17,7 +17,6 @@ import { Badge, Card, CardContent, CardHeader, CardTitle, EmptyState, Skeleton }
 import { type ListingDetail, useDeleteReview, useInstall, useListing, useSaveReview, useUninstall } from "./api";
 import { AppMark, StarInput, Stars, useListingText } from "./parts";
 
-/** /marketplace/[key]: one listing — what it does, setup or install with scope consent, and reviews. */
 export function ListingPage({ listingKey }: { listingKey: string }) {
   const t = useTranslations("marketplace");
   const { data: l, isPending, isError } = useListing(listingKey);
@@ -106,7 +105,6 @@ function Hero({ l }: { l: ListingDetail }) {
   );
 }
 
-/** Scope consent: exactly what the app will be able to do, before anything is granted (G-6). */
 function ConsentDialog({ l, onClose }: { l: ListingDetail; onClose: () => void }) {
   const t = useTranslations("marketplace.consent");
   const ts = useTranslations("developer.scopes");

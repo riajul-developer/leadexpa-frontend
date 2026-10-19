@@ -13,7 +13,6 @@ import { Card, CardContent, CardHeader, CardTitle, Skeleton } from "@/shared/ui/
 
 type Settings = Schemas["MessagingSettings"];
 
-/** Agency messaging switches: pause everything (kill switch), and whether automated replies meet the SLA. */
 export function MessagingSettings() {
   const t = useTranslations("settings.messaging");
   const qc = useQueryClient();

@@ -1,8 +1,6 @@
 "use client";
 
-// Offline activity queue (FRONTEND_PROMPT §9, M4): outcomes logged without a connection are stored with the
-// Idempotency-Key they will be sent with, and replayed in order on reconnect. The API replays the first
-// response for a repeated key, so a replay can never log a call twice.
+// Replays reuse the stored Idempotency-Key, so the API never logs a call twice.
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -12,7 +10,7 @@ import type { components } from "./api/schema";
 export type ActivityBody = components["schemas"]["ActivityCreate"];
 
 export interface QueuedActivity {
-  key: string; // Idempotency-Key
+  key: string;
   leadId: string;
   body: ActivityBody;
   queuedAt: string;
@@ -55,7 +53,7 @@ export interface ReplayResult {
 
 let replaying = false;
 
-/** Sends queued activities oldest first. Network failures stop the run (retry later); 4xx drops the item. */
+/** Oldest first. Network failures stop the run; a 4xx drops the item. */
 export async function replayQueue(): Promise<ReplayResult> {
   const result: ReplayResult = { sent: [], rejected: [] };
   if (replaying || isOffline()) return result;

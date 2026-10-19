@@ -16,8 +16,6 @@ import { Input } from "@/shared/ui/input";
 import { Switch } from "@/shared/ui/overlays";
 import { Badge, Card, CardContent, CardHeader, CardTitle, EmptyState, Skeleton } from "@/shared/ui/primitives";
 
-// Smart routing (17.9): the client's routing options, its decision log, and members' skills.
-
 type RoutingDraft = {
   routing_max_open: number | null;
   routing_use_skills: boolean;
@@ -70,7 +68,6 @@ export function SmartRoutingFields({
 type Decision = Schemas["RoutingDecision"];
 type Step = { step: string; field?: string; value?: string; kept?: number; ignored?: boolean; excluded?: number };
 
-/** Why each lead went where it did. */
 export function RoutingLog({ clientId }: { clientId: string }) {
   const t = useTranslations("clients.routing");
   const f = useFormat();
@@ -131,7 +128,6 @@ export function RoutingLog({ clientId }: { clientId: string }) {
   );
 }
 
-/** Members' languages and product lines (Settings › Team). */
 export function MemberSkillsCard() {
   const t = useTranslations("clients.skills");
   const qc = useQueryClient();

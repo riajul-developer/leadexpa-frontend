@@ -1,5 +1,3 @@
-// MSW handlers: a stand-in API for the clickable prototype. Shapes come from the generated OpenAPI types;
-// behaviour is simplified (no RLS, no SLA engine) but writes persist for the session so demos feel real.
 import { delay, http, HttpResponse } from "msw";
 
 import { fromStarter, overlaps as rbOverlaps, problem as rbProblem } from "@/features/reportbuilder/grid";
@@ -19,8 +17,7 @@ function problem(status: number, code: string, detail: string) {
   );
 }
 
-// Action links (17.0.3): the mock token is "mock-<lead id>" so it survives a page load (seeded ids are stable).
-// "mock-expired" always reads as expired.
+// Mock action tokens are "mock-<lead id>"; "mock-expired" always reads as expired.
 
 function actionLinkView(token: string) {
   if (token === "mock-expired") return problem(400, "action_link_expired", "This link has expired.");
@@ -43,8 +40,7 @@ function actionLinkView(token: string) {
 
 const list = <T>(data: T[]) => ({ data, next_cursor: null });
 
-// Mock pay tokens carry their link ("mock-pay-<base64url JSON>"): the payer's page is a fresh load, where the
-// in-memory mock data starts over. A paid mock link is remembered for the tab in sessionStorage.
+// Pay tokens carry their link: the payer's page is a fresh load without mock data.
 function mockPayToken(l: S["PaymentLink"]) {
   const raw = JSON.stringify(l);
   return (
@@ -74,7 +70,7 @@ function mockPayLink(token: string): S["PaymentLink"] | undefined {
   return l;
 }
 
-// Global billing (G2): the subscription and budgets survive the checkout redirect (a fresh load) in sessionStorage.
+// sessionStorage: survives the Stripe checkout redirect (a fresh load).
 type MockBilling = { subscription: S["Subscription"] | null; budgets: Record<string, number> };
 const MOCK_PRICES: Record<string, number> = { starter: 149000, growth: 299000, pro: 499000 };
 function mockBilling(): MockBilling {
@@ -118,7 +114,7 @@ function mockUsage(b: MockBilling): S["UsageReport"] {
   };
 }
 
-// Reseller mode + partners (6c): kept in sessionStorage, since Stripe onboarding and checkout are full-page trips.
+// sessionStorage: Stripe onboarding and checkout are full-page trips.
 type MockResale = {
   account: S["ConnectedAccount"];
   plans: S["ResellerPlan"][];
@@ -220,7 +216,6 @@ const mockScoring: S["ScoringModel"] = {
   feedback_too_low: 5,
 };
 
-// Client health, attribution and forecast (17.10–17.11): deterministic per client.
 function mockHealth(clientId: string): S["ClientHealth"] {
   const i = db.clients.findIndex((c) => c.id === clientId);
   const score = [82, 54, 33][i] ?? 70;
@@ -303,7 +298,6 @@ function mockHealth(clientId: string): S["ClientHealth"] {
   };
 }
 
-// AI agent (17.12): in-memory, seeded so the console has something to show.
 const mockAgents = new Map<string, S["Agent"]>();
 function mockAgent(clientId: string): S["Agent"] {
   let a = mockAgents.get(clientId);
@@ -641,10 +635,6 @@ function dashboard(u: URL): S["Dashboard"] {
   };
 }
 
-/**
- * A placed mock call rings for 3 s, then is connected for 42 s: the first read after that logs it on the lead
- * (once), like the provider's dial callback would.
- */
 function progress(c: S["Call"]): S["Call"] {
   if (c.status !== "ringing") return c;
   const started = Date.parse(c.started_at);
@@ -684,12 +674,10 @@ function progress(c: S["Call"]): S["Call"] {
   });
 }
 
-// Security (17.6). "mfa@…" signs in with a second step; an address with "+gate" (e.g. owner+gate@…) makes the
-// agency require two-step sign-in from someone without a method, to walk through the app's gate.
+// "mfa@…" needs a second step; "+gate" makes the agency require 2FA.
 const MFA_TOKEN = "mock-mfa-token";
 
-// Access policy (G7b). The demo user is the owner, so the allowlist never blocks them; "+offsite" sign-ins show
-// the gate a staff member outside the networks would see.
+// The demo owner is never blocked; "+offsite" sign-ins see the blocked gate.
 const mockAccess: { blocked: boolean; policy: S["AccessPolicy"] } = {
   blocked: false,
   policy: { ip_allowlist: [], session_max_hours: null, session_idle_minutes: null, your_ip: "198.51.100.23" },
@@ -818,9 +806,7 @@ const securityHandlers = [
   ),
 ];
 
-// Appointments (10.1): booking rules per client, slots from working hours minus bookings, a calendar connection.
-// Appointments survive a fresh load (the lead's public pages) in sessionStorage. Mock tokens carry their target:
-// "mock-book-<lead id>" (self-booking) and "mock-appt-<appointment id>" (the manage link).
+// Tokens: "mock-book-<lead id>" and "mock-appt-<appointment id>".
 const mockBookings = new Map<string, S["Booking"]>();
 function mockBooking(clientId: string): S["Booking"] {
   let b = mockBookings.get(clientId);
@@ -1018,7 +1004,6 @@ function funnel(clientId?: string): S["AppointmentFunnel"] {
     const noShow = ls.filter(
       (l) => of(l).some((a) => a.status === "no_show") && !of(l).some((a) => a.status === "attended"),
     ).length;
-    // A believable demo: seeded history on top of the live session.
     const leadsN = ls.length * 6;
     const bookedN = booked + Math.round(leadsN * 0.32);
     const attendedN = attended + Math.round(bookedN * 0.7);
@@ -1139,7 +1124,6 @@ const appointmentHandlers = [
   http.get(url("/v1/me/calendar"), () => HttpResponse.json(mockCalendar)),
   http.post(url("/v1/me/calendar/connect"), async ({ request }) => {
     const { provider } = (await request.json()) as { provider: "google" | "microsoft" };
-    // No real provider in the demo: come straight back to the callback page.
     return HttpResponse.json({
       authorize_url: `${location.origin}/en/settings/calendar/callback?code=mock-${provider}&state=mock`,
     });
@@ -1209,9 +1193,7 @@ const appointmentHandlers = [
   }),
 ];
 
-// Ask your data (17.13): a keyword interpreter stands in for the model (English, Bangla, Arabic), then the query runs
-// over the same mock lead list and dashboard as their pages.
-// Remembered for the tab (sessionStorage) so recent questions survive a page load, like the real API.
+// sessionStorage so recent questions survive a reload, like the real API.
 const askHistory: S["AskAnswer"][] = (() => {
   try {
     return JSON.parse(sessionStorage.getItem("mock-ask") ?? "[]") as S["AskAnswer"][];
@@ -1397,7 +1379,6 @@ const askHandlers = [
   ),
 ];
 
-// Revenue intelligence (10.3): offline sales with a review queue, deal predictions, benchmarks (opt-in).
 let mockOffline: S["OfflineSale"][] | null = null;
 function offlineSales(): S["OfflineSale"][] {
   if (mockOffline) return mockOffline;
@@ -1564,8 +1545,7 @@ const revintelHandlers = [
   }),
 ];
 
-// Leakage audits and business reviews (10.3). Mock share tokens carry their id ("mock-audit-<id>",
-// "mock-review-<id>"); the seeded ones survive a fresh load of the public page.
+// Share tokens: "mock-audit-<id>" / "mock-review-<id>" survive a fresh load.
 function sampleReport(withMoney: boolean): S["AuditReport"] {
   const days = 14;
   return {
@@ -1901,7 +1881,7 @@ const auditHandlers = [
   }),
 ];
 
-// White-label (8f): the agency's brand, remembered for the tab so the portal pages (a fresh load) see it.
+// Brand kept in sessionStorage so portal pages (a fresh load) see it.
 function loadBrand(): S["Brand"] {
   try {
     const raw = sessionStorage.getItem("mock-brand");
@@ -1936,7 +1916,6 @@ function luminanceOf(hex: string) {
   return 0.2126 * r! + 0.7152 * g! + 0.0722 * b!;
 }
 
-// Shared pages carry the brand once the agency has set one (null keeps the default theme).
 function brandIfSet() {
   const b = brand();
   return b.primary_color || b.logo_url || b.display_name !== b.agency_name ? b : null;
@@ -1959,7 +1938,6 @@ const mockSSO: {
   domains: [],
   connection: null,
   tokens: [],
-  // Groups arrive from the identity provider over SCIM; the app only maps them to roles.
   groups: [
     {
       id: "0190f0f0-0000-7000-8000-00000000a001",
@@ -1979,7 +1957,6 @@ const mockSSO: {
     },
   ],
 };
-// The certificate body is a placeholder: the UI only shows, copies and downloads it.
 function mockSPCert(prefix: string, rotatedAt: string | null): S["SAMLSPCert"] {
   return {
     pem: `-----BEGIN CERTIFICATE-----
@@ -2041,8 +2018,7 @@ const brandHandlers = [
   http.get(url("/v1/public/brand/:slug"), ({ params }) =>
     params.slug === db.agency.slug ? HttpResponse.json(brand()) : problem(404, "not_found", "Not found."),
   ),
-  // Custom and sender domains (8f-2). The mock "finds" the records on verify, except for a host starting with
-  // "wrong." (its CNAME points elsewhere), so both outcomes can be shown.
+  // Verify "finds" the records, except hosts starting with "wrong.".
   http.get(url("/v1/domains"), () => HttpResponse.json({ data: mockDomains })),
   http.post(url("/v1/domains"), async ({ request }) => {
     const { hostname } = (await request.json()) as { hostname: string };
@@ -2154,7 +2130,7 @@ const brandHandlers = [
       ? HttpResponse.json(brand())
       : problem(404, "not_found", "Not found.");
   }),
-  // Enterprise single sign-on and SCIM (G7a). Verify always finds the TXT record; gmail.com is refused.
+  // Verify always finds the TXT record; gmail.com is refused.
   http.get(url("/v1/sso/domains"), () => HttpResponse.json({ data: mockSSO.domains })),
   http.post(url("/v1/sso/domains"), async ({ request }) => {
     const { domain } = (await request.json()) as { domain: string };
@@ -2224,7 +2200,6 @@ const brandHandlers = [
       saml_idp_cert: b.saml_idp_cert ?? "",
       saml_sign_requests: b.saml_sign_requests ?? false,
       saml_allow_idp_initiated: b.saml_allow_idp_initiated ?? false,
-      // A SAML connection gets the workspace's own certificate the first time.
       saml_sp_cert: b.protocol === "saml" ? (mockSSO.connection?.saml_sp_cert ?? mockSPCert("AB:CD", null)) : null,
       updated_at: new Date().toISOString(),
       sp: mockSSOProvider,
@@ -2269,7 +2244,7 @@ const brandHandlers = [
     Object.assign(g, { role, updated_at: new Date().toISOString() });
     return HttpResponse.json(g);
   }),
-  // Sign-in: emails on "sso.test" have an identity provider; the mock "provider" sends the browser straight back.
+  // Emails on "sso.test" have an IdP; the mock provider redirects straight back.
   http.post(url("/v1/auth/sso/start"), async ({ request }) => {
     const { email } = (await request.json()) as { email: string };
     if (!email.toLowerCase().endsWith("@sso.test"))
@@ -2303,8 +2278,7 @@ const brandHandlers = [
   }),
 ];
 
-// Report builder (8g): templates, schedules and shared runs live in the tab's sessionStorage (shared pages are a
-// fresh load). Widgets run through the same mock "Ask your data" engine, so their numbers match /ask and /dashboard.
+// sessionStorage: shared report pages are a fresh load.
 type RbRun = S["ReportRunSummary"] & { template_id: string; view: S["PublicReportRun"] };
 type RbState = { templates: S["ReportTemplate"][]; schedules: S["ReportSchedule"][]; runs: RbRun[] };
 let rbState: RbState | null = null;
@@ -2567,8 +2541,7 @@ const rbHandlers = [
   }),
 ];
 
-// Team tools (8h). Coaching and screens are remembered for the tab (the TV page is a fresh load); the board is
-// computed from the mock leads like the inbox. Presence: one teammate is always looking at the first lead.
+// sessionStorage: the TV page is a fresh load. A teammate is on the first lead.
 type TtState = { coaching: boolean; screens: S["WallboardScreen"][] };
 let ttState: TtState | null = null;
 function tt(): TtState {
@@ -2738,7 +2711,6 @@ const ttHandlers = [
   http.post(url("/v1/presence"), async ({ request }) => {
     const { resource, state } = (await request.json()) as { resource: string; state: "viewing" | "editing" };
     const viewers: S["PresenceView"]["viewers"] = [{ user_id: db.me.user.id, name: db.me.user.name, state }];
-    // A teammate is on every lead; on the first one they are writing (the soft-lock note).
     const mate = db.members.find((m) => m.role === "manager")!;
     viewers.push({
       user_id: mate.user.id,
@@ -2757,8 +2729,7 @@ function ttPaired(s: S["WallboardScreen"]): S["WallboardPaired"] {
   return { screen: s, token, url: `${origin}/${db.agency.default_locale ?? "en"}/tv#k=${token}` };
 }
 
-// Holding groups (G7e): the demo agency founded "Bright Holdings" with a sister brand. In memory: a reload
-// starts over.
+// In memory: a reload starts over.
 const MOCK_GROUP_ID = "0190f0f0-0000-7000-8000-00000000c001";
 const mockGroups = {
   group: {
@@ -2923,7 +2894,7 @@ const groupHandlers = [
   }),
 ];
 
-// Customer-managed keys (G7f). An AWS ARN containing "denied" behaves like a key whose policy leaves us out.
+// An AWS ARN containing "denied" acts like a key policy that leaves us out.
 const mockKeys: S["EncryptionKeys"] = {
   provider: "platform",
   key_ref: "",
@@ -2972,7 +2943,7 @@ const keyHandlers = [
     mockKeys.data_key_count += 1;
     return HttpResponse.json(mockKeys);
   }),
-  // Lead PII (G7f-2): the mock switches straight to the end state (no backfill to wait for).
+  // Switches straight to the end state (no backfill).
   http.put(url("/v1/agencies/current/encryption-keys/lead-pii"), async ({ request }) => {
     const { enabled } = (await request.json()) as { enabled: boolean };
     mockKeys.lead_pii = enabled ? "encrypting" : "off";
@@ -2984,8 +2955,7 @@ const keyHandlers = [
   }),
 ];
 
-// Audit log streaming (G7g). An HTTPS URL containing "denied" refuses test entries; a bucket containing "denied"
-// shows a failing stream.
+// URLs/buckets containing "denied" refuse test entries or fail the stream.
 const mockStreams: S["AuditStream"][] = [];
 
 const fieldProblem = (field: string, message: string) =>
@@ -3001,7 +2971,6 @@ const fieldProblem = (field: string, message: string) =>
     { status: 422, headers: { "Content-Type": "application/problem+json" } },
   );
 
-// Cloud Storage and Azure destinations (ADR 0056), as the API checks them.
 function mockCloud(b: {
   kind: string;
   bucket?: string;
@@ -3146,7 +3115,7 @@ const streamHandlers = [
   }),
 ];
 
-// Data warehouse export (G7h). "Run now" finishes at once: a bucket containing "denied" fails like an S3 refusal.
+// "Run now" finishes at once; a bucket containing "denied" fails.
 const mockExports: S["WarehouseExport"][] = [];
 const mockAgency = "0192a0b0-0000-7000-8000-00000000a6e1";
 
@@ -3273,7 +3242,7 @@ const exportHandlers = [
   }),
 ];
 
-// Sandbox (G7i): kept in sessionStorage, since switching workspaces is a full-page load.
+// sessionStorage: switching workspaces is a full-page load.
 type MockSandbox = { sandbox: { id: string; name: string; created_at: string } | null; inside: boolean };
 function mockSandbox(): MockSandbox {
   const raw = typeof sessionStorage === "undefined" ? null : sessionStorage.getItem("mock-sandbox");
@@ -3295,7 +3264,6 @@ const sandboxCopies = [
   "ai_agents",
 ];
 
-/** The Me the shell sees: inside the sandbox, the agency is the sandbox; the switcher lists it either way. */
 function withSandbox(m: S["Me"]): S["Me"] {
   const s = mockSandbox();
   if (!s.sandbox || !m.agency) return m;
@@ -3350,9 +3318,7 @@ const sandboxHandlers = [
   }),
 ];
 
-// Service status (G7j). The public page reads the control plane (in mocks: the mocked API): two regions with
-// 90 days of history, an incident in eu1, upcoming maintenance and a resolved incident. In the app, this region
-// is healthy (so no banner over other pages) and last month missed the standard target by a little.
+// This region is healthy (no banner); last month missed the target slightly.
 function mockDays(seedDown: number) {
   const today = new Date();
   return Array.from({ length: 90 }, (_, i) => {
@@ -3487,7 +3453,7 @@ const statusHandlers = [
   http.get(url("/v1/agencies/current/sla"), ({ request }) => {
     const month = new URL(request.url).searchParams.get("month") ?? "";
     const current = new Date().toISOString().slice(0, 7);
-    const missed = month !== current; // finished months missed by a little; the month in progress is fine
+    const missed = month !== current;
     return HttpResponse.json({
       region: "ap1",
       month,
@@ -3624,7 +3590,6 @@ export const handlers = [
       id: db.newId(),
       name: b.name,
       industry: b.industry ?? "other",
-      // Same defaults as the API: the agency's settings in its own country, otherwise a neutral fallback.
       country: b.country ?? db.agency.country,
       timezone:
         b.timezone ?? ((b.country ?? db.agency.country) === db.agency.country ? db.agency.default_timezone : "UTC"),
@@ -4320,7 +4285,6 @@ export const handlers = [
       ].map((p) => ({ ...p, monthly_minor: MOCK_PRICES[p.code]!, annual_minor: MOCK_PRICES[p.code]! * 10 })),
     }),
   ),
-  // Mock checkout "pays" at once and comes back the way Stripe would.
   http.post(url("/v1/billing/checkout"), async ({ request }) => {
     const body = (await request.json()) as { plan: string; interval: "month" | "year" };
     const b = mockBilling();
@@ -4406,7 +4370,6 @@ export const handlers = [
   http.get(url("/v1/integrations/meta"), () =>
     HttpResponse.json({ configured: false, messaging_available: false, connections: [], pages: [], forms: [] }),
   ),
-  // 17.0.4: email-in sources, the review queue and DM conversations.
   http.post(url("/v1/clients/:id/sources"), async ({ params, request }) => {
     const b = (await request.json()) as { kind: S["Source"]["kind"]; name: string };
     const key = db.newId().replace(/-/g, "") + "abcdef012345";
@@ -4465,7 +4428,6 @@ export const handlers = [
   http.get(url("/v1/integrations/meta/unrouted"), () => HttpResponse.json(list([]))),
   http.get(url("/v1/ingestion/issues"), () => HttpResponse.json(list([]))),
 
-  // 17.0.3: phone sign-in for client staff (any number works in the mock; the code is 123456) and adoption.
   http.post(url("/v1/auth/otp/start"), () => HttpResponse.json({ challenge_id: db.newId() }, { status: 202 })),
   http.post(url("/v1/auth/otp/verify"), async ({ request }) => {
     const b = (await request.json()) as { code: string };
@@ -4497,7 +4459,6 @@ export const handlers = [
   }),
   http.post(url("/v1/clients/:id/adoption/remind"), () => HttpResponse.json({ reminded: 1 })),
 
-  // Step 3a: shared inbox, channels, templates, messaging settings.
   http.get(url("/v1/conversations"), ({ request }) => {
     const q = new URL(request.url).searchParams;
     let rows = db.inbox
@@ -4618,7 +4579,6 @@ export const handlers = [
     return HttpResponse.json(db.autoResponder);
   }),
 
-  // Step 3c: calls. A placed call rings for ~3 s, then connects for 42 s and logs itself on the lead.
   http.get(url("/v1/calls"), ({ request }) => {
     const q = new URL(request.url).searchParams;
     const rows = db.calls
@@ -4718,7 +4678,6 @@ export const handlers = [
     return HttpResponse.json(db.myCallPhone);
   }),
 
-  // Step 4a: recovery sequences.
   http.get(url("/v1/sequences"), ({ request }) => {
     const client = new URL(request.url).searchParams.get("client_id");
     return HttpResponse.json(
@@ -4875,7 +4834,6 @@ export const handlers = [
     return new HttpResponse(null, { status: 204 });
   }),
 
-  // Step 4b: automation rules.
   http.get(url("/v1/automation/rules"), () => HttpResponse.json(list(db.rules))),
   http.post(url("/v1/automation/rules/test"), async ({ request }) => {
     const { rule, lead_id } = (await request.json()) as { rule: S["AutomationRuleInput"]; lead_id: string };
@@ -5005,7 +4963,6 @@ export const handlers = [
     return HttpResponse.json(list(first ? db.ruleRuns.filter((r) => !status || r.status === status) : []));
   }),
 
-  // Step 5a: lead-source connectors. Installing creates the lead source; credentials are returned once.
   http.get(url("/v1/connectors"), () => HttpResponse.json({ data: db.connectorCatalog })),
   http.get(url("/v1/connector-installs"), ({ request }) => {
     const client = new URL(request.url).searchParams.get("client_id");
@@ -5055,7 +5012,6 @@ export const handlers = [
     return HttpResponse.json({ install, credentials: db.connectorCredentials(i) });
   }),
 
-  // Step 5b: conversion feedback, the Google Ads connection and spend sync.
   http.get(url("/v1/clients/:id/conversions"), ({ params }) => {
     const id = params.id as string;
     return HttpResponse.json({
@@ -5266,7 +5222,6 @@ export const handlers = [
     return HttpResponse.json(a);
   }),
 
-  // Step 5c: API keys and outgoing webhooks. Secrets are returned once; test and resend answer at once.
   http.get(url("/v1/developer/catalog"), () => HttpResponse.json(db.developerCatalog)),
   http.get(url("/v1/api-keys"), () => HttpResponse.json({ data: db.apiKeys })),
   http.post(url("/v1/api-keys"), async ({ request }) => {
@@ -5400,14 +5355,14 @@ export const handlers = [
     return HttpResponse.json(d);
   }),
 
-  // Step 5d: CRM sync. "Connect" points the popup straight at our callback with a mock code (no CRM sign-in).
+  // "Connect" points the popup straight at our callback with a mock code.
   http.get(url("/v1/crm/providers"), () => HttpResponse.json({ data: db.crmProviders })),
   http.post(url("/v1/crm/connect"), async ({ request }) => {
     const b = (await request.json()) as { provider: S["CrmProviderKey"]; client_id: string };
     const p = db.crmProviders.find((x) => x.key === b.provider);
     if (!p?.configured) return problem(503, "crm_unconfigured", "This CRM isn't set up on the server yet.");
     const locale = location.pathname.split("/")[1] || "en";
-    // Mock data lives per window: create the connection here, where the list will be refetched (the popup has its own).
+    // Mock data is per window: create it here, where the list is refetched.
     if (!db.crmConnections.some((x) => x.client_id === b.client_id && x.provider === b.provider))
       db.crmConnections.push({
         ...db.crmConnection(b.client_id, b.provider),
@@ -5489,7 +5444,6 @@ export const handlers = [
     HttpResponse.json(list(db.crmLogs.get(params.id as string) ?? [])),
   ),
 
-  // Step 5e: the marketplace. Installing returns a mock key once; reviews average live.
   http.get(url("/v1/marketplace/listings"), ({ request }) => {
     const sp = new URL(request.url).searchParams;
     const category = sp.get("category");
@@ -5571,7 +5525,6 @@ export const handlers = [
     return new HttpResponse(null, { status: 204 });
   }),
 
-  // Step 6a: payment links. "Pay" in the mock skips the gateway: it marks the link paid and returns to the page.
   http.get(url("/v1/clients/:clientId/payment-accounts"), ({ params }) =>
     HttpResponse.json({ data: db.paymentAccounts.filter((a) => a.client_id === params.clientId) }),
   ),
@@ -5708,12 +5661,10 @@ export const handlers = [
     return HttpResponse.json({ redirect_url: `${location.pathname}?returned=1` });
   }),
 
-  // Reseller mode (6c).
   http.get(url("/v1/reseller/account"), () => HttpResponse.json(mockResale().account)),
   http.post(url("/v1/reseller/account/onboarding"), async () => {
     await delay(300);
     const r = mockResale();
-    // Mock onboarding finishes at once and comes back the way Stripe would.
     r.account = {
       ...r.account,
       connected: true,
@@ -5842,7 +5793,6 @@ export const handlers = [
       locale: "en",
     });
   }),
-  // Mock checkout "pays" at once (on the agency's account) and comes back the way Stripe would.
   http.post(url("/v1/public/buy/:code/checkout"), async ({ params }) => {
     await delay(300);
     const r = mockResale();
@@ -5878,7 +5828,6 @@ export const handlers = [
     return HttpResponse.json({ url: `${location.pathname}?done=1` });
   }),
 
-  // Partner program (6c).
   http.get(url("/v1/partner"), () => HttpResponse.json(mockPartnerProgram(mockResale()))),
   http.post(url("/v1/partner"), () => {
     const r = mockResale();
@@ -5987,7 +5936,6 @@ export const handlers = [
     return HttpResponse.json({ valid });
   }),
 
-  // Smart routing (17.9).
   http.get(url("/v1/clients/:id/routing-decisions"), ({ params }) => {
     const agents = db.members.filter((m) => m.role === "agent");
     const leads = db.leads.filter((l) => l.client_id === params.id).slice(0, 8);
@@ -6029,7 +5977,6 @@ export const handlers = [
     return HttpResponse.json(s);
   }),
 
-  // Predictive lead scoring (17.7).
   http.get(url("/v1/scoring"), () => HttpResponse.json(mockScoring)),
   http.put(url("/v1/scoring/settings"), async ({ request }) => {
     mockScoring.pool_opt_in = ((await request.json()) as { pool_opt_in: boolean }).pool_opt_in;
@@ -6047,7 +5994,6 @@ export const handlers = [
   }),
   http.post(url("/v1/leads/:id/score-feedback"), () => new HttpResponse(null, { status: 204 })),
 
-  // Client health (17.10), attribution and forecast (17.11).
   http.get(url("/v1/health/clients"), () =>
     HttpResponse.json(
       list(
@@ -6184,7 +6130,6 @@ export const handlers = [
     });
   }),
 
-  // AI agent (17.12).
   http.get(url("/v1/clients/:id/agent"), ({ params }) => HttpResponse.json(mockAgent(String(params.id)))),
   http.put(url("/v1/clients/:id/agent"), async ({ params, request }) => {
     const b = (await request.json()) as S["AgentInput"];

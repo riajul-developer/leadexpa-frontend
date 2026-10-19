@@ -13,7 +13,6 @@ import { Skeleton } from "@/shared/ui/primitives";
 import { AuditReportView } from "./audit-report";
 import { ReviewDocument } from "./business-reviews";
 
-// Shared pages carry the agency's white label when it has one (8f-2).
 function Shell({ children, brand }: { children: React.ReactNode; brand?: Schemas["Brand"] | null }) {
   return (
     <BrandTheme brand={brand ?? undefined}>
@@ -37,7 +36,6 @@ function Gone({ title }: { title: string }) {
   );
 }
 
-/** /audit/[token]: the prospect's Lead Leakage Audit report. */
 export function PublicAuditPage({ token }: { token: string }) {
   const t = useTranslations("revintel.publicAudit");
   const q = useQuery({
@@ -70,7 +68,6 @@ export function PublicAuditPage({ token }: { token: string }) {
   );
 }
 
-/** /qbr/[token]: the client's approved business review. */
 export function PublicReviewPage({ token }: { token: string }) {
   const t = useTranslations("revintel.publicReview");
   const tr = useTranslations("revintel.review");

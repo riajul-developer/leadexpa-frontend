@@ -18,10 +18,6 @@ import { Badge, Card, CardContent, CardHeader, CardTitle, Skeleton } from "@/sha
 
 const adoptionKey = (clientId: string) => ["clients", clientId, "adoption"] as const;
 
-/**
- * Client staff adoption (FRONTEND_PROMPT 17.0.3): "34 % of leads have an outcome logged · median 2h 10m to log ·
- * 3 of 5 staff active", who's idle, and a nudge that texts them a link to their leads.
- */
 export function AdoptionCard({ clientId }: { clientId: string }) {
   const t = useTranslations("clients.adoption");
   const te = useTranslations("errors");

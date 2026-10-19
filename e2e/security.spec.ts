@@ -1,8 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 
-// FRONTEND_PROMPT 17.6: two-step sign-in, authenticator-app setup with recovery codes, signed-in devices and
-// the agency gate. The mock accepts 123456 as every authenticator code; "mfa@…" has two-step sign-in and an
-// address with "+gate" makes the agency require it from someone without a method.
+// Mock: 123456 is every app code; "mfa@…" has 2FA; "+gate" triggers the agency gate.
 
 async function signIn(page: Page, email: string) {
   await page.goto("/en/login");
@@ -16,7 +14,6 @@ async function setUpAuthenticatorApp(page: Page) {
   await expect(page.getByText("JBSW Y3DP EHPK 3PXP", { exact: false })).toBeVisible();
   await page.getByLabel("6-digit code").fill("123456");
   await page.getByRole("button", { name: "Turn on" }).click();
-  // The first method comes with recovery codes, shown once.
   await expect(page.getByRole("listitem").filter({ hasText: "k7m2p-x9q4r" })).toBeVisible();
   const done = page.getByRole("button", { name: "Done" });
   await expect(done).toBeDisabled();
@@ -52,7 +49,6 @@ test("security settings: authenticator app, recovery codes and other devices", a
   await expect(page.getByText("10 codes left")).toBeVisible();
   await expect(page.getByText("Authenticator app added")).toBeVisible();
 
-  // Devices: this one first, and the others can be signed out together.
   const devices = page.locator("li", { hasText: "Last active" });
   await expect(page.getByText("This device")).toBeVisible();
   await expect(devices.filter({ hasText: "Safari on iOS" })).toBeVisible();

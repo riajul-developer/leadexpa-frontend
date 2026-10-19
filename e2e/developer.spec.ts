@@ -1,8 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// GLOBAL_PROMPT 9.5 (step 5c): agency API keys (scoped, shown once, revocable) and outgoing webhooks with a
-// delivery log, a test send and resend.
-
 test("an API key is created with scopes, shown once, and can be revoked", async ({ page }) => {
   await page.goto("/en/settings/developer");
   await expect(page.getByRole("heading", { name: "API keys" })).toBeVisible();

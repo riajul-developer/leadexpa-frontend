@@ -11,10 +11,6 @@ import { useConversations, type Activity, type Lead } from "../api/queries";
 
 const DM_CHANNELS = new Set(["messenger", "instagram"]);
 
-/**
- * The 24-hour messaging window of a Messenger / Instagram lead (17.0.4): while open, free-form replies are
- * allowed; after it, only message templates. Fetched only for leads that came from, or received, a DM.
- */
 export function ConversationWindow({ lead, activities }: { lead: Lead; activities: Activity[] }) {
   const t = useTranslations("timeline");
   const tc = useTranslations("source");

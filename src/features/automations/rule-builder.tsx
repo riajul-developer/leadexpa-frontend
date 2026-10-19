@@ -50,7 +50,6 @@ const NEW_ACTION: Record<ActionType, Action> = {
   send_webhook: { type: "send_webhook", url: "https://" },
 };
 
-/** Sentence-style builder (17.5): When [event] If [all/any of these] Then [do this]. */
 export function RuleBuilder({ rule, defaultClient }: { rule?: Rule; defaultClient?: string }) {
   const t = useTranslations("automations");
   const te = useTranslations("errors");
@@ -619,7 +618,6 @@ function SecretLine({ secret }: { secret: string }) {
   );
 }
 
-/** Test against a sample lead, and simulate on the last 7 days — both run nothing. */
 function TryIt({ rule }: { rule: RuleInput }) {
   const t = useTranslations("automations");
   const te = useTranslations("errors");
@@ -713,7 +711,6 @@ function TryIt({ rule }: { rule: RuleInput }) {
   );
 }
 
-/** "Why did / didn't it fire": each condition, the lead's actual value, and the result. */
 export function Checks({ checks }: { checks: Check[] }) {
   const t = useTranslations("automations");
   if (checks.length === 0) return <p className="text-muted text-sm">{t("builder.always")}</p>;

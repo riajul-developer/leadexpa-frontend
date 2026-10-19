@@ -5,7 +5,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { track } from "@/shared/lib/analytics";
 import { api, unwrap, unwrapEmpty, type Schemas } from "@/shared/lib/api/client";
 
-/** The appointment engine (GLOBAL_PROMPT 10.1): booking rules, calendars, slots, bookings, the funnel. */
 export const apptKeys = {
   all: ["appointments"] as const,
   booking: (clientId: string) => ["appointments", "booking", clientId] as const,

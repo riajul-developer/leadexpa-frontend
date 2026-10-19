@@ -14,28 +14,23 @@ export function meQuery() {
     queryKey: meKey,
     queryFn: async () => {
       const me = await unwrap(api.GET("/v1/me"));
-      setApiBase(me.api_base_url); // the agency's region (G1)
+      setApiBase(me.api_base_url);
       return me;
     },
     staleTime: 5 * 60_000,
   };
 }
 
-/** The signed-in user, active agency, role, permissions and flags (GET /v1/me). */
 export function useMe() {
   return useQuery(meQuery());
 }
 
-/**
- * Permission check for showing/hiding UI. The API enforces everything; this only avoids offering actions
- * that would fail. Permissions come from /v1/me (e.g. "lead.assign", "integration.manage").
- */
+/** UI only: the API enforces every permission. */
 export function useCan(permission: string): boolean {
   const { data } = useMe();
   return !!data?.permissions.includes(permission);
 }
 
-/** Per-agency feature flag from /v1/me; every post-MVP feature ships behind one. */
 export function useFlag(key: string): boolean {
   const { data } = useMe();
   return data?.flags[key] === true;

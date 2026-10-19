@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 
-// Direct imports: the barrels also export client components, which would ship to this server page.
+// Direct imports: the barrels also export client components.
 // eslint-disable-next-line no-restricted-imports
 import { BrandHeader, BrandTheme } from "@/features/portal/brand-theme";
 // eslint-disable-next-line no-restricted-imports
@@ -10,10 +10,7 @@ import { serverGet, type Report } from "@/shared/lib/server/api";
 
 export const dynamic = "force-dynamic";
 
-/**
- * Print view for the PDF renderer. The backend opens this URL with a short-lived print token
- * (?token=…), which authorizes reading exactly this report's snapshot.
- */
+/** The renderer passes a short-lived ?token= that authorizes only this report. */
 export default async function PrintReport({
   params,
   searchParams,

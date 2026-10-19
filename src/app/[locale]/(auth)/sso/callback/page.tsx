@@ -11,7 +11,6 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return { title: t("title"), robots: { index: false } };
 }
 
-// The identity provider (OIDC) returns here with ?code=&state=; the API checks them and opens the session.
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "auth.sso" });

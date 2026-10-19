@@ -1,18 +1,13 @@
-// Formatting helpers (FRONTEND_PROMPT §8, GLOBAL_PROMPT §5.2). Pure functions over Intl; React code uses
-// useFormat().
 import { NATIVE_DIGITS, NATIVE_NUMBERING, type AppLocale } from "../../config/locales";
 
 export type { AppLocale };
-/** Latin digits are the default everywhere; a locale's own digits (০১২, ٠١٢) are a user preference. */
 export type Digits = "latn" | "native";
 export type HourCycle = "h12" | "h23";
 
 export interface FormatOptions {
   locale: AppLocale;
   digits: Digits;
-  /** ISO 3166 region for locale variants (en-GB dates, ar-SA…): the agency's country. */
   region?: string | null;
-  /** null/undefined = the locale's default clock. */
   hourCycle?: HourCycle | null;
 }
 
@@ -23,14 +18,12 @@ const NATIVE_RANGES: [RegExp, number][] = [
   [/[०-९]/g, 0x0966], // Devanagari
 ];
 
-/** Native digits (Bangla, Arabic-Indic, Persian, Devanagari) → 0-9, for every input that accepts numbers. */
 export function toLatinDigits(s: string): string {
   let out = s;
   for (const [re, zero] of NATIVE_RANGES) out = out.replace(re, (d) => String(d.charCodeAt(0) - zero));
   return out;
 }
 
-/** 0-9 → the locale's own digits (unchanged when it has none). */
 export function toNativeDigits(s: string, locale: AppLocale): string {
   const digits = NATIVE_DIGITS[locale];
   return digits ? s.replace(/[0-9]/g, (d) => digits[Number(d)] ?? d) : s;
@@ -40,13 +33,8 @@ export function toBanglaDigits(s: string): string {
   return toNativeDigits(s, "bn");
 }
 
-/**
- * Intl locale tag. bn always uses Bangladeshi conventions (lakh/crore grouping); en and ar take the
- * agency's region when given. Digits and hour cycle become Unicode extensions.
- */
 export function intlLocale({ locale, digits, region, hourCycle }: FormatOptions): string {
-  // Only the language subtag combines with a region: "en-XA" (pseudo-locale) + "BD" must become en-BD,
-  // never the invalid "en-XA-BD".
+  // Only the language subtag takes a region: en-XA + BD → en-BD, never en-XA-BD.
   const lang = locale.split("-")[0]!;
   const base = lang === "bn" ? "bn-BD" : region ? `${lang}-${region.toUpperCase()}` : lang === "ar" ? "ar" : "en-US";
   const ext: string[] = [];
@@ -60,13 +48,11 @@ export function formatNumber(n: number, o: FormatOptions, opts?: Intl.NumberForm
   return new Intl.NumberFormat(intlLocale(o), opts).format(n);
 }
 
-/** 0–1 ratio → "62 %"; null (no denominator) → "—", never "0 %". */
 export function formatPercent(ratio: number | null | undefined, o: FormatOptions, digits = 0): string {
   if (ratio == null) return "—";
   return formatNumber(ratio, o, { style: "percent", maximumFractionDigits: digits, minimumFractionDigits: digits });
 }
 
-/** ISO 4217 minor-unit exponents that differ from 2 (mirrors the backend's locale package). */
 const EXPONENTS: Record<string, number> = {
   BIF: 0,
   CLP: 0,
@@ -98,10 +84,6 @@ export function minorUnits(currency: string): number {
   return EXPONENTS[currency.toUpperCase()] ?? 2;
 }
 
-/**
- * Money from integer minor units. bn: "৳1,49,000" (lakh grouping, taka sign). Other locales use Intl's
- * currency style ("$1,221.80", "BDT 149,000", Arabic with the dirham sign). Whole amounts drop the decimals.
- */
 export function formatMoney(
   m: { amount_minor: number; currency: string } | null | undefined,
   o: FormatOptions,
@@ -125,10 +107,7 @@ export function formatMoney(
   return text.replace(/\u00a0/g, " ");
 }
 
-/**
- * Parses a money input in any script ("১,৪৯,০০০", "١٬٥٠٠٫٥٠", "$ 5,000.50") into minor units, or null.
- * Decimals beyond the currency's exponent are rejected rather than rounded.
- */
+/** Parses money in any script into minor units; extra decimals are rejected, not rounded. */
 export function parseMoney(input: string, currency: string): number | null {
   const cleaned = toLatinDigits(input)
     .replace(/٫/g, ".")
@@ -140,15 +119,11 @@ export function parseMoney(input: string, currency: string): number | null {
   return Math.round(Number(cleaned) * 10 ** exp);
 }
 
-/**
- * BD national display (01712-345678) from E.164; other numbers stay E.164. The API already returns
- * `phone.display` for leads; this covers client-side cases without a phone library on the critical path.
- */
 export function formatPhone(e164: string | null | undefined): string {
   if (!e164) return "";
   const bd = e164.match(/^\+880(1[3-9]\d{8})$/);
   if (!bd) return e164;
-  const n = bd[1]!; // 1712345678
+  const n = bd[1]!;
   return `0${n.slice(0, 4)}-${n.slice(4)}`;
 }
 
@@ -156,23 +131,17 @@ export function telHref(e164: string): string {
   return `tel:${e164}`;
 }
 
-/** wa.me wants digits only, no plus. */
 export function whatsappHref(e164: string, text?: string): string {
   const base = `https://wa.me/${e164.replace(/\D/g, "")}`;
   return text ? `${base}?text=${encodeURIComponent(text)}` : base;
 }
 
-/**
- * Finds a phone number in pasted text (any digits, spaces, dashes). Bangladeshi mobiles come back in
- * national form (01712345678); any other number written with a + comes back as +<digits>.
- */
 export function extractPhone(text: string): string | null {
   const latin = toLatinDigits(text);
-  // A number written with a foreign country code wins: the BD pattern below would otherwise match digits
-  // in its middle ("+971 50 123 4567" contains "1 50 1234567").
+  // Foreign codes first: the BD pattern could match digits in their middle.
   const intlFirst = latin.match(/\+[\s-]*\d(?:[\s().-]*\d){6,14}/);
   if (intlFirst && !/^\+[\s-]*8[\s-]*8/.test(intlFirst[0])) return "+" + intlFirst[0].replace(/\D/g, "");
-  // Optional +88 / 88, optional leading 0, operator 13–19, eight more digits; spaces and dashes anywhere.
+  // Optional +88/88, optional 0, operator 13–19, 8 more digits; spaces/dashes anywhere.
   const bd = latin.match(/(?:\+?8[\s-]*8[\s-]*)?0?[\s-]*1[\s-]*[3-9](?:[\s-]*\d){8}/);
   if (bd) {
     const national = bd[0].replace(/\D/g, "").replace(/^88/, "");
@@ -182,7 +151,6 @@ export function extractPhone(text: string): string | null {
   return intlFirst ? "+" + intlFirst[0].replace(/\D/g, "") : null;
 }
 
-/** Date/time in a timezone (the client's for SLA and lead times). */
 export function formatDateTime(
   iso: string | Date,
   timeZone: string,
@@ -201,7 +169,6 @@ export function formatDateTime(
   return new Intl.DateTimeFormat(intlLocale(o), { ...opts, timeZone }).format(d);
 }
 
-/** YYYY-MM-DD of an instant in a timezone (report/dashboard periods are client-local dates). */
 export function localDate(iso: Date, timeZone: string): string {
   // en-CA formats as YYYY-MM-DD.
   return new Intl.DateTimeFormat("en-CA", { timeZone, year: "numeric", month: "2-digit", day: "2-digit" }).format(iso);
@@ -217,7 +184,6 @@ const UNITS: [Intl.RelativeTimeFormatUnit, number][] = [
   ["second", 1],
 ];
 
-/** "5 min ago" / "৫ মিনিট আগে" / "in 2 hours". */
 export function formatRelative(iso: string | Date, now: number, o: FormatOptions): string {
   const t = typeof iso === "string" ? Date.parse(iso) : iso.getTime();
   const diff = Math.round((t - now) / 1000);
@@ -230,7 +196,6 @@ export function formatRelative(iso: string | Date, now: number, o: FormatOptions
   return rtf.format(0, "second");
 }
 
-/** Compact duration: 45s, 12m, 3h 5m, 2d 4h. Localized digits via the number formatter. */
 export function formatDuration(
   seconds: number,
   o: FormatOptions,
@@ -247,7 +212,6 @@ export function formatDuration(
   return h % 24 ? `${n(d)}${labels.d} ${n(h % 24)}${labels.h}` : `${n(d)}${labels.d}`;
 }
 
-/** First grapheme of each of the first two words: works for Bangla conjuncts (Intl.Segmenter). */
 export function initials(name: string): string {
   const seg = typeof Intl.Segmenter === "function" ? new Intl.Segmenter(undefined, { granularity: "grapheme" }) : null;
   const first = (w: string) => (seg ? ([...seg.segment(w)][0]?.segment ?? "") : (w[0] ?? ""));

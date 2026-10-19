@@ -1,8 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// GLOBAL_PROMPT G5 (step 5a): lead-source connectors. Install shows the credentials once, the health page shows
-// deliveries (test leads with their mapped fields), and a failing webhook can be re-mapped and paused.
-
 test("adding a Google Ads connector shows the URL and key once", async ({ page }) => {
   await page.goto("/en/integrations");
   await page.getByRole("button", { name: "Add connector" }).click();

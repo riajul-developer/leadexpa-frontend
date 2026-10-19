@@ -14,7 +14,6 @@ import { useCoaching } from "./api";
 
 const RANGES = [7, 30, 90] as const;
 
-/** Per-agent call coaching (17.8): connect rate, connected length, talk ratio and the objections they hear. */
 export function Coaching() {
   const t = useTranslations("calls.coaching");
   const f = useFormat();

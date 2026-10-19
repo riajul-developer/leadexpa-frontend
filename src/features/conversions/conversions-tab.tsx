@@ -18,7 +18,6 @@ import { DestinationCard } from "./destination-card";
 
 const AddDestinationDialog = dynamic(() => import("./add-destination").then((m) => m.AddDestinationDialog));
 
-/** Clients → Conversions: send qualified and won leads back to Meta and Google so campaigns optimize for buyers. */
 export function ConversionsTab({ clientId }: { clientId: string }) {
   const t = useTranslations("conversions");
   const q = useConversions(clientId);

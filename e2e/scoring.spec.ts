@@ -1,9 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// BACKEND/FRONTEND_PROMPT 17.7 + 17.9 (step 7a): every lead shows a Hot/Warm/Cold score with "Why?" in plain
-// language and a "Score seems wrong" control; the inbox can sort by urgency × score; clients can use smart routing
-// with per-agent weights and a decision log; members have routing skills; Settings shows the scoring model.
-
 test("a lead's score explains itself and takes feedback", async ({ page }) => {
   await page.goto("/en/leads");
   await expect(page.locator("[data-score]").first()).toBeVisible();

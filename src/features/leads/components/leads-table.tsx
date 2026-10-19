@@ -51,7 +51,6 @@ import { useLeadSheet } from "./lead-sheet";
 
 const FILTER_KEYS = ["stage", "owner", "q", "from", "to", "view", "quality", "campaign", "sla"] as const;
 
-/** Built-in views are URL presets; personal views are saved on this device (see docs/api-proposals.md). */
 const BUILT_IN_VIEWS = {
   unassigned_today: () => ({ owner: "unassigned", from: today(), stage: "new,contacted" }),
   new_today: () => ({ stage: "new", from: today() }),
@@ -69,8 +68,6 @@ interface SavedView {
 }
 const VIEWS_KEY = "recov-saved-views";
 
-// The table opens with what a person scans for: who, how to reach them, whose they are, where they stand and the
-// SLA. The rest is one click away in the column picker; a person's own choices there override these.
 const DEFAULT_VISIBILITY: VisibilityState = {
   campaign: false,
   first_response: false,
@@ -87,8 +84,7 @@ function loadViews(): SavedView[] {
 
 const COLS_KEY = "recov-leads-columns";
 
-// Its own subscriber to the shared ticker: keeping `now` out of the column defs means a tick re-renders these
-// cells, not every column (new defs remount all cells).
+// Own ticker subscriber: `now` in the column defs would remount every cell on each tick.
 function Relative({ at }: { at: string }) {
   const f = useFormat();
   const now = useNow();
@@ -130,7 +126,7 @@ export function LeadsTable() {
       /* ignore */
     }
   }, [visibility]);
-  // Debounced search, normalizing Bangla digits (০১৭… → 017…).
+  // Debounced; normalizes Bangla digits (০১৭… → 017…).
   useEffect(() => {
     const id = setTimeout(() => {
       const v = toLatinDigits(q.trim());
@@ -147,7 +143,6 @@ export function LeadsTable() {
     received_from: s.from ? new Date(s.from + "T00:00:00").toISOString() : undefined,
     received_to: s.to ? new Date(s.to + "T23:59:59").toISOString() : undefined,
     quality: s.quality as LeadFilters["quality"],
-    // Set by links from "Ask your data" (17.13); shown as removable chips below.
     campaign_id: s.campaign,
     sla: s.sla === "overdue" ? "overdue" : undefined,
   };
@@ -161,7 +156,6 @@ export function LeadsTable() {
   });
   const rows = useMemo(() => query.data?.pages.flatMap((p) => p.data) ?? [], [query.data]);
 
-  // The Junk bucket lets people confirm or restore several leads at once.
   const junkView = s.quality === "junk";
   const [selected, setSelected] = useState<Set<string>>(new Set());
   useEffect(() => setSelected(new Set()), [s.quality]);
@@ -283,7 +277,6 @@ export function LeadsTable() {
     overscan: 12,
   });
   const items = virtualizer.getVirtualItems();
-  // Infinite scroll: fetch the next page as the last rows come into view.
   useEffect(() => {
     const last = items[items.length - 1];
     if (last && last.index >= rows.length - 20 && query.hasNextPage && !query.isFetchingNextPage)
@@ -322,10 +315,8 @@ export function LeadsTable() {
   const hasFilters = !!(s.stage || s.owner || s.q || s.from || s.to || s.quality || s.campaign || s.sla);
 
   return (
-    // The page fills the viewport below the header (and above the bottom navigation on phones), so the table is the
-    // only thing that scrolls. It fills the app container edge to edge (the container draws the only frame).
     <div className="flex h-[calc(100dvh-3.5rem-5rem)] flex-col pt-3 md:h-[calc(100dvh-3.5rem)] md:pt-4">
-      {/* The filter bar is the visual header; the page still needs its h1 for screen readers. */}
+      {/* The filter bar is the visual header; the h1 is for screen readers. */}
       <h1 className="sr-only">{t("title")}</h1>
       <div className="bg-surface border-border flex min-h-0 flex-1 flex-col overflow-hidden border-x border-t">
         <div className="border-border flex flex-wrap items-center gap-2 border-b p-3">
@@ -385,7 +376,7 @@ export function LeadsTable() {
             <option value="junk">{t("quality.junk")}</option>
             <option value="all">{t("quality.all")}</option>
           </NativeSelect>
-          {/* One joined range control: from and to share a border. The focused half rises so its ring isn't clipped. */}
+          {/* The focused half rises so its ring isn't clipped. */}
           <div className="flex items-center">
             <Input
               type="date"
@@ -519,12 +510,11 @@ export function LeadsTable() {
             description={hasFilters ? t("noMatchHint") : undefined}
           />
         ) : (
-          // Scrollable regions must be keyboard-focusable (axe scrollable-region-focusable); j/k/Enter move within.
+          // axe scrollable-region-focusable: scrollers must be keyboard-focusable.
           // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
           <div
             ref={parentRef}
-            // relative: the rows' screen-reader-only labels (absolutely positioned) stay inside this scroller; against
-            // the page they stretched the document and gave it a second scrollbar.
+            // relative: keeps the sr-only labels inside the scroller (no second page scrollbar).
             className="relative min-h-0 flex-1 overflow-auto overscroll-contain focus-visible:outline-offset-[-2px]"
             // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
             tabIndex={0}
@@ -594,7 +584,6 @@ export function LeadsTable() {
   );
 }
 
-/** Bulk actions of the Junk bucket: restore real leads (they rejoin the inbox) or confirm junk (a label). */
 function JunkBar({ selected, onDone }: { selected: string[]; onDone: () => void }) {
   const t = useTranslations("leadsTable");
   const qc = useQueryClient();

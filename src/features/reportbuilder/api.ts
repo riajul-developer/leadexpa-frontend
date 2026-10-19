@@ -5,7 +5,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { track } from "@/shared/lib/analytics";
 import { api, unwrap, unwrapEmpty, type Schemas } from "@/shared/lib/api/client";
 
-/** Custom report builder (Tier 3, step 8g): widget grids saved as templates, shared and emailed on a schedule. */
 export type ReportWidget = Schemas["ReportWidget"];
 export type ReportTemplate = Schemas["ReportTemplate"];
 export type ReportTemplateInput = Schemas["ReportTemplateInput"];
@@ -60,7 +59,6 @@ export function useDeleteTemplate() {
   });
 }
 
-/** The editor's live preview: the widgets as they are now, for a client (or all) and period. */
 export function useRunWidgets(widgets: ReportWidget[], clientId: string, period: AskPeriod) {
   const body = { widgets, client_id: clientId || null, period };
   return useQuery({

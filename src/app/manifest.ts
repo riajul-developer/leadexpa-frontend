@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
 
-/** PWA manifest (FRONTEND_PROMPT §9): installable on Android, opens straight into the Inbox. */
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Leadexpa — Every lead. More revenue.",

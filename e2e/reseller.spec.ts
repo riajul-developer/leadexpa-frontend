@@ -1,8 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// GLOBAL_PROMPT G3 (step 6c): an agency connects Stripe, prices a plan for its clients, shares a branded checkout
-// link, and its client pays the agency's account; partners refer agencies and see their commission.
-
 test("a reseller sells its own plan to a client", async ({ page }) => {
   await page.goto("/en/reseller");
   await expect(page.getByRole("heading", { name: "Reseller", level: 1 })).toBeVisible();
@@ -32,14 +29,12 @@ test("a reseller sells its own plan to a client", async ({ page }) => {
   expect(url).toMatch(/\/en\/buy\/mock[0-9a-f]+$/);
   await ready.getByRole("button", { name: "Done" }).click();
 
-  // The client: no login, the agency's name and plan, and they pay the agency.
   await page.goto(url);
   await expect(page.getByRole("heading", { name: "Local SEO retainer" })).toBeVisible();
   await expect(page.getByText("You pay", { exact: false })).toBeVisible();
   await page.getByRole("button", { name: "Subscribe" }).click();
   await expect(page.getByText("Thank you!")).toBeVisible();
 
-  // Back in the console: the sale, the customer and the earnings.
   await page.goto("/en/reseller");
   await expect(page.getByRole("heading", { name: "Earnings" })).toBeVisible();
   await expect(page.getByText("Net", { exact: true })).toBeVisible();

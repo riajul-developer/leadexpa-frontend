@@ -16,7 +16,6 @@ import { Card, CardContent, CardHeader, CardTitle, Skeleton } from "@/shared/ui/
 import { type CrmConnection, crmKeys, useCrmConnections, useCrmProviders, useStartCrmConnect } from "./api";
 import { CRM_CALLBACK_MESSAGE, HealthBadge, ProviderMark } from "./parts";
 
-/** /integrations: a client's CRMs. Each connects with the CRM's own sign-in (a popup) and syncs both ways. */
 export function CrmCard({ clientId }: { clientId: string }) {
   const t = useTranslations("crm");
   const te = useTranslations("errors");

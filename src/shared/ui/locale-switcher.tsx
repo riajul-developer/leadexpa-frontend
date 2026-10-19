@@ -9,7 +9,6 @@ import { usePathname, useRouter } from "@/i18n/navigation";
 import { LOCALE_NAMES, LOCALES, type AppLocale } from "../config/locales";
 import { cn } from "../lib/cn";
 
-/** Language picker for screens outside the app shell; keeps the current page and query. */
 export function LocaleSwitcher({ className }: { className?: string }) {
   const locale = useLocale() as AppLocale;
   const t = useTranslations("common");

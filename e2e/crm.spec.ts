@@ -1,7 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// GLOBAL_PROMPT 9.5 (step 5d): two-way CRM sync per client — connect, field rules, stage map, sync log.
-
 test("a client's CRMs show their state, and an unconfigured one can't be connected", async ({ page }) => {
   await page.goto("/en/integrations");
   await expect(page.getByRole("heading", { name: "CRM sync" })).toBeVisible();

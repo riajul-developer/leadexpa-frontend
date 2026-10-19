@@ -11,7 +11,6 @@ import { useLeadPrediction } from "./api";
 
 type Lead = Schemas["LeadDetail"];
 
-/** Lead › Sales: what this lead is likely worth and when it may close (10.3). Open leads only. */
 export function LeadPrediction({ lead, timeZone }: { lead: Lead; timeZone: string }) {
   const t = useTranslations("revintel.prediction");
   const f = useFormat();

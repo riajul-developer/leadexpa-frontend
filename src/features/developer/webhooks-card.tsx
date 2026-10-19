@@ -33,7 +33,6 @@ import {
 } from "./api";
 import { DeliveryStatusBadge, EndpointStatusBadge, SecretOnce, useEventLabel } from "./parts";
 
-/** Outgoing webhooks: signed events to the agency's own systems, with a delivery log and resend. */
 export function WebhooksCard() {
   const t = useTranslations("developer.webhooks");
   const { data, isPending } = useWebhookEndpoints();

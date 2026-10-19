@@ -1,8 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// FRONTEND_PROMPT 17.1: the shared inbox. Replies inside the 24-hour window, templates outside it, the reply lock,
-// the client's channels and the agency kill switch.
-
 test("reply to a WhatsApp conversation inside the 24-hour window", async ({ page }) => {
   await page.goto("/en/conversations");
   await expect(page.getByRole("heading", { level: 1, name: "Conversations" })).toBeVisible();

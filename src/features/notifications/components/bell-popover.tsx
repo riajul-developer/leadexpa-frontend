@@ -49,7 +49,6 @@ const ICON: Record<string, typeof Bell> = {
   "agent.handoff": Bot,
 };
 
-/** Deep link for a notification (lead, or the integration page). */
 function hrefFor(n: Notification): string {
   if (n.lead_id) return `/leads/${n.lead_id}`;
   const data = n.data as { install_id?: unknown; destination_id?: unknown; client_id?: unknown };
@@ -65,7 +64,6 @@ function hrefFor(n: Notification): string {
   return "/inbox";
 }
 
-/** The notification list itself; loaded on first open by NotificationBell. */
 export function NotificationPopover({ defaultOpen }: { defaultOpen?: boolean }) {
   const t = useTranslations("notifications");
   const f = useFormat();

@@ -9,10 +9,6 @@ import { Card, CardContent, Skeleton } from "@/shared/ui/primitives";
 
 import { useRecoverySummary, type Recovered } from "./api";
 
-/**
- * Recovered revenue (17.3), the hero number: revenue from leads a sequence worked on, and how much of it beat the
- * holdout group that was left alone ("+৳1,84,000 vs. holdout").
- */
 export function RecoveredCard({ client, days = 90 }: { client?: string; days?: number }) {
   const canRead = useCan("report.read");
   const q = useRecoverySummary(client, days);

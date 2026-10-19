@@ -8,10 +8,6 @@ import { useEffect, useState } from "react";
 import { inboxKeys, leadKeys } from "@/shared/lib/query-keys";
 import { toast } from "@/shared/lib/toast";
 
-/**
- * "You're offline" with the number of outcomes waiting; replays them when the connection returns.
- * The queue module (zustand persist store + replay) loads right after mount instead of in the first-load bundle.
- */
 export function OfflineBanner() {
   const t = useTranslations("shell");
   const qc = useQueryClient();
@@ -42,7 +38,7 @@ export function OfflineBanner() {
           for (const i of [...sent, ...rejected]) void qc.invalidateQueries({ queryKey: leadKeys.detail(i.leadId) });
         }
       };
-      update(); // replay anything left from a previous session
+      update();
     });
     return () => {
       cancelled = true;

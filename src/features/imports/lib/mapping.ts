@@ -1,5 +1,3 @@
-// CSV column auto-mapping (FRONTEND_PROMPT §5.8). The API also suggests a mapping; this fills gaps and is
-// unit-tested for the English/Bangla headers BD agencies actually export.
 export const IMPORT_FIELDS = [
   "full_name",
   "first_name",
@@ -67,7 +65,6 @@ const ALIASES: Record<string, ImportField> = {
   marketing_opt_in: "marketing_opt_in",
 };
 
-/** " Mobile Number " / "মোবাইল নম্বর" → "mobile_number" / "মোবাইল_নম্বর" (same rule as the backend). */
 export function normalizeHeader(h: string): string {
   const k = h.replace(/^﻿/, "").trim().toLowerCase();
   const prefix = k.match(/^_+/)?.[0] ?? "";
@@ -84,7 +81,6 @@ export function guessField(header: string): ImportField {
   return ALIASES[normalizeHeader(header)] ?? "custom";
 }
 
-/** API suggestion first, then our guess; a field other than custom/_ignore is used at most once. */
 export function autoMap(headers: string[], suggested: Record<string, string> = {}): Record<string, ImportField> {
   const out: Record<string, ImportField> = {};
   const used = new Set<ImportField>();
@@ -98,7 +94,6 @@ export function autoMap(headers: string[], suggested: Record<string, string> = {
   return out;
 }
 
-/** A mapping must say where the contact is. */
 export function hasContactColumn(m: Record<string, string>): boolean {
   return Object.values(m).some((f) => f === "phone" || f === "email");
 }

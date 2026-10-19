@@ -17,7 +17,6 @@ import { type AskPeriod, useShareTemplate } from "./api";
 
 export const REPORT_LOCALES = ["en", "bn", "ar"] as const;
 
-/** Runs the saved template for one client and freezes the result behind a link (counts only, no leads). */
 export function ShareDialog({
   templateId,
   defaultClient,

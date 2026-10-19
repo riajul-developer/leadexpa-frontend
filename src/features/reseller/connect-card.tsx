@@ -10,7 +10,6 @@ import { type ConnectedAccount, useOnboarding, useStripeDashboard } from "./api"
 
 const TONE = { none: "neutral", onboarding: "warning", restricted: "warning", active: "success" } as const;
 
-/** The agency's Stripe connected account: where reseller sales and partner commission are paid. */
 export function ConnectCard({ account, purpose }: { account?: ConnectedAccount; purpose: "reseller" | "partner" }) {
   const t = useTranslations("reseller.account");
   const onboard = useOnboarding();

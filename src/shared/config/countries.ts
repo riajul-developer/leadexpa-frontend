@@ -1,5 +1,3 @@
-// Curated launch countries (GLOBAL_PROMPT §1 waves) with their primary timezone, used to preselect the
-// signup country from the browser's zone. Defaults (currency, weekend, language) are derived server-side.
 export const COUNTRY_ZONES: Record<string, string[]> = {
   BD: ["Asia/Dhaka"],
   US: ["America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles", "America/Phoenix"],
@@ -60,7 +58,6 @@ export const COUNTRY_ZONES: Record<string, string[]> = {
 
 export const COUNTRIES = Object.keys(COUNTRY_ZONES);
 
-/** The browser's IANA zone ("UTC" when unavailable). */
 export function browserTimeZone(): string {
   try {
     return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
@@ -69,13 +66,11 @@ export function browserTimeZone(): string {
   }
 }
 
-/** Country guessed from a timezone, or "" when the zone isn't one of the curated countries'. */
 export function countryForTimeZone(tz: string): string {
   for (const [code, zones] of Object.entries(COUNTRY_ZONES)) if (zones.includes(tz)) return code;
   return "";
 }
 
-/** Country names in the UI language, sorted for pickers. */
 export function countryOptions(locale: string): { code: string; name: string }[] {
   const names = typeof Intl.DisplayNames === "function" ? new Intl.DisplayNames([locale], { type: "region" }) : null;
   return COUNTRIES.map((code) => ({ code, name: names?.of(code) ?? code })).sort((a, b) =>
@@ -83,7 +78,6 @@ export function countryOptions(locale: string): { code: string; name: string }[]
   );
 }
 
-/** International dialing codes of the curated countries (stable ITU-T E.164 assignments). */
 export const DIAL_CODES: Record<string, string> = {
   BD: "880",
   US: "1",
@@ -142,11 +136,7 @@ export const DIAL_CODES: Record<string, string> = {
   GH: "233",
 };
 
-/**
- * The phone value to send for a lead. In the client's own country the text goes as typed (the API
- * normalizes it with the client's country, so local habits like 01712-345678 work); in another country the
- * national number gets that country's code. A number typed with + always wins.
- */
+/** Home-country input goes as typed (the API normalizes); else add that country's code. */
 export function composePhone(text: string, dialCountry: string, clientCountry: string | undefined): string {
   const t = text.trim();
   if (t.startsWith("+") || !dialCountry || dialCountry === clientCountry) return t;

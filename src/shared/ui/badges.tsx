@@ -105,11 +105,7 @@ export interface LeadQuality {
   verified_at: string | null;
 }
 
-/**
- * Lead quality (17.0.1): "Verified" for OTP-proven phones, "Suspect"/"Junk" with the reasons. Plain valid
- * leads show nothing. Text + tone, no icon, and reasons in a native title + screen-reader text rather than a
- * tooltip: this badge renders in every inbox row, inside the inbox JS budget.
- */
+/** Reasons in a native title + sr-only text, not a tooltip: keeps the inbox bundle small. */
 export function QualityBadge({ quality, className }: { quality: LeadQuality; className?: string }) {
   const t = useTranslations("quality");
   if (quality.status === "valid") {
@@ -138,7 +134,6 @@ export type LeadScore = {
 
 const SCORE_TONE = { hot: "danger", warm: "warning", cold: "neutral" } as const;
 
-/** One factor in plain language: "Answered when contacted", "Waiting a long time"… (17.7). */
 export function useScoreFactor() {
   const t = useTranslations("score.factor");
   return (f: LeadScore["factors"][number]) => {
@@ -147,7 +142,6 @@ export function useScoreFactor() {
   };
 }
 
-/** Predictive score (17.7): band + number; the title lists the top factors. */
 export function ScoreBadge({ score, className }: { score: LeadScore | null | undefined; className?: string }) {
   const t = useTranslations("score");
   const factor = useScoreFactor();

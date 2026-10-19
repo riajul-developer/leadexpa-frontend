@@ -6,8 +6,6 @@ import { track } from "@/shared/lib/analytics";
 import { api, unwrap, unwrapEmpty, type Schemas } from "@/shared/lib/api/client";
 import { leadKeys } from "@/shared/lib/query-keys";
 
-// Query keys local to this feature (kept out of the shared first-load bundle).
-/** Calls (click-to-call, PBX events), calling numbers, call settings and coaching. */
 const callKeys = {
   all: ["calls"] as const,
   list: (f: { client?: string; lead?: string }) => ["calls", "list", f] as const,
@@ -25,7 +23,6 @@ export type CallSettings = Schemas["CallSettings"];
 export type AgentCoaching = Schemas["AgentCoaching"];
 export type Turn = Call["transcript"][number];
 
-/** Statuses after which nothing changes but the recording and transcript. */
 export const FINAL: ReadonlySet<CallStatus> = new Set([
   "completed",
   "no_answer",
@@ -36,7 +33,6 @@ export const FINAL: ReadonlySet<CallStatus> = new Set([
   "agent_missed",
 ]);
 
-/** A call is still being processed (ringing, or a transcript on its way): worth polling. */
 function live(c: Call | undefined) {
   return !!c && (!FINAL.has(c.status) || c.recording_status === "pending" || c.transcript_status === "pending");
 }
@@ -61,7 +57,6 @@ export function useCall(id: string | null) {
   });
 }
 
-/** Click-to-call: the caller's phone rings first, then the lead is dialled from the client's number. */
 export function usePlaceCall(leadId: string) {
   const qc = useQueryClient();
   return useMutation({
@@ -147,7 +142,7 @@ export function useSaveMyCallPhone() {
   });
 }
 
-/** The recording URL (same-origin API, cookie auth): the browser streams it in an <audio> element. */
+/** Same-origin with cookie auth, so an <audio> element can stream it. */
 export function recordingUrl(callId: string) {
   const base = (process.env.NEXT_PUBLIC_API_URL ?? "").replace(/\/$/, "");
   return `${base}/v1/calls/${callId}/recording`;

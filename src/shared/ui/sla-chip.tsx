@@ -17,10 +17,7 @@ const STYLE: Record<Exclude<SlaState, "none">, { cls: string; Icon: typeof Clock
   paused: { cls: "bg-sla-paused-soft text-sla-paused", Icon: CalendarClock },
 };
 
-/**
- * The SLA state of a lead: color AND icon AND text, never color alone. Counts down on the page's shared
- * ticker (1 s only under 10 minutes). `live` adds aria-live for the one lead that has focus.
- */
+/** Color, icon and text, never color alone. */
 export const SlaChip = memo(function SlaChip({
   lead,
   timeZone,
@@ -28,7 +25,6 @@ export const SlaChip = memo(function SlaChip({
   className,
 }: {
   lead: SlaInput;
-  /** Client timezone, for callback times. */
   timeZone?: string;
   live?: boolean;
   className?: string;
@@ -36,7 +32,6 @@ export const SlaChip = memo(function SlaChip({
   const t = useTranslations("sla");
   const f = useFormat();
   const defaultTz = useDisplayTimeZone();
-  // Two passes keep the tick coarse until it matters: the first render picks the resolution.
   const coarse = useNow(false);
   const fine = needsFineTick(slaView(lead, coarse || Date.now()));
   const now = useNow(fine);

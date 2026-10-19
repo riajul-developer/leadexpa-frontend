@@ -1,6 +1,6 @@
 import type { ActionType, EventType, Op } from "./api";
 
-/** What a condition can look at (mirrors the backend catalog in automation/domain.go). */
+/** Mirrors the backend catalog in automation/domain.go. */
 export type ValueInput =
   | "text"
   | "number"
@@ -18,7 +18,6 @@ export interface FieldDef {
   key: string;
   kind: "text" | "number" | "bool" | "list";
   input: ValueInput;
-  /** Event fields only exist on some events. */
   events?: EventType[];
 }
 
@@ -100,7 +99,6 @@ export const OPTIONS: Partial<Record<ValueInput, string[]>> = {
   sla_kind: ["first_response", "follow_up"],
 };
 
-/** "custom.service" → the catalog entry for custom fields. */
 export function fieldDef(key: string): FieldDef | undefined {
   return (
     FIELDS.find((f) => f.key === key) ??

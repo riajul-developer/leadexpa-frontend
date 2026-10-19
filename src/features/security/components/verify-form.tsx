@@ -13,7 +13,6 @@ import { Input } from "@/shared/ui/input";
 
 import { useVerifySession, type MFAMethod } from "../api";
 
-/** Proves a second factor for this login with any method the person has (step-up, 17.6). */
 export function VerifyForm({ methods, onVerified }: { methods: MFAMethod[]; onVerified?: () => void }) {
   const t = useTranslations("security.verify");
   const te = useTranslations("errors");

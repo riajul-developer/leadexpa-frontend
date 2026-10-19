@@ -5,8 +5,6 @@ import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tansta
 import { track } from "@/shared/lib/analytics";
 import { api, unwrap, unwrapEmpty, type Schemas } from "@/shared/lib/api/client";
 
-// Query keys local to this feature (kept out of the shared first-load bundle).
-/** Automation rules, their run log and version history. */
 const automationKeys = {
   all: ["automation"] as const,
   list: (client?: string) => ["automation", "list", client ?? null] as const,
@@ -118,7 +116,6 @@ export function useSimulate() {
   });
 }
 
-/** Lead search for "test on a lead". */
 export function useLeadSearch(q: string) {
   return useQuery({
     queryKey: automationKeys.leadSearch(q),

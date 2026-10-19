@@ -5,8 +5,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, unwrap, unwrapEmpty, type Schemas } from "@/shared/lib/api/client";
 import { lookupKeys } from "@/shared/lib/lookups";
 
-// Enterprise identity (G7a): verified email domains, the OIDC/SAML connection and SCIM tokens.
-
 export type SSOConnectionView = Schemas["SSOConnectionView"];
 export type SSOConnection = Schemas["SSOConnection"];
 export type SSOConnectionInput = Schemas["SSOConnectionInput"];
@@ -47,7 +45,6 @@ export function useDeleteConnection() {
   });
 }
 
-// SAML hardening (G7d): the agency's own service-provider certificate.
 export type SAMLSPCert = Schemas["SAMLSPCert"];
 
 export function useRotateSPKey() {
@@ -93,7 +90,6 @@ export function useTokenActions() {
   return { create, revoke };
 }
 
-// SCIM groups and their role mapping (G7c).
 export type SSOGroupMapping = Schemas["SSOGroupMapping"];
 export type MappableRole = NonNullable<SSOGroupMapping["role"]>;
 export const ssoGroupsKey = ["sso", "groups"] as const;
@@ -115,19 +111,16 @@ export function useMapGroupRole() {
   });
 }
 
-/** Starts single sign-on for an email; resolves to the identity provider URL to open. */
 export function startSSO(email: string, returnTo: string | null, locale: string) {
   return unwrap(
     api.POST("/v1/auth/sso/start", { body: { email, locale, ...(returnTo ? { return_to: returnTo } : {}) } }),
   ).then((r) => r.redirect_url);
 }
 
-/** Finishes an OIDC sign-in with what the identity provider sent back. */
 export function finishOIDC(code: string, state: string) {
   return unwrap(api.POST("/v1/auth/sso/oidc/callback", { body: { code, state } }));
 }
 
-// Access policy (G7b): IP allowlist and session limits.
 export type AccessPolicy = Schemas["AccessPolicy"];
 export const accessPolicyKey = ["access-policy"] as const;
 
@@ -151,7 +144,6 @@ export function useSaveAccessPolicy() {
   });
 }
 
-// Customer-managed keys (G7f): what wraps the agency's data keys.
 export type EncryptionKeys = Schemas["EncryptionKeys"];
 export const encryptionKeysKey = ["encryption-keys"] as const;
 
@@ -190,12 +182,10 @@ export function useEncryptionKeyActions() {
   };
 }
 
-// Audit log streaming (G7g): the agency's audit log sent to its SIEM (HTTPS) or S3 bucket.
 export type AuditStream = Schemas["AuditStream"];
 export type AuditStreamOverview = Schemas["AuditStreamOverview"];
 export type AuditStreamInput = {
   kind: AuditStream["kind"];
-  /** HTTPS: ndjson (default), splunk_hec or datadog (ADR 0057). */
   format?: AuditStream["format"];
   name: string;
   url?: string;
@@ -204,12 +194,10 @@ export type AuditStreamInput = {
   bucket?: string;
   region?: string;
   prefix?: string;
-  /** gcs: bucket + access_key + storage_secret; azure_blob: container_url + storage_secret (ADR 0056). */
   container_url?: string;
   access_key?: string;
   storage_secret?: string;
   backfill?: boolean;
-  /** Send only these actions or groups like auth.* (ADR 0053); empty sends everything. */
   actions?: string[];
 };
 export const auditStreamsKey = ["audit-streams"] as const;
@@ -218,7 +206,6 @@ export function useAuditStreams() {
   return useQuery({
     queryKey: auditStreamsKey,
     queryFn: () => unwrap(api.GET("/v1/audit-streams")),
-    // Pending counts and health move while the worker ships.
     refetchInterval: 15_000,
   });
 }
@@ -259,7 +246,6 @@ export function useAuditStreamActions() {
   };
 }
 
-// Data warehouse export (G7h): daily Parquet snapshots in the agency's S3 bucket.
 export type WarehouseExport = Schemas["WarehouseExport"];
 export type WarehouseExportRun = Schemas["WarehouseExportRun"];
 export type WarehouseExportInput = {
@@ -280,7 +266,6 @@ export function useWarehouseExports() {
   return useQuery({
     queryKey: warehouseExportsKey,
     queryFn: () => unwrap(api.GET("/v1/warehouse-exports")),
-    // Poll while a run is going, so its result shows up.
     refetchInterval: (q) =>
       q.state.data?.data.some((e) => e.running || e.last_run?.status === "running") ? 5_000 : false,
   });

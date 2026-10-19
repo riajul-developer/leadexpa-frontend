@@ -2,10 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-/**
- * A plain anchor that navigates client-side. next/link adds ~3 KB (prefetching, link status) that the lite app
- * doesn't need on a cheap phone; the router itself is already loaded.
- */
+/** Plain anchor: next/link adds ~3 KB the lite app doesn't need. */
 export function NavLink({
   href,
   className,

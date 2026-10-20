@@ -37,12 +37,14 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
+    ".next-e2e/types/**/*.ts",
     ".next/types/**/*.ts",
     "next-env.d.ts",
-    ".next-e2e/types/**/*.ts"
+    ".next-preview/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
-    "public/mockServiceWorker.js"
+    "public/mockServiceWorker.js",
+    ".next-e2e"
   ]
 }

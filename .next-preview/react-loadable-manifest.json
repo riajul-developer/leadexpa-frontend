@@ -1,0 +1,26 @@
+{
+  "..\\node_modules\\.pnpm\\next@15.5.27_@babel+core@7._360954bc23504998cc60eebab9d28316\\node_modules\\next\\dist\\client\\dev\\hot-reloader\\app\\use-websocket.js -> @vercel/turbopack-ecmascript-runtime/browser/dev/hmr-client/hmr-client.ts": {
+    "id": "..\\node_modules\\.pnpm\\next@15.5.27_@babel+core@7._360954bc23504998cc60eebab9d28316\\node_modules\\next\\dist\\client\\dev\\hot-reloader\\app\\use-websocket.js -> @vercel/turbopack-ecmascript-runtime/browser/dev/hmr-client/hmr-client.ts",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_pnpm_next_15_5_27__babel_core_7__360954bc23504998cc60eebab9d2-afa23f.js"
+    ]
+  },
+  "..\\node_modules\\.pnpm\\next@15.5.27_@babel+core@7._360954bc23504998cc60eebab9d28316\\node_modules\\next\\dist\\client\\index.js -> ../pages/_app": {
+    "id": "..\\node_modules\\.pnpm\\next@15.5.27_@babel+core@7._360954bc23504998cc60eebab9d28316\\node_modules\\next\\dist\\client\\index.js -> ../pages/_app",
+    "files": [
+      "static/chunks/_pages-dir-browser_node_modules_pnpm_next_15_5_27__babel_core_7__360954bc23504998cc60eebab9d2-930dd3.js"
+    ]
+  },
+  "..\\node_modules\\.pnpm\\next@15.5.27_@babel+core@7._360954bc23504998cc60eebab9d28316\\node_modules\\next\\dist\\client\\index.js -> ../pages/_error": {
+    "id": "..\\node_modules\\.pnpm\\next@15.5.27_@babel+core@7._360954bc23504998cc60eebab9d28316\\node_modules\\next\\dist\\client\\index.js -> ../pages/_error",
+    "files": [
+      "static/chunks/_pages-dir-browser_node_modules_pnpm_next_15_5_27__babel_core_7__360954bc23504998cc60eebab9d2-1240f9.js"
+    ]
+  },
+  "shared\\lib\\monitoring\\index.ts -> @sentry/nextjs": {
+    "id": "shared\\lib\\monitoring\\index.ts -> @sentry/nextjs",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_pnpm_sentry_nextjs_11_6_0__babe_0267d8bd5a2bd412cd266b67eaf85-907190.js"
+    ]
+  }
+}

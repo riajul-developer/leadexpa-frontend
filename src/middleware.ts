@@ -23,6 +23,7 @@ const PUBLIC_SEGMENTS = new Set([
   "qbr", // a business review shared with a client
   "p", // the client portal's branded sign-in
   "status", // the public status page
+  "features",
 ]);
 
 // CSRF cookie lives as long as the refresh token: a cheap hint; real auth is /v1/me.

@@ -5878,5 +5878,615 @@
         "failed": "That didn't work. Open the link again in a moment."
       }
     }
+  },
+  "marketing": {
+    "meta": {
+      "title": "LeadExpa: never lose a lead again",
+      "description": "Lead management for agencies: capture every enquiry, reply in minutes with SLA timers and AI drafts, and trace every sale back to the ad that paid for it.",
+      "featuresTitle": "All features",
+      "featuresDescription": "Everything LeadExpa does, from lead capture and AI to revenue tracking, client portals and security."
+    },
+    "nav": {
+      "how": "How it works",
+      "features": "Features",
+      "pricing": "Pricing",
+      "faq": "FAQ",
+      "signIn": "Sign in",
+      "start": "Start free trial",
+      "menu": "Menu",
+      "language": "Language",
+      "home": "LeadExpa home",
+      "openApp": "Open your inbox"
+    },
+    "hero": {
+      "eyebrow": "Lead management for agencies",
+      "titleStart": "Never lose a ",
+      "titleHighlight": "lead",
+      "titleEnd": " again.",
+      "sub": "Capture every enquiry from ads, WhatsApp, calls and forms. Reply in minutes with SLA timers and AI drafts, and trace every sale back to the ad that paid for it.",
+      "primary": "Start your 14-day free trial",
+      "secondary": "See how it works",
+      "note": "Free for 14 days. Set up your first channel in minutes.",
+      "stats": {
+        "one": {
+          "value": "1 inbox",
+          "label": "for every channel"
+        },
+        "two": {
+          "value": "Minutes",
+          "label": "SLA clock on each lead"
+        },
+        "three": {
+          "value": "Ad → sale",
+          "label": "revenue traced"
+        }
+      },
+      "mock": {
+        "source": "Facebook Lead Ads",
+        "fresh": "New",
+        "name": "Rahim Uddin",
+        "detail": "3-bed flat · Bashundhara",
+        "timer": "4:12",
+        "call": "Call now",
+        "whatsapp": "WhatsApp",
+        "replied": "Replied in 2 min",
+        "revenue": "Revenue from leads",
+        "period": "This month",
+        "amount": "৳36,37,200",
+        "growth": "▲ 38%",
+        "visual": "A new lead card with a running SLA timer, a reply sent in two minutes, and monthly revenue from leads rising."
+      }
+    },
+    "channels": {
+      "title": "Leads arrive from everywhere. They all land in one inbox.",
+      "items": {
+        "meta": "Facebook Lead Ads",
+        "google": "Google Ads forms",
+        "whatsapp": "WhatsApp",
+        "social": "Instagram & Messenger",
+        "web": "Website forms",
+        "email": "Email",
+        "calls": "Phone calls",
+        "api": "Inbound API"
+      }
+    },
+    "problem": {
+      "eyebrow": "The problem",
+      "title": "Agencies win the click, then lose the lead",
+      "sub": "Most agencies are great at getting enquiries. What happens next is where the money leaks out.",
+      "items": {
+        "slow": {
+          "title": "Slow replies",
+          "body": "A lead that waits an hour has already called someone else. Nobody sees the clock until it's too late."
+        },
+        "scattered": {
+          "title": "Leads lost between tools",
+          "body": "Forms in one place, WhatsApp on a phone, calls in a notebook. Some enquiries are never answered at all."
+        },
+        "proof": {
+          "title": "Results you can't prove",
+          "body": "Clients see ad spend, not sales. Without revenue tied to campaigns, every renewal is a negotiation."
+        }
+      }
+    },
+    "how": {
+      "eyebrow": "How it works",
+      "title": "From first click to closed sale, in one flow",
+      "steps": {
+        "capture": {
+          "title": "Capture",
+          "body": "Every lead from every channel lands in one place, de-duplicated and checked for quality the moment it arrives."
+        },
+        "route": {
+          "title": "Route",
+          "body": "Smart routing sends hot leads to your fastest available person, and the SLA clock starts at once."
+        },
+        "respond": {
+          "title": "Respond",
+          "body": "Call, WhatsApp or SMS straight from the lead, with AI drafts in their language and automatic follow-ups."
+        },
+        "prove": {
+          "title": "Prove",
+          "body": "Record the sale. LeadExpa ties it to the campaign and sends the conversion back to Meta and Google."
+        }
+      }
+    },
+    "showcase": {
+      "inbox": {
+        "eyebrow": "Speed to lead",
+        "title": "An inbox that knows what's urgent",
+        "body": "Leads are sorted by how much time is left, not by when they arrived. Your team always works on the one that matters next.",
+        "points": {
+          "one": "SLA timers on every lead, aware of business hours and holidays",
+          "two": "Overdue leads escalate to managers automatically",
+          "three": "Recovery sequences chase leads nobody answered"
+        },
+        "mock": {
+          "title": "Inbox",
+          "overdue": "Overdue 6m",
+          "soon": "Due in 3m",
+          "track": "12m left",
+          "met": "Replied",
+          "a": "Nusrat Jahan",
+          "aMeta": "Website form · Dental check-up",
+          "b": "Karim Ahmed",
+          "bMeta": "WhatsApp · Price for implants",
+          "c": "Sadia Islam",
+          "cMeta": "Facebook Lead Ads · Flat in Uttara",
+          "d": "Tanvir Hasan",
+          "dMeta": "Phone call · Visa consultation"
+        }
+      },
+      "ai": {
+        "eyebrow": "AI that works with your team",
+        "title": "Drafts, follow-ups and an AI agent you control",
+        "body": "AI writes the first reply in the lead's own language and keeps the conversation going. You decide how much it may do on its own.",
+        "points": {
+          "one": "Replies drafted in Bangla, English or Arabic, from your knowledge base",
+          "two": "An AI agent that qualifies, books and hands over, at the autonomy level you choose",
+          "three": "Guardrails, an approval queue and a kill switch"
+        },
+        "mock": {
+          "lead": "আসসালামু আলাইকুম, ইমপ্লান্টের খরচ কত?",
+          "draftLabel": "AI draft · Bangla",
+          "draft": "ওয়ালাইকুম আসসালাম! ইমপ্লান্ট ৪৫,০০০ টাকা থেকে শুরু। এই মাসে চেক-আপ ফ্রি, কাল বিকেল ৫টায় আসবেন?",
+          "level": "Needs approval",
+          "approve": "Approve & send",
+          "edit": "Edit"
+        }
+      },
+      "revenue": {
+        "eyebrow": "Revenue intelligence",
+        "title": "Every sale traced back to the ad that paid for it",
+        "body": "Stop guessing which campaigns work. See revenue, not just leads, for every client, campaign and source.",
+        "points": {
+          "one": "Sales matched to leads, even when they close offline",
+          "two": "Conversions sent back to Meta and Google Ads to improve targeting",
+          "three": "Multi-touch attribution and a pipeline forecast"
+        },
+        "mock": {
+          "title": "Revenue by campaign",
+          "a": "Ramadan offer",
+          "b": "Implant search",
+          "c": "Retargeting",
+          "aValue": "৳12.4L",
+          "bValue": "৳8.1L",
+          "cValue": "৳3.6L",
+          "roas": "ROAS",
+          "aRoas": "6.2×",
+          "bRoas": "4.8×",
+          "cRoas": "3.1×",
+          "sent": "Conversion sent to Meta"
+        }
+      },
+      "reports": {
+        "eyebrow": "Clients who renew",
+        "title": "Reports and a portal with your brand on them",
+        "body": "Show clients what you delivered in their language, on your domain, without building slides every month.",
+        "points": {
+          "one": "A white-label client portal on your own domain",
+          "two": "Scheduled reports in each client's language and calendar",
+          "three": "Client health scores warn you before a client leaves"
+        },
+        "mock": {
+          "brand": "Bright Agency",
+          "client": "Dhaka Dental Care · October",
+          "leads": "Leads",
+          "leadsValue": "482",
+          "reply": "Avg. first reply",
+          "replyValue": "3m 40s",
+          "sales": "Sales",
+          "salesValue": "61",
+          "health": "Client health",
+          "healthValue": "86"
+        }
+      }
+    },
+    "grid": {
+      "eyebrow": "Everything included",
+      "title": "One platform instead of six tools",
+      "sub": "The pieces agencies usually stitch together, built to work as one.",
+      "all": "See all features",
+      "items": {
+        "sequences": {
+          "title": "Recovery sequences",
+          "body": "Automatic follow-ups for unanswered, stale and lost leads."
+        },
+        "automation": {
+          "title": "Automation rules",
+          "body": "When something happens, assign, tag, notify or call a webhook."
+        },
+        "routing": {
+          "title": "Scoring & smart routing",
+          "body": "Explainable lead scores and routing by skill, capacity and speed."
+        },
+        "booking": {
+          "title": "Appointment booking",
+          "body": "Calendars, reminders and no-show risk, booked by your team or the AI agent."
+        },
+        "payments": {
+          "title": "Payment links",
+          "body": "Collect deposits with bKash or SSLCommerz. A paid link records the sale."
+        },
+        "crm": {
+          "title": "Two-way CRM sync",
+          "body": "HubSpot, Salesforce, Pipedrive and Zoho, with rules for every field."
+        },
+        "inbox": {
+          "title": "Shared inbox",
+          "body": "WhatsApp, SMS, Messenger and Instagram conversations in one place."
+        },
+        "calls": {
+          "title": "Calls & coaching",
+          "body": "Click to call, every call logged, and private coaching for your team."
+        },
+        "team": {
+          "title": "Team tools",
+          "body": "Wallboard TVs, live presence on leads and personal bests."
+        },
+        "ask": {
+          "title": "Ask your data",
+          "body": "Ask a question in plain language and get a checked answer."
+        },
+        "health": {
+          "title": "Client health",
+          "body": "Anomaly alerts and a 0–100 health score for every client."
+        },
+        "sandbox": {
+          "title": "Sandbox",
+          "body": "Test automations and AI agents on a safe copy that can't message anyone."
+        }
+      }
+    },
+    "global": {
+      "eyebrow": "Built for global teams",
+      "title": "Local where it matters, global as you grow",
+      "items": {
+        "languages": {
+          "title": "Bangla, English and Arabic",
+          "body": "The whole app, AI replies and reports, with full right-to-left support."
+        },
+        "money": {
+          "title": "Your currency",
+          "body": "Local prices, currency conversion and reports in each client's currency."
+        },
+        "regions": {
+          "title": "Data where you need it",
+          "body": "Regional data centres with data residency, and moves between regions."
+        },
+        "mobile": {
+          "title": "Works on any phone",
+          "body": "A lite app for field staff, with sign-in by SMS."
+        }
+      }
+    },
+    "security": {
+      "eyebrow": "Enterprise-ready",
+      "title": "Secure by default, ready for your audits",
+      "sub": "Bigger agencies and holding groups get the controls their IT teams ask for.",
+      "items": {
+        "mfa": "Two-step sign-in and passkeys",
+        "sso": "Single sign-on and SCIM provisioning",
+        "keys": "Encryption with your own keys",
+        "audit": "Audit log streaming to your SIEM",
+        "uptime": "99.9% uptime SLA, 99.95% on Pro",
+        "status": "A public status page with email updates"
+      }
+    },
+    "pricing": {
+      "eyebrow": "Pricing",
+      "title": "Simple plans that grow with your agency",
+      "sub": "Every plan starts with a 14-day free trial of Growth.",
+      "per": "/month",
+      "popular": "Most popular",
+      "cta": "Start free trial",
+      "note": "Prices in Bangladeshi taka per month. You'll see the price for your country at checkout.",
+      "plans": {
+        "starter": {
+          "name": "Starter",
+          "price": "৳1,490",
+          "desc": "For small teams getting organised",
+          "features": {
+            "one": "3 team members",
+            "two": "3 clients",
+            "three": "Lead inbox and pipeline",
+            "four": "Facebook Lead Ads"
+          }
+        },
+        "growth": {
+          "name": "Growth",
+          "price": "৳2,990",
+          "desc": "For agencies growing fast",
+          "features": {
+            "one": "10 team members",
+            "two": "10 clients",
+            "three": "AI assistant, 1,000 drafts a month",
+            "four": "SLA alerts and escalations",
+            "five": "Client reports, 50 a month",
+            "six": "Payment links"
+          }
+        },
+        "pro": {
+          "name": "Pro",
+          "price": "৳4,990",
+          "desc": "For larger agencies and groups",
+          "features": {
+            "one": "25 team members",
+            "two": "30 clients",
+            "three": "5,000 AI drafts and 300 reports a month",
+            "four": "Custom follow-ups and sandbox",
+            "five": "SSO, access policy and your own keys",
+            "six": "99.95% uptime SLA"
+          }
+        }
+      }
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "title": "Questions agencies ask us",
+      "items": {
+        "channels": {
+          "q": "Which channels can I connect?",
+          "a": "Facebook Lead Ads, Google Ads lead forms, WhatsApp, Instagram and Messenger, website forms, forwarded emails, phone calls, CSV imports and an inbound API for anything else."
+        },
+        "language": {
+          "q": "Does it work in Bangla?",
+          "a": "Yes. The app, AI drafts, reminders and reports all work in Bangla, English and Arabic, and each lead is answered in their own language."
+        },
+        "ai": {
+          "q": "Will the AI message leads on its own?",
+          "a": "Only if you allow it. The AI agent has autonomy levels from drafts only up to booking appointments, with guardrails, an approval queue and a kill switch."
+        },
+        "clients": {
+          "q": "Can my clients see their results?",
+          "a": "Yes. Give each client a branded portal on your own domain with their results and the business reviews you approve. Nothing else is visible."
+        },
+        "data": {
+          "q": "Where is my data stored?",
+          "a": "In the region you choose. Each region runs separately with its own database, and an agency can move to another region."
+        },
+        "trial": {
+          "q": "What happens after the trial?",
+          "a": "Pick a plan to keep going. Your data stays safe while you decide, and you can change plans at any time."
+        }
+      }
+    },
+    "cta": {
+      "title": "Stop losing leads this week",
+      "sub": "Connect your first channel and watch every enquiry get answered on time.",
+      "primary": "Start your free trial",
+      "secondary": "Sign in"
+    },
+    "footer": {
+      "tagline": "The lead-to-revenue platform for agencies.",
+      "product": "Product",
+      "account": "Account",
+      "trust": "Trust",
+      "status": "System status",
+      "security": "Security",
+      "rights": "© {year} LeadExpa. All rights reserved."
+    },
+    "features": {
+      "eyebrow": "All features",
+      "title": "Everything LeadExpa does, in one place",
+      "sub": "From the first click to the renewal call, every tool your agency needs works together.",
+      "groups": {
+        "capture": {
+          "title": "Capture",
+          "items": {
+            "sources": {
+              "title": "Every source",
+              "body": "Meta and Google lead forms, WhatsApp, Instagram, Messenger, website forms, email, calls and CSV."
+            },
+            "quality": {
+              "title": "Lead quality checks",
+              "body": "Duplicates merged, junk and suspect leads flagged before anyone wastes time."
+            },
+            "consent": {
+              "title": "Consent records",
+              "body": "A consent ledger and contact rules per country, kept for every lead."
+            },
+            "api": {
+              "title": "Inbound API and webhooks",
+              "body": "Send leads from any system, and get signed events out."
+            }
+          }
+        },
+        "respond": {
+          "title": "Respond",
+          "items": {
+            "sla": {
+              "title": "SLA timers",
+              "body": "First-response clocks per client, with business hours, holidays and escalation ladders."
+            },
+            "inbox": {
+              "title": "Shared inbox",
+              "body": "Every conversation with a lead, across channels, in one thread."
+            },
+            "autoreply": {
+              "title": "Instant auto-reply",
+              "body": "A WhatsApp or SMS reply within seconds, in the lead's language."
+            },
+            "calls": {
+              "title": "Telephony",
+              "body": "Click to call, call logs and recordings tied to the lead."
+            },
+            "links": {
+              "title": "Action links",
+              "body": "Let staff without an account log an outcome from a link."
+            }
+          }
+        },
+        "automate": {
+          "title": "Automate",
+          "items": {
+            "sequences": {
+              "title": "Recovery sequences",
+              "body": "Multi-step follow-ups that stop when the lead replies or buys."
+            },
+            "rules": {
+              "title": "Automation rules",
+              "body": "Triggers, conditions and actions with a full run log."
+            },
+            "routing": {
+              "title": "Smart routing",
+              "body": "Route by skill, capacity, round robin or fastest responder."
+            },
+            "booking": {
+              "title": "Appointments",
+              "body": "Booking rules, Google and Microsoft calendars, reminders and no-show risk."
+            }
+          }
+        },
+        "ai": {
+          "title": "AI",
+          "items": {
+            "drafts": {
+              "title": "AI drafts and summaries",
+              "body": "Replies and note summaries written for your team to send."
+            },
+            "agent": {
+              "title": "AI agent",
+              "body": "Qualifies and books leads at the autonomy level you allow, with hand-over to a person."
+            },
+            "scoring": {
+              "title": "Predictive scoring",
+              "body": "Explainable scores trained on your own results."
+            },
+            "ask": {
+              "title": "Ask your data",
+              "body": "Questions in any language become checked reports, never raw SQL."
+            }
+          }
+        },
+        "revenue": {
+          "title": "Revenue",
+          "items": {
+            "sales": {
+              "title": "Sales and pipeline",
+              "body": "Record sales, deal values and close dates against each lead."
+            },
+            "attribution": {
+              "title": "Attribution",
+              "body": "Multi-touch attribution and a simulated pipeline forecast."
+            },
+            "conversions": {
+              "title": "Conversion feedback",
+              "body": "Sales sent back to Meta Conversions API and Google offline conversions."
+            },
+            "payments": {
+              "title": "Payment links",
+              "body": "bKash and SSLCommerz links, verified, that record the sale when paid."
+            }
+          }
+        },
+        "clients": {
+          "title": "Clients",
+          "items": {
+            "portal": {
+              "title": "White-label portal",
+              "body": "Your brand, your domain, your sender address."
+            },
+            "reports": {
+              "title": "Report builder",
+              "body": "Drag-and-drop reports, shared by link or emailed on a schedule."
+            },
+            "reviews": {
+              "title": "Business reviews",
+              "body": "AI-drafted reviews where every number links to its source."
+            },
+            "health": {
+              "title": "Client health",
+              "body": "Seasonal anomaly detection and an explainable health score."
+            }
+          }
+        },
+        "team": {
+          "title": "Team",
+          "items": {
+            "wallboard": {
+              "title": "Wallboards",
+              "body": "Live numbers on an office TV, paired in seconds."
+            },
+            "coaching": {
+              "title": "Coaching",
+              "body": "Private streaks and personal bests for each person who opts in."
+            },
+            "lite": {
+              "title": "Lite app",
+              "body": "A simple phone app for client staff, signed in by SMS."
+            },
+            "sandbox": {
+              "title": "Sandbox",
+              "body": "A safe copy of your agency to test changes, then promote them."
+            }
+          }
+        },
+        "integrations": {
+          "title": "Integrations",
+          "items": {
+            "crm": {
+              "title": "Two-way CRM sync",
+              "body": "HubSpot, Salesforce, Pipedrive and Zoho."
+            },
+            "marketplace": {
+              "title": "App marketplace",
+              "body": "Install partner apps with clear permission consent."
+            },
+            "warehouse": {
+              "title": "Warehouse export",
+              "body": "Daily Parquet snapshots to your own cloud storage."
+            },
+            "developer": {
+              "title": "Public API",
+              "body": "Scoped API keys and signed outgoing webhooks with replay."
+            }
+          }
+        },
+        "security": {
+          "title": "Security and admin",
+          "items": {
+            "mfa": {
+              "title": "Two-step sign-in",
+              "body": "Authenticator apps, passkeys and recovery codes, enforced for admins."
+            },
+            "sso": {
+              "title": "SSO and SCIM",
+              "body": "SAML and OIDC sign-in with automatic user provisioning."
+            },
+            "encryption": {
+              "title": "Encryption",
+              "body": "Personal data encrypted, with your own keys if you want them."
+            },
+            "audit": {
+              "title": "Audit trail",
+              "body": "An append-only audit log, streamed to your SIEM."
+            }
+          }
+        },
+        "global": {
+          "title": "Global",
+          "items": {
+            "languages": {
+              "title": "Three languages",
+              "body": "Bangla, English and Arabic, with right-to-left layouts."
+            },
+            "currencies": {
+              "title": "Currencies",
+              "body": "Local price books and conversion for reports."
+            },
+            "regions": {
+              "title": "Regions",
+              "body": "Data residency in regional cells, with tenant moves."
+            },
+            "status": {
+              "title": "Status and SLA",
+              "body": "A public status page, uptime SLA and service credits."
+            }
+          }
+        }
+      },
+      "cta": "Start your free trial"
+    }
   }
 }

@@ -30,6 +30,8 @@ const ROUTES = [
   "/tv",
   "/pay/mock-pay-missing",
   "/login",
+  "",
+  "/features",
   "/status",
   "/status/subscribe?token=mock-confirm",
 ];

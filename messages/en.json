@@ -5775,7 +5775,8 @@
         "conflict": "A picked change was also changed in the live workspace. Refresh and try again.",
         "unavailable": "Reset the sandbox to promote from it.",
         "dependency": "A picked change uses something new in the sandbox that isn't picked. Pick it too.",
-        "failed": "The changes couldn't be promoted. Nothing was changed."
+        "failed": "The changes couldn't be promoted. Nothing was changed.",
+        "load": "The changes couldn't be loaded. Close this and try again."
       }
     }
   },

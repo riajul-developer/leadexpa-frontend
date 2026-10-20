@@ -45,6 +45,10 @@ export function PromoteDialog({ onClose }: { onClose: () => void }) {
       <DialogContent title={t("title")} description={t("hint")} className="max-w-2xl">
         {q.isPending ? (
           <Skeleton className="h-32 w-full" />
+        ) : q.isError ? (
+          <p role="alert" className="bg-danger-soft text-danger rounded-lg px-3 py-2 text-sm">
+            {t("errors.load")}
+          </p>
         ) : q.data && !q.data.available ? (
           <p className="text-muted text-sm">{t("unavailable")}</p>
         ) : changes.length === 0 ? (

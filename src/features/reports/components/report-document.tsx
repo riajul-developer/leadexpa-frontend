@@ -33,7 +33,7 @@ function DayBars({ rows, label }: { rows: Schemas["Breakdown"][]; label: string 
               width={Math.max(1, bw - 2)}
               height={bh}
               rx={2}
-              fill="var(--c-primary, #7a1a12)"
+              fill="var(--c-primary, #7c1d3b)"
               opacity={0.35}
             />
             <rect

@@ -12,7 +12,7 @@ export const DialogTrigger = DialogPrimitive.Trigger;
 export const DialogClose = DialogPrimitive.Close;
 
 const overlayClass =
-  "fixed inset-0 z-40 bg-[rgb(42_22_19/0.45)] backdrop-blur-[2px] data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out";
+  "fixed inset-0 z-40 bg-[rgb(24_22_34/0.45)] backdrop-blur-[2px] data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out";
 
 export function DialogContent({
   className,

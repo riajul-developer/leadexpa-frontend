@@ -30,6 +30,8 @@ const ROUTES = [
   "/tv",
   "/pay/mock-pay-missing",
   "/login",
+  "/status",
+  "/status/subscribe?token=mock-confirm",
 ];
 
 for (const locale of ["bn", "en", "ar"]) {

@@ -27,3 +27,25 @@ test("the status page speaks the reader's language", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1, name: "حالة LeadExpa" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "مشكلات في استقبال العملاء المحتملين" })).toBeVisible();
 });
+
+test("subscribe to email updates, confirm from the email, and unsubscribe", async ({ page }) => {
+  await page.goto("/en/status");
+  const form = page.getByRole("region", { name: "Get email updates" });
+  await expect(form).toBeVisible();
+  await form.getByRole("textbox", { name: "Email" }).fill("ops@example.com");
+  await form.getByRole("checkbox").first().click();
+  await form.getByRole("button", { name: "Subscribe" }).click();
+  await expect(form.getByText("Check ops@example.com and open the link to confirm.")).toBeVisible();
+
+  await page.goto("/en/status/subscribe?token=mock-confirm");
+  await expect(page.getByRole("heading", { level: 1, name: "Confirm email updates" })).toBeVisible();
+  await expect(page.getByText("You're subscribed.", { exact: false })).toBeVisible();
+  await page.goto("/en/status/subscribe?token=expired");
+  await expect(page.getByText("This link is invalid or has expired.", { exact: false })).toBeVisible();
+
+  await page.goto("/bn/status/unsubscribe?token=mock-unsubscribe");
+  await expect(page.getByRole("heading", { level: 1, name: "আনসাবস্ক্রাইব" })).toBeVisible();
+  await expect(page.getByText("আপনি আনসাবস্ক্রাইব করেছেন।", { exact: false })).toBeVisible();
+  await page.getByRole("link", { name: "স্ট্যাটাস পেজে ফিরে যান" }).click();
+  await expect(page).toHaveURL(/\/bn\/status$/);
+});

@@ -10,7 +10,7 @@ import { cn } from "../lib/cn";
 import { ScreenClose, screenClass } from "./dialog";
 
 const overlayClass =
-  "fixed inset-0 z-40 bg-[rgb(42_22_19/0.45)] backdrop-blur-[2px] data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out";
+  "fixed inset-0 z-40 bg-[rgb(24_22_34/0.45)] backdrop-blur-[2px] data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out";
 
 export const Sheet = DialogPrimitive.Root;
 export const SheetTrigger = DialogPrimitive.Trigger;

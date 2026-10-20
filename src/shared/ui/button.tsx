@@ -11,7 +11,7 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "bg-primary text-primary-fg shadow-[inset_0_1px_0_rgb(255_255_255/0.14),0_1px_2px_rgb(100_20_12/0.35)] hover:bg-primary-hover hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.14),0_2px_6px_-1px_rgb(100_20_12/0.4)]",
+          "bg-primary text-primary-fg shadow-[inset_0_1px_0_rgb(255_255_255/0.14),0_1px_2px_rgb(100_21_47/0.35)] hover:bg-primary-hover hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.14),0_2px_6px_-1px_rgb(100_21_47/0.4)]",
         secondary:
           "border border-border bg-surface text-text shadow-card hover:border-[color-mix(in_srgb,var(--c-accent)_40%,var(--c-border))] hover:bg-surface-2 active:bg-[color-mix(in_srgb,var(--c-surface-2)_70%,var(--c-border))]",
         ghost: "text-text hover:bg-surface-2 active:bg-[color-mix(in_srgb,var(--c-surface-2)_70%,var(--c-border))]",

@@ -5724,6 +5724,8 @@
     "deleted": "Sandbox deleted.",
     "leads": "Test leads",
     "leadsHint": "0 to 200 made-up leads",
+    "realLeads": "Copies of real leads",
+    "realLeadsHint": "0 to 200 of your latest leads, with names, phones and emails replaced; notes and messages aren't copied",
     "create": "Create sandbox",
     "created": "Sandbox ready. Open it to start testing.",
     "ownersOnly": "Only the workspace owner can create a sandbox.",
@@ -5745,6 +5747,36 @@
       "sent": "Reply received. It shows in the conversation in a moment.",
       "noNumber": "This client has no WhatsApp number in the sandbox.",
       "failed": "Couldn't simulate the reply."
+    },
+    "promote": {
+      "open": "Promote changes",
+      "title": "Promote sandbox changes",
+      "hint": "Apply what you changed in the sandbox to your live workspace. Pick the changes to apply.",
+      "none": "Nothing to promote: the sandbox matches your live workspace.",
+      "unavailable": "This sandbox was made before promote existed. Reset it to promote from it.",
+      "all": "Select all",
+      "change": {
+        "added": "New",
+        "changed": "Changed",
+        "conflict": "Conflict"
+      },
+      "kind": {
+        "sequence": "Sequence",
+        "automation_rule": "Automation rule",
+        "auto_responder": "Auto-reply",
+        "sla_policy": "SLA policy"
+      },
+      "fields": "Changed: {fields}",
+      "conflictHint": "Also changed in the live workspace since the sandbox was made, so it can't be promoted.",
+      "safety": "Nothing is deleted or switched on: new rules arrive turned off and new sequences as drafts.",
+      "apply": "{count, plural, =0 {Promote} one {Promote # change} other {Promote # changes}}",
+      "done": "{count, plural, one {# change promoted.} other {# changes promoted.}}",
+      "errors": {
+        "conflict": "A picked change was also changed in the live workspace. Refresh and try again.",
+        "unavailable": "Reset the sandbox to promote from it.",
+        "dependency": "A picked change uses something new in the sandbox that isn't picked. Pick it too.",
+        "failed": "The changes couldn't be promoted. Nothing was changed."
+      }
     }
   },
   "serviceStatus": {
@@ -5815,6 +5847,35 @@
       "minutes": "{measured} minutes measured, {down} down, {excluded} in announced maintenance (not counted)",
       "partial": "month in progress"
     },
-    "automatic": "Detected automatically"
+    "automatic": "Detected automatically",
+    "subscribe": {
+      "title": "Get email updates",
+      "hint": "We'll email you when an incident or maintenance starts, changes or ends. Confirm from the email we send.",
+      "email": "Email",
+      "regions": "Regions",
+      "regionsHint": "Pick none to hear about every region.",
+      "submit": "Subscribe",
+      "sent": "Check {email} and open the link to confirm.",
+      "back": "Back to the status page",
+      "errors": {
+        "email": "Enter a valid email address.",
+        "rate": "Too many tries. Wait a minute and try again.",
+        "failed": "That didn't work. Try again in a moment."
+      },
+      "confirm": {
+        "title": "Confirm email updates",
+        "working": "Confirming…",
+        "done": "You're subscribed. We'll email you about incidents and maintenance.",
+        "invalid": "This link is invalid or has expired. Subscribe again from the status page.",
+        "failed": "That didn't work. Open the link again in a moment."
+      },
+      "unsubscribe": {
+        "title": "Unsubscribe",
+        "working": "Unsubscribing…",
+        "done": "You're unsubscribed. We won't email you status updates any more.",
+        "invalid": "This link is invalid.",
+        "failed": "That didn't work. Open the link again in a moment."
+      }
+    }
   }
 }

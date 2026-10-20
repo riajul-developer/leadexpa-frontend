@@ -350,6 +350,7 @@ test("sandbox: create one, work in it with test leads, come back, reset and dele
   page.on("dialog", (d) => void d.accept());
 
   await card.getByRole("spinbutton", { name: "Test leads" }).fill("5");
+  await card.getByRole("spinbutton", { name: "Copies of real leads" }).fill("3");
   await card.getByRole("button", { name: "Create sandbox" }).click();
   await expect(page.getByText("Sandbox ready. Open it to start testing.")).toBeVisible();
   await expect(card.getByText("Demo Digital Agency (sandbox) was made", { exact: false })).toBeVisible();
@@ -364,6 +365,20 @@ test("sandbox: create one, work in it with test leads, come back, reset and dele
   await expect(page.getByTestId("sandbox-banner")).toHaveCount(0);
 
   await page.goto("/en/settings/sso");
+  await card.getByRole("button", { name: "Promote changes" }).click();
+  const dialog = page.getByRole("dialog", { name: "Promote sandbox changes" });
+  const list = dialog.getByTestId("promote-changes");
+  await expect(list.getByRole("listitem")).toHaveCount(3);
+  await expect(dialog.getByRole("checkbox", { name: "Dhaka Dental" })).toBeDisabled();
+  await expect(list).toContainText("Also changed in the live workspace");
+  await dialog.getByText("Select all").click();
+  await dialog.getByRole("button", { name: "Promote 2 changes" }).click();
+  await expect(page.getByText("2 changes promoted.")).toBeVisible();
+  await expect(list.getByRole("listitem")).toHaveCount(1);
+  await dialog.getByRole("button", { name: "Close", exact: true }).click();
+  await expect(dialog).toHaveCount(0);
+
+  await card.getByRole("spinbutton", { name: "Copies of real leads" }).fill("2");
   await card.getByRole("button", { name: "Reset" }).click();
   await expect(page.getByText("The sandbox has a fresh copy.")).toBeVisible();
   await card.getByRole("button", { name: "Delete sandbox" }).click();

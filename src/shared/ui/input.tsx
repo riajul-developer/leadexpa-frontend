@@ -5,7 +5,7 @@ import { cn } from "../lib/cn";
 import { PasswordInput } from "./password-input";
 
 export const inputClass =
-  "flex h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm text-text shadow-[0_1px_0_rgb(74_32_18/0.03)] placeholder:text-muted transition-[border-color,box-shadow,background-color] duration-150 ease-out hover:border-[color-mix(in_srgb,var(--c-accent)_40%,var(--c-border))] focus-visible:border-accent focus-visible:shadow-[0_0_0_3px_color-mix(in_srgb,var(--c-accent)_22%,transparent)] focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-surface-2 disabled:opacity-60 aria-[invalid=true]:border-danger aria-[invalid=true]:focus-visible:shadow-[0_0_0_3px_color-mix(in_srgb,var(--c-danger)_18%,transparent)]";
+  "flex h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm text-text shadow-[0_1px_0_rgb(24_22_34/0.03)] placeholder:text-muted transition-[border-color,box-shadow,background-color] duration-150 ease-out hover:border-[color-mix(in_srgb,var(--c-accent)_40%,var(--c-border))] focus-visible:border-accent focus-visible:shadow-[0_0_0_3px_color-mix(in_srgb,var(--c-primary)_16%,transparent)] focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-surface-2 disabled:opacity-60 aria-[invalid=true]:border-danger aria-[invalid=true]:focus-visible:shadow-[0_0_0_3px_color-mix(in_srgb,var(--c-danger)_18%,transparent)]";
 
 export const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
   ({ className, type, ...props }, ref) =>

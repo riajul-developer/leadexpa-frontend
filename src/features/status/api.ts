@@ -54,6 +54,8 @@ export interface PublicStatus {
   upcoming: StatusIncident[];
   history: StatusIncident[];
   sla_targets: { standard: number; enterprise: number };
+  /** The page may offer email updates (ADR 0061). */
+  subscriptions?: boolean;
 }
 
 export function localized(text: Localized | Record<string, string>, locale: string): string {
@@ -64,6 +66,28 @@ export async function fetchPublicStatus(signal?: AbortSignal): Promise<PublicSta
   const res = await fetch(`${STATUS_API_URL}/v1/status`, { signal, cache: "no-store", credentials: "omit" });
   if (!res.ok) throw new Error(`status ${res.status}`);
   return (await res.json()) as PublicStatus;
+}
+
+/** A status-page subscription call: the HTTP status and, on failure, the problem code. */
+export interface SubscriptionResult {
+  status: number;
+  code?: string;
+  body?: { email?: string; locale?: string; regions?: string[] };
+}
+
+export async function postSubscription(
+  path: "" | "/confirm" | "/unsubscribe",
+  body: Record<string, unknown>,
+): Promise<SubscriptionResult> {
+  const res = await fetch(`${STATUS_API_URL}/v1/status/subscriptions${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+    credentials: "omit",
+    cache: "no-store",
+  });
+  const json = (await res.json().catch(() => ({}))) as { code?: string } & SubscriptionResult["body"];
+  return { status: res.status, code: res.ok ? undefined : json.code, body: res.ok ? json : undefined };
 }
 
 export type ServiceStatus = Schemas["ServiceStatus"];

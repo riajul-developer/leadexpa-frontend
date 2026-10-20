@@ -12,6 +12,8 @@ import {
   localized,
 } from "../api";
 
+import { SubscribeForm } from "./subscribe-form";
+
 const REFRESH_MS = 60_000;
 
 const DOT: Record<HealthState, string> = {
@@ -136,6 +138,7 @@ function StatusBody({ data }: { data: PublicStatus }) {
           </article>
         ))}
       </section>
+      {data.subscriptions && <SubscribeForm regions={data.regions.map((r) => r.region)} />}
       <section className="grid gap-3" aria-labelledby="history-h">
         <h2 id="history-h" className="text-lg font-semibold">
           {t("history")}

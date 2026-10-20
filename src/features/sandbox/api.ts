@@ -10,6 +10,11 @@ import { useMe } from "@/shared/lib/session";
 
 export type SandboxView = Schemas["SandboxView"];
 export const sandboxKey = ["sandbox"] as const;
+/** Synthetic leads, and masked copies of the agency's latest real leads (ADR 0058). */
+export type SandboxSeed = { leads: number; real_leads: number };
+export type SandboxPromoteView = Schemas["SandboxPromoteView"];
+export type SandboxChange = SandboxPromoteView["changes"][number];
+const promoteKey = ["sandbox", "promote"] as const;
 
 export function useSandboxOf(): string | null {
   const { data: me } = useMe();
@@ -29,12 +34,12 @@ export function useSandboxActions() {
   const set = (v: SandboxView) => qc.setQueryData(sandboxKey, v);
   return {
     create: useMutation({
-      mutationFn: (leads: number) => unwrap(api.POST("/v1/agencies/current/sandbox", { body: { leads } })),
+      mutationFn: (body: SandboxSeed) => unwrap(api.POST("/v1/agencies/current/sandbox", { body })),
       meta: { silent: true },
       onSuccess: set,
     }),
     reset: useMutation({
-      mutationFn: (leads: number) => unwrap(api.POST("/v1/agencies/current/sandbox/reset", { body: { leads } })),
+      mutationFn: (body: SandboxSeed) => unwrap(api.POST("/v1/agencies/current/sandbox/reset", { body })),
       meta: { silent: true },
       onSuccess: set,
     }),
@@ -44,6 +49,29 @@ export function useSandboxActions() {
         qc.setQueryData(sandboxKey, (old: SandboxView | undefined) => (old ? { ...old, sandbox: null } : old)),
     }),
   };
+}
+
+/** What promote would apply from the sandbox to the live workspace (ADR 0059). */
+export function usePromotePreview() {
+  return useQuery({
+    queryKey: promoteKey,
+    queryFn: () => unwrap(api.GET("/v1/agencies/current/sandbox/promote")),
+    staleTime: 0,
+  });
+}
+
+export function usePromote() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (changes: Pick<SandboxChange, "kind" | "sandbox_id">[]) =>
+      unwrap(api.POST("/v1/agencies/current/sandbox/promote", { body: { changes } })),
+    meta: { silent: true },
+    onSuccess: (v) => {
+      qc.setQueryData(promoteKey, v);
+      // Rules, sequences, responders and SLA policies changed in the live workspace.
+      void qc.invalidateQueries({ predicate: (q) => q.queryKey[0] !== "sandbox" });
+    },
+  });
 }
 
 export function useSwitchWorkspace() {

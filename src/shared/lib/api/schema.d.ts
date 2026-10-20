@@ -7116,6 +7116,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/agencies/current/sandbox/promote": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** What promote would apply from the sandbox to the agency (owners): sequences and automation rules changed or added in the sandbox, and changed auto-responders and SLA policies. "conflict" means the agency's copy was also changed in the live workspace since the sandbox was made, and promote won't overwrite it. available is false for a sandbox made before promote existed (reset it). */
+        get: operations["getSandboxPromotion"];
+        put?: never;
+        /** Apply picked sandbox changes to the agency (owners, Pro), all or nothing, through the same checks as an edit in the live workspace. Nothing is deleted or switched on: new rules arrive disabled and new sequences as drafts, and on/off state stays the agency's. 409 promote_conflict for a conflicting change, promote_unavailable for a sandbox made before promote existed; 422 depends_on_unpicked when a change uses a new sandbox item that wasn't picked. */
+        post: operations["promoteSandbox"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/sandbox/leads": {
         parameters: {
             query?: never;
@@ -7817,6 +7835,30 @@ export interface components {
             /** @description The tables in every snapshot */
             tables: string[];
             schema_version: number;
+        };
+        /** @enum {string} */
+        SandboxChangeKind: "sequence" | "automation_rule" | "auto_responder" | "sla_policy";
+        SandboxPromoteView: {
+            /** @description false: the sandbox predates promote; reset it to promote from it */
+            available: boolean;
+            changes: {
+                kind: components["schemas"]["SandboxChangeKind"];
+                /**
+                 * Format: uuid
+                 * @description The item in the sandbox (the client, for auto_responder and sla_policy)
+                 */
+                sandbox_id: string;
+                /**
+                 * Format: uuid
+                 * @description The agency's item it updates; null when added
+                 */
+                live_id: string | null;
+                name: string;
+                /** @enum {string} */
+                change: "added" | "changed" | "conflict";
+                /** @description Top-level fields that differ (empty when added) */
+                fields: string[];
+            }[];
         };
         SandboxView: {
             sandbox: {
@@ -26414,6 +26456,8 @@ export interface operations {
                 "application/json": {
                     /** @description Synthetic leads to start with (default 20) */
                     leads?: number;
+                    /** @description Masked copies of the agency's latest leads (default 0): each keeps its client, source kind and campaign tags (utm_source, utm_medium, utm_campaign, utm_term, utm_content); the name, phone and email are made up, and notes, form answers and messages are never copied */
+                    real_leads?: number;
                 };
             };
         };
@@ -26471,7 +26515,10 @@ export interface operations {
         requestBody?: {
             content: {
                 "application/json": {
+                    /** @description Synthetic leads to start with (default 20) */
                     leads?: number;
+                    /** @description Masked copies of the agency's latest leads (default 0): each keeps its client, source kind and campaign tags (utm_source, utm_medium, utm_campaign, utm_term, utm_content); the name, phone and email are made up, and notes, form answers and messages are never copied */
+                    real_leads?: number;
                 };
             };
         };
@@ -26483,6 +26530,69 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SandboxView"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthenticated"];
+            402: components["responses"]["PlanLimit"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
+            409: components["responses"]["Conflict"];
+            421: components["responses"]["WrongRegion"];
+            422: components["responses"]["ValidationFailed"];
+            503: components["responses"]["TenantMigrating"];
+        };
+    };
+    getSandboxPromotion: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SandboxPromoteView"];
+                };
+            };
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
+            409: components["responses"]["Conflict"];
+        };
+    };
+    promoteSandbox: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    changes: {
+                        kind: components["schemas"]["SandboxChangeKind"];
+                        /** Format: uuid */
+                        sandbox_id: string;
+                    }[];
+                };
+            };
+        };
+        responses: {
+            /** @description Applied; what is still pending */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SandboxPromoteView"];
                 };
             };
             400: components["responses"]["BadRequest"];

@@ -1,40 +1,41 @@
 @import "tailwindcss";
 
 /*
- * Design tokens (FRONTEND_PROMPT §7), from the Leadexpa logo: maroon (#64140c), bronze (#a56f29) and gold (#ebc07a)
- * on warm ivory. Leadexpa is light-only. Components use the Tailwind names below (bg-surface, text-muted,
- * bg-sla-overdue …). Text colors meet 4.5:1 on bg, surface and surface-2; bronze and gold are for large type,
- * fills and decoration only (use accent-strong for small bronze text).
+ * Design tokens (FRONTEND_PROMPT §7): a wine primary (from the logo's maroon) and gold accent on cool neutral greys,
+ * so the brand colors stand out instead of blending into a warm background. Every status color has its own hue:
+ * danger is a true red (not the wine), warning a clear orange (not the gold). Leadexpa is light-only. Components use
+ * the Tailwind names below (bg-surface, text-muted, bg-sla-overdue …). Text colors meet 4.5:1 on bg, surface and
+ * surface-2; gold is for large type, fills and decoration only (use accent-strong for small gold text).
  */
 :root {
-  --c-bg: #fbf7f1;
+  --c-bg: #f6f6f8;
   --c-surface: #ffffff;
-  --c-surface-2: #f6efe5;
-  --c-border: #ebe0d1;
-  --c-text: #2a1613;
-  --c-muted: #6b5850;
-  --c-primary: #7a1a12;
-  --c-primary-hover: #64140c;
+  --c-surface-2: #f0f0f3;
+  --c-border: #e3e3e9;
+  --c-text: #1c1b22;
+  --c-muted: #5a5966;
+  --c-primary: #7c1d3b;
+  --c-primary-hover: #64152f;
   --c-primary-fg: #ffffff;
-  --c-primary-soft: #f8e9e5;
-  --c-accent: #a56f29;
-  --c-accent-strong: #84561c;
-  --c-accent-soft: #fbf0dc;
-  --c-gold: #ebc07a;
-  --c-success: #146c3c;
-  --c-success-soft: #e4f3e9;
-  --c-warning: #a04a06;
-  --c-warning-soft: #fdeedd;
-  --c-danger: #c22d1f;
-  --c-danger-soft: #fde9e6;
+  --c-primary-soft: #f8eaf0;
+  --c-accent: #b8862b;
+  --c-accent-strong: #85600f;
+  --c-accent-soft: #fbf3e1;
+  --c-gold: #e6bd6e;
+  --c-success: #13703a;
+  --c-success-soft: #e6f4ec;
+  --c-warning: #b93f0b;
+  --c-warning-soft: #fff0e5;
+  --c-danger: #c81e24;
+  --c-danger-soft: #fdecec;
   --c-info: #1d5fa8;
-  --c-info-soft: #e7f0fa;
-  --c-focus: #a56f29;
+  --c-info-soft: #e8f0fb;
+  --c-focus: #7c1d3b;
   --leading-body: 1.5;
-  --shadow-1: 0 1px 2px rgb(74 32 18 / 0.05), 0 1px 3px rgb(74 32 18 / 0.07);
-  --shadow-2: 0 12px 32px -8px rgb(74 32 18 / 0.18);
-  --brand-gradient: linear-gradient(135deg, #7a1a12 0%, #64140c 55%, #4f0f09 100%);
-  --brand-rule: linear-gradient(90deg, #64140c 0%, #a56f29 55%, #ebc07a 100%);
+  --shadow-1: 0 1px 2px rgb(24 22 34 / 0.05), 0 1px 3px rgb(24 22 34 / 0.07);
+  --shadow-2: 0 12px 32px -8px rgb(24 22 34 / 0.18);
+  --brand-gradient: linear-gradient(135deg, #7c1d3b 0%, #64152f 55%, #4a0f22 100%);
+  --brand-rule: linear-gradient(90deg, #64152f 0%, #b8862b 60%, #e6bd6e 100%);
   color-scheme: light;
 }
 
@@ -275,7 +276,7 @@ html[lang="ar"] {
   .select-chevron {
     appearance: none;
     -webkit-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%236b5850' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%235a5966' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-size: 1rem 1rem;
     background-position: right 0.625rem center;
@@ -284,7 +285,7 @@ html[lang="ar"] {
   }
   .select-chevron:hover:not(:disabled),
   .select-chevron:focus-visible {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%237a1a12' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%237c1d3b' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
   }
   /* The element's own direction: a phone field stays LTR inside an Arabic page. */
   .select-chevron:dir(rtl) {

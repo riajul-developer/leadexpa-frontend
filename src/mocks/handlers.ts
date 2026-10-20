@@ -3243,7 +3243,11 @@ const exportHandlers = [
 ];
 
 // sessionStorage: switching workspaces is a full-page load.
-type MockSandbox = { sandbox: { id: string; name: string; created_at: string } | null; inside: boolean };
+type MockSandbox = {
+  sandbox: { id: string; name: string; created_at: string } | null;
+  inside: boolean;
+  promoted?: string[];
+};
 function mockSandbox(): MockSandbox {
   const raw = typeof sessionStorage === "undefined" ? null : sessionStorage.getItem("mock-sandbox");
   return raw ? (JSON.parse(raw) as MockSandbox) : { sandbox: null, inside: false };
@@ -3279,7 +3283,55 @@ function withSandbox(m: S["Me"]): S["Me"] {
   return { ...m, agencies, agency: { ...m.agency, id: s.sandbox.id, name: s.sandbox.name, sandbox_of: db.agency.id } };
 }
 
+const mockPromoteChanges: S["SandboxPromoteView"]["changes"] = [
+  {
+    kind: "sequence",
+    sandbox_id: "5b1c7e2a-0d4f-4a8e-9c3b-1f2e3d4c5b60",
+    live_id: null,
+    name: "Win-back",
+    change: "added",
+    fields: [],
+  },
+  {
+    kind: "automation_rule",
+    sandbox_id: "5b1c7e2a-0d4f-4a8e-9c3b-1f2e3d4c5b61",
+    live_id: "9e8d7c6b-5a4f-4e3d-8c2b-1a0f9e8d7c61",
+    name: "Welcome new leads",
+    change: "changed",
+    fields: ["actions", "name"],
+  },
+  {
+    kind: "sla_policy",
+    sandbox_id: "5b1c7e2a-0d4f-4a8e-9c3b-1f2e3d4c5b62",
+    live_id: "9e8d7c6b-5a4f-4e3d-8c2b-1a0f9e8d7c62",
+    name: "Dhaka Dental",
+    change: "conflict",
+    fields: ["first_response_minutes"],
+  },
+];
+const promoteView = (): S["SandboxPromoteView"] => {
+  const done = new Set(mockSandbox().promoted ?? []);
+  return { available: true, changes: mockPromoteChanges.filter((c) => !done.has(c.sandbox_id)) };
+};
+
 const sandboxHandlers = [
+  http.get(url("/v1/agencies/current/sandbox/promote"), () => {
+    if (!mockSandbox().sandbox) return problem(404, "not_found", "This agency has no sandbox.");
+    return HttpResponse.json(promoteView());
+  }),
+  http.post(url("/v1/agencies/current/sandbox/promote"), async ({ request }) => {
+    const s = mockSandbox();
+    if (!s.sandbox) return problem(404, "not_found", "This agency has no sandbox.");
+    const { changes } = (await request.json()) as { changes: { kind: string; sandbox_id: string }[] };
+    const pending = promoteView().changes;
+    for (const c of changes) {
+      const p = pending.find((x) => x.sandbox_id === c.sandbox_id && x.kind === c.kind);
+      if (!p) return problem(422, "validation_failed", "A picked change isn't pending any more.");
+      if (p.change === "conflict") return problem(409, "promote_conflict", "Also changed in the live workspace.");
+    }
+    saveSandbox({ ...s, promoted: [...(s.promoted ?? []), ...changes.map((c) => c.sandbox_id)] });
+    return HttpResponse.json(promoteView());
+  }),
   http.get(url("/v1/agencies/current/sandbox"), () =>
     HttpResponse.json({ sandbox: mockSandbox().sandbox, copies: sandboxCopies } satisfies S["SandboxView"]),
   ),
@@ -3353,11 +3405,28 @@ function mockIncident(over: Record<string, unknown>) {
   };
 }
 const statusHandlers = [
+  http.post(url("/v1/status/subscriptions"), async ({ request }) => {
+    const { email } = (await request.json()) as { email?: string };
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+      return problem(422, "invalid_email", "Enter a valid email address.");
+    return new HttpResponse(null, { status: 202 });
+  }),
+  http.post(url("/v1/status/subscriptions/confirm"), async ({ request }) => {
+    const { token } = (await request.json()) as { token?: string };
+    if (token !== "mock-confirm") return problem(404, "invalid_token", "This link is invalid or has expired.");
+    return HttpResponse.json({ email: "ops@example.com", locale: "en", regions: [] });
+  }),
+  http.post(url("/v1/status/subscriptions/unsubscribe"), async ({ request }) => {
+    const { token } = (await request.json()) as { token?: string };
+    if (token !== "mock-unsubscribe") return problem(404, "invalid_token", "This link is invalid.");
+    return new HttpResponse(null, { status: 204 });
+  }),
   http.get(url("/v1/status"), () => {
     const now = Date.now();
     return HttpResponse.json({
       generated_at: new Date(now).toISOString(),
       state: "degraded",
+      subscriptions: true,
       regions: [
         {
           region: "ap1",

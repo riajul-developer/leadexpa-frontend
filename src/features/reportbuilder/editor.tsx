@@ -166,7 +166,7 @@ export function ReportEditor({ templateId }: { templateId: string }) {
             className={cn(
               "grid rounded-lg border border-transparent px-2 py-1 transition-[border-color,box-shadow,background-color] duration-150",
               canEdit &&
-                "border-border bg-surface focus-within:border-accent focus-within:shadow-[0_0_0_3px_color-mix(in_srgb,var(--c-accent)_22%,transparent)]",
+                "border-border bg-surface focus-within:border-primary focus-within:shadow-[0_0_0_3px_color-mix(in_srgb,var(--c-primary)_16%,transparent)]",
               nameError && "border-danger",
             )}
           >

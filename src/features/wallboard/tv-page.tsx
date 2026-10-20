@@ -110,12 +110,12 @@ export function TvPage() {
     };
   }, []);
 
-  if (state.kind === "loading") return <main className="min-h-dvh bg-[#1b0d0b]" aria-busy />;
+  if (state.kind === "loading") return <main className="min-h-dvh bg-[#16141c]" aria-busy />;
   if (state.kind === "unpaired" || state.kind === "inactive")
     return (
-      <main className="grid min-h-dvh place-items-center bg-[#1b0d0b] p-8 text-center text-white">
+      <main className="grid min-h-dvh place-items-center bg-[#16141c] p-8 text-center text-white">
         <div className="grid max-w-xl justify-items-center gap-4">
-          <MonitorOff aria-hidden className="size-16 text-[#ebc07a]" />
+          <MonitorOff aria-hidden className="size-16 text-[#e6bd6e]" />
           <h1 className="text-3xl font-semibold">{state.kind === "unpaired" ? t("unpaired") : t("inactive")}</h1>
           <p className="text-lg text-white/75">{t("unpairedHint")}</p>
         </div>
@@ -132,12 +132,12 @@ export function TvPage() {
 
   return (
     <main
-      className={`relative flex min-h-dvh flex-col gap-6 bg-[#1b0d0b] p-6 text-white transition-[filter] duration-1000 lg:p-10 ${b.dimmed ? "brightness-[0.35]" : ""}`}
+      className={`relative flex min-h-dvh flex-col gap-6 bg-[#16141c] p-6 text-white transition-[filter] duration-1000 lg:p-10 ${b.dimmed ? "brightness-[0.35]" : ""}`}
       data-dimmed={b.dimmed || undefined}
     >
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div className="min-w-0">
-          <p className="text-lg text-[#ebc07a]">{b.brand?.display_name ?? b.agency}</p>
+          <p className="text-lg text-[#e6bd6e]">{b.brand?.display_name ?? b.agency}</p>
           <h1 className="truncate text-3xl font-semibold lg:text-4xl">{b.name}</h1>
         </div>
         <div className="flex items-center gap-4">
@@ -197,7 +197,7 @@ export function TvPage() {
                   {b.clients.map((c, i) => (
                     <span
                       key={c.name + i}
-                      className={`size-2.5 rounded-full ${i === index % b.clients.length ? "bg-[#ebc07a]" : "bg-white/25"}`}
+                      className={`size-2.5 rounded-full ${i === index % b.clients.length ? "bg-[#e6bd6e]" : "bg-white/25"}`}
                     />
                   ))}
                 </span>
@@ -213,7 +213,7 @@ export function TvPage() {
         {b.leaderboard && b.leaderboard.length > 0 && (
           <section aria-labelledby="tv-lb" className="grid content-start gap-3 rounded-2xl bg-white/5 p-6">
             <h2 id="tv-lb" className="flex items-center gap-2 text-2xl font-semibold">
-              <Trophy aria-hidden className="size-6 text-[#ebc07a]" />
+              <Trophy aria-hidden className="size-6 text-[#e6bd6e]" />
               {t("leaderboard")}
             </h2>
             <ol className="grid gap-2">
@@ -250,7 +250,7 @@ function Tile({
   testId?: string;
 }) {
   return (
-    <div className={`grid gap-1 rounded-2xl p-5 ${alert ? "bg-[#c22d1f]" : "bg-white/5"}`}>
+    <div className={`grid gap-1 rounded-2xl p-5 ${alert ? "bg-[#c81e24]" : "bg-white/5"}`}>
       <span className="flex items-center gap-2 text-lg text-white/75">
         <Icon aria-hidden className="size-5" />
         {label}

@@ -19,6 +19,8 @@ const securityHeaders = [
 ];
 
 const config: NextConfig = {
+  // E2E builds into .next-e2e, so a running `next dev` (which owns .next) and the test server never clobber each other.
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   reactStrictMode: true,
   poweredByHeader: false,
   typedRoutes: false,

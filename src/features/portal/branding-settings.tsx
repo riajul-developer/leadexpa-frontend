@@ -137,7 +137,7 @@ export function BrandingSettings() {
                   <input
                     type="color"
                     aria-label={t("primaryPicker")}
-                    value={isHex(v.primary_color) ? v.primary_color : "#7a1a12"}
+                    value={isHex(v.primary_color) ? v.primary_color : "#7c1d3b"}
                     onChange={set("primary_color")}
                     className="border-border size-10 shrink-0 cursor-pointer rounded-lg border bg-transparent p-1 [&::-moz-color-swatch]:rounded-sm [&::-moz-color-swatch]:border-0 [&::-webkit-color-swatch]:rounded-sm [&::-webkit-color-swatch]:border-0 [&::-webkit-color-swatch-wrapper]:p-0"
                   />
@@ -155,7 +155,7 @@ export function BrandingSettings() {
                   <input
                     type="color"
                     aria-label={t("accentPicker")}
-                    value={isHex(v.accent_color) ? v.accent_color : "#a56f29"}
+                    value={isHex(v.accent_color) ? v.accent_color : "#b8862b"}
                     onChange={set("accent_color")}
                     className="border-border size-10 shrink-0 cursor-pointer rounded-lg border bg-transparent p-1 [&::-moz-color-swatch]:rounded-sm [&::-moz-color-swatch]:border-0 [&::-webkit-color-swatch]:rounded-sm [&::-webkit-color-swatch]:border-0 [&::-webkit-color-swatch-wrapper]:p-0"
                   />

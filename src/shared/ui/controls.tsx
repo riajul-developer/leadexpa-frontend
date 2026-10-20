@@ -17,7 +17,7 @@ export function Switch({ className, ...props }: React.ComponentPropsWithoutRef<t
       )}
       {...props}
     >
-      <SwitchPrimitive.Thumb className="block size-5 rounded-full bg-white shadow-[0_1px_3px_rgb(42_22_19/0.25)] transition-transform duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] data-[state=checked]:translate-x-5 rtl:data-[state=checked]:-translate-x-5" />
+      <SwitchPrimitive.Thumb className="block size-5 rounded-full bg-white shadow-[0_1px_3px_rgb(24_22_34/0.25)] transition-transform duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] data-[state=checked]:translate-x-5 rtl:data-[state=checked]:-translate-x-5" />
     </SwitchPrimitive.Root>
   );
 }

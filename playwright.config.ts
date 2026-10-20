@@ -25,6 +25,6 @@ export default defineConfig({
         url: `http://localhost:${PORT}/bn/login`,
         timeout: 600_000,
         reuseExistingServer: !process.env.CI,
-        env: { NEXT_PUBLIC_API_MOCKING: "enabled", NEXT_PUBLIC_API_URL: "http://localhost:8080" },
+        env: { NEXT_PUBLIC_API_MOCKING: "enabled", NEXT_PUBLIC_API_URL: "http://localhost:8080", NEXT_DIST_DIR: ".next-e2e" },
       },
 });

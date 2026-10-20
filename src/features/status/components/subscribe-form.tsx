@@ -11,7 +11,7 @@ import { Input } from "@/shared/ui/input";
 
 import { postSubscription } from "../api";
 
-/** Email updates for incidents and maintenance (ADR 0061): double opt-in, in the page's language. */
+/** Status page email sign-up (ADR 0061). */
 export function SubscribeForm({ regions }: { regions: string[] }) {
   const t = useTranslations("serviceStatus.subscribe");
   const locale = useLocale();

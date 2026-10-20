@@ -9,13 +9,13 @@ import { postSubscription } from "../api";
 
 type State = "working" | "done" | "invalid" | "failed";
 
-/** The page an emailed link opens: confirms a subscription or unsubscribes (ADR 0061). */
+/** Confirms or unsubscribes from an emailed link (ADR 0061). */
 export function SubscriptionLink({ action }: { action: "confirm" | "unsubscribe" }) {
   const t = useTranslations("serviceStatus.subscribe");
   const locale = useLocale();
   const token = useSearchParams().get("token") ?? "";
   const [state, setState] = useState<State>(token ? "working" : "invalid");
-  const sent = useRef(false); // a confirm token works once; strict mode mounts twice
+  const sent = useRef(false);
   useEffect(() => {
     if (!token || sent.current) return;
     sent.current = true;

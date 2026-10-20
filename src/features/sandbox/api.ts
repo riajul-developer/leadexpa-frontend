@@ -10,7 +10,6 @@ import { useMe } from "@/shared/lib/session";
 
 export type SandboxView = Schemas["SandboxView"];
 export const sandboxKey = ["sandbox"] as const;
-/** Synthetic leads, and masked copies of the agency's latest real leads (ADR 0058). */
 export type SandboxSeed = { leads: number; real_leads: number };
 export type SandboxPromoteView = Schemas["SandboxPromoteView"];
 export type SandboxChange = SandboxPromoteView["changes"][number];
@@ -51,7 +50,7 @@ export function useSandboxActions() {
   };
 }
 
-/** What promote would apply from the sandbox to the live workspace (ADR 0059). */
+/** Changes promote would apply (ADR 0059). */
 export function usePromotePreview() {
   return useQuery({
     queryKey: promoteKey,
@@ -68,7 +67,6 @@ export function usePromote() {
     meta: { silent: true },
     onSuccess: (v) => {
       qc.setQueryData(promoteKey, v);
-      // Rules, sequences, responders and SLA policies changed in the live workspace.
       void qc.invalidateQueries({ predicate: (q) => q.queryKey[0] !== "sandbox" });
     },
   });

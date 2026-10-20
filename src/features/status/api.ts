@@ -54,7 +54,6 @@ export interface PublicStatus {
   upcoming: StatusIncident[];
   history: StatusIncident[];
   sla_targets: { standard: number; enterprise: number };
-  /** The page may offer email updates (ADR 0061). */
   subscriptions?: boolean;
 }
 
@@ -68,7 +67,6 @@ export async function fetchPublicStatus(signal?: AbortSignal): Promise<PublicSta
   return (await res.json()) as PublicStatus;
 }
 
-/** A status-page subscription call: the HTTP status and, on failure, the problem code. */
 export interface SubscriptionResult {
   status: number;
   code?: string;

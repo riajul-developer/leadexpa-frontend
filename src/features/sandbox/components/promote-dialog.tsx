@@ -16,7 +16,7 @@ import { type SandboxChange, usePromote, usePromotePreview } from "../api";
 
 const key = (c: Pick<SandboxChange, "kind" | "sandbox_id">) => `${c.kind}:${c.sandbox_id}`;
 
-/** Picks sandbox changes to apply to the live workspace (ADR 0059). Conflicts are listed but can't be picked. */
+/** Picks sandbox changes to promote (ADR 0059). */
 export function PromoteDialog({ onClose }: { onClose: () => void }) {
   const t = useTranslations("sandbox.promote");
   const q = usePromotePreview();

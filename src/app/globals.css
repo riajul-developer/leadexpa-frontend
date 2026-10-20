@@ -1,12 +1,6 @@
 @import "tailwindcss";
 
-/*
- * Design tokens (FRONTEND_PROMPT §7): a wine primary (from the logo's maroon) and gold accent on cool neutral greys,
- * so the brand colors stand out instead of blending into a warm background. Every status color has its own hue:
- * danger is a true red (not the wine), warning a clear orange (not the gold). Leadexpa is light-only. Components use
- * the Tailwind names below (bg-surface, text-muted, bg-sla-overdue …). Text colors meet 4.5:1 on bg, surface and
- * surface-2; gold is for large type, fills and decoration only (use accent-strong for small gold text).
- */
+/* Design tokens: wine primary, gold accent, neutral greys; text colors meet 4.5:1. */
 :root {
   --c-bg: #f6f6f8;
   --c-surface: #ffffff;
